@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}آزمایش صحت ارتقا و سلامت سامانه (کارگاه ۲۲) | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 22px auto;">
+
+  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+    
+    <div style="border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark);">🩺 آزمایش صحت ارتقا و سلامت سامانه (کارگاه ۲۱ و ۲۲)</h1>
+        <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">بررسی زنده وضعیت پایگاه داده، مجوزهای دایرکتوری، تنظیمات امنیتی و شِمای سیستم</p>
+      </div>
+      <div>
+        <a href="{% url 'core:health_check' %}" class="btn-action" style="background: #1b4332; color: #fff; border: none; font-size: 12px; padding: 7px 14px;">🔄 بازآزمایی و رفرش</a>
+      </div>
+    </div>
+
+    <!-- جدول نتایج ارزیابی سلامت سیستم -->
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>آزمون سنجش شایستگی</th>
+          <th>وضعیت عملیاتی</th>
+          <th>شرح فنی و جزئیات بررسی</th>
+          <th>نتیجه آزمون</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for diag in diagnostics %}
+          <tr>
+            <td style="font-weight: bold; width: 28%;">{{ diag.title }}</td>
+            <td style="width: 15%;">
+              {% if diag.status == 'OK' %}
+                <span class="badge" style="background:#e8f5e9; color:#1b5e20; border:1px solid #a5d6a7;">✓ نرمال و فعال</span>
+              {% elif diag.status == 'WARNING' %}
+                <span class="badge" style="background:#fff8e1; color:#f57f17; border:1px solid #ffe082;">⚠️ نیازمند بررسی</span>
+              {% else %}
+                <span class="badge" style="background:#ffebee; color:#b71c1c; border:1px solid #ffcdd2;">✕ خطا در اتصال</span>
+              {% endif %}
+            </td>
+            <td style="color: #555; font-size: 12px;">{{ diag.details }}</td>
+            <td style="font-weight: bold; width: 12%;">
+              <span class="badge" style="background:#f1f8e9; color:#2e7d32;">{{ diag.badge }}</span>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="margin-top: 30px; background: #f9fbe7; border: 1px solid #dce775; padding: 20px; border-radius: var(--radius-md);">
+      <h3 style="font-size: 15px; color: #33691e; margin-bottom: 8px;">📋 تطبیق با صفحه ۹۷ کتاب درسی (کارگاه ۲۲):</h3>
+      <p style="font-size: 13px; color: #558b2f; line-height: 1.8;">
+        در کارگاه ۲۲ کتاب، پس از انجام ارتقا (Upgrade)، صحت بخش‌های پایگاه داده، ماژول‌ها و عدم بروز خطا در لاگ‌ها تست می‌شود. در سامانه عطارخونه، این صفحه اختصاصی تمام ارکان حیاتی پروژه شامل کوئری تست پایگاه داده SQLite، وضعیت کش، متغیرهای محیطی و مسیرهای رسانه‌ای را ارزیابی کرده و تاییدیه سلامت سیستمی صادر می‌کند.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

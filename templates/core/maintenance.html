@@ -1,0 +1,63 @@
+{% load static persian_tags %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فروشگاه در حال به‌روزرسانی است | کارگاه ۳ کتاب</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    body {
+      background: #f1f8e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .maintenance-card {
+      background: #ffffff;
+      max-width: 600px;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border-top: 6px solid var(--accent);
+      text-align: center;
+    }
+    .maintenance-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="maintenance-card">
+    <div class="maintenance-icon">🛠️🌿</div>
+    <h1 style="color: var(--primary-dark); font-size: 22px; margin-bottom: 15px;">
+      فروشگاه عطارخونه موقتاً در دست تعمیر و ارتقا می‌باشد
+    </h1>
+    
+    <div class="alert alert-warning" style="text-align: right; margin: 20px 0; font-size: 13px;">
+      <strong>پیام مدیریت کارگاه ۳:</strong> {{ store_setting.maintenance_message }}
+    </div>
+
+    <p style="color: #666; font-size: 13px; line-height: 1.8; margin-bottom: 25px;">
+      همکاران ما در حال اعمال تغییرات، اضافه کردن محصولات فصلی جدید و افزایش کارایی سامانه هستند. از شکیبایی شما صمیمانه سپاسگزاریم.
+    </p>
+
+    <div style="background: #f5f5f5; padding: 12px; border-radius: var(--radius-sm); font-size: 12px; color: #777; margin-bottom: 20px;">
+      نشانی IP شما: <code>{{ client_ip }}</code> (جهت دسترسی در حالت تعمیرات، این IP باید توسط مدیر در پنل ثبت شود)
+    </div>
+
+    <div>
+      <a href="/attar-management/" style="font-size: 12px; color: #888; text-decoration: underline;">
+        ورود کارمندان و مدیریت سامانه (با IP مجاز)
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

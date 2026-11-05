@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fae8ff"/>
+      <stop offset="100%" stop-color="#f5d0fe"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="20" fill="url(#bg3)"/>
+  <circle cx="100" cy="100" r="70" fill="#ffffff" opacity="0.6"/>
+  <!-- Stem -->
+  <path d="M100 60 L100 170" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+  <!-- Leaves at bottom -->
+  <path d="M100 150 Q75 145 70 135" stroke="#15803d" stroke-width="3" fill="none"/>
+  <path d="M100 145 Q125 140 130 130" stroke="#15803d" stroke-width="3" fill="none"/>
+  <!-- Flower florets -->
+  <g fill="#9333ea">
+    <ellipse cx="94" cy="65" rx="7" ry="5"/>
+    <ellipse cx="106" cy="65" rx="7" ry="5"/>
+    <ellipse cx="100" cy="55" rx="6" ry="6"/>
+    
+    <ellipse cx="93" cy="78" rx="8" ry="5.5"/>
+    <ellipse cx="107" cy="78" rx="8" ry="5.5"/>
+    
+    <ellipse cx="92" cy="92" rx="8.5" ry="6"/>
+    <ellipse cx="108" cy="92" rx="8.5" ry="6"/>
+    
+    <ellipse cx="91" cy="106" rx="9" ry="6"/>
+    <ellipse cx="109" cy="106" rx="9" ry="6"/>
+    
+    <ellipse cx="93" cy="120" rx="8" ry="5.5"/>
+    <ellipse cx="107" cy="120" rx="8" ry="5.5"/>
+  </g>
+  <g fill="#c084fc">
+    <circle cx="100" cy="65" r="4"/>
+    <circle cx="100" cy="78" r="4.5"/>
+    <circle cx="100" cy="92" r="5"/>
+    <circle cx="100" cy="106" r="5"/>
+  </g>
+</svg>

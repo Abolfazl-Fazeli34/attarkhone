@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="200" height="50">
+  <!-- لوگوی دقیق عطارخونه برگرفته از موکاپ طراحی -->
+  <g transform="translate(155, 6)">
+    <!-- شش‌ضلعی نشان سلامت سبز -->
+    <path d="M18 2 L32 10 L32 26 L18 34 L4 26 L4 10 Z" fill="none" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- رگبرگ‌های داخلی گیاه دارویی -->
+    <path d="M18 7 L18 29" stroke="#1b4332" stroke-width="2" stroke-linecap="round"/>
+    <path d="M18 13 Q25 15 26 21" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M18 19 Q24 22 24 26" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M18 13 Q11 15 10 21" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M18 19 Q12 22 12 26" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- تایپوگرافی نام و شعار -->
+  <text x="145" y="24" font-family="'Vazirmatn', 'IRANSans', Tahoma, sans-serif" font-size="19" font-weight="800" fill="#1b4332" text-anchor="end">عطارخونه</text>
+  <text x="145" y="38" font-family="'Vazirmatn', 'IRANSans', Tahoma, sans-serif" font-size="9.5" font-weight="500" fill="#475569" text-anchor="end">دانش کهن، سلامت مدرن</text>
+</svg>

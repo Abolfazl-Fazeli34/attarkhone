@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}میز کار و داشبورد کارمندان (کارگاه ۱ و ۲) | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 20px auto;">
+
+  <!-- هدر داشبورد کارمندی -->
+  <div style="background: #1e293b; color: #ffffff; padding: 18px 22px; border-radius: var(--radius-md); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 16px; font-weight: 700; margin-bottom: 2px;">
+        ⚙️ میز کار کارمندان عطارخونه (کارگاه ۱ و ۲ کتاب)
+      </h1>
+      <div style="font-size: 11.5px; color: #94a3b8;">
+        کارمند: <b>{{ user.get_full_name|default:user.username }}</b> | نمایه دسترسی: <b style="color: #fde047;">{{ role_display }}</b>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <a href="/attar-management/" class="btn-action" style="background: var(--primary); color: #ffffff; border: none; font-size: 11.5px;" target="_blank">
+        🛡️ پنل امن مدیریت (ص ۱۱۳)
+      </a>
+      <a href="{% url 'core:health_check' %}" class="btn-action" style="font-size: 11.5px;">
+        🩺 تست سلامت
+      </a>
+    </div>
+  </div>
+
+  <!-- کارت‌های آماری جمع‌وجور -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px;">
+    <div style="background: #ffffff; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 11px; color: #64748b;">کل سفارشات</div>
+      <div style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-top: 2px;">{{ total_orders|fa_digits }}</div>
+    </div>
+    <div style="background: #ffffff; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 11px; color: #b45309;">در انتظار پرداخت</div>
+      <div style="font-size: 18px; font-weight: 800; color: #b45309; margin-top: 2px;">{{ pending_orders|fa_digits }}</div>
+    </div>
+    <div style="background: #ffffff; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 11px; color: #15803d;">پرداخت شده</div>
+      <div style="font-size: 18px; font-weight: 800; color: #15803d; margin-top: 2px;">{{ paid_orders|fa_digits }}</div>
+    </div>
+    <div style="background: #ffffff; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 11px; color: #0369a1;">تحویل به حامل</div>
+      <div style="font-size: 18px; font-weight: 800; color: #0369a1; margin-top: 2px;">{{ shipped_orders|fa_digits }}</div>
+    </div>
+    <div style="background: #ffffff; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 11px; color: #b91c1c;">فیش‌های باز بانکی</div>
+      <div style="font-size: 18px; font-weight: 800; color: #b91c1c; margin-top: 2px;">{{ unverified_receipts|fa_digits }}</div>
+    </div>
+  </div>
+
+  <!-- تایید فیش‌های بانکی کارت‌به‌کارت (کارگاه ۱۷) -->
+  {% if recent_receipts.exists %}
+    <div style="background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 20px;">
+      <h3 style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 1.5px solid var(--warning); padding-bottom: 6px;">
+        📑 فیش‌های بانکی در صف تایید حسابداری (کارگاه ۱۷ کتاب)
+      </h3>
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>سفارش</th>
+            <th>بانک</th>
+            <th>کد پیگیری فیش</th>
+            <th>مبلغ واریزی</th>
+            <th>تاریخ ثبت</th>
+            <th>عملیات بررسی</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in recent_receipts %}
+            <tr>
+              <td><b>{{ r.order.tracking_code }}</b> ({{ r.order.full_name }})</td>
+              <td>{{ r.bank_name }}</td>
+              <td><code>{{ r.tracking_number }}</code></td>
+              <td style="font-weight: 700;">{{ r.deposited_amount|toman }}</td>
+              <td>{{ r.created_at|date:"Y/m/d - H:i" }}</td>
+              <td>
+                <form method="post" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="verify_receipt">
+                  <input type="hidden" name="receipt_id" value="{{ r.id }}">
+                  <button type="submit" class="btn-action" style="background:#f0fdf4; color:#15803d; border-color:#bbf7d0; font-size:10.5px; padding:3px 8px;">
+                    ✓ تایید فیش
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+  <!-- مدیریت سفارش‌ها و تغییر وضعیت‌ها (کارگاه ۲۴) -->
+  <div style="background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+    <h3 style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 1.5px solid var(--primary); padding-bottom: 6px;">
+      📦 مدیریت آخرین سفارش‌ها و گردش کار تحویل (کارگاه ۲۴ کتاب)
+    </h3>
+
+    {% if recent_orders.exists %}
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>کد رهگیری</th>
+            <th>خریدار</th>
+            <th>حامل پستی</th>
+            <th>کادوپیچی (ص ۱۱۲)</th>
+            <th>مبلغ کل</th>
+            <th>وضعیت فعلی</th>
+            <th>تغییر مرحله سفارش (کارگاه ۲۴)</th>
+            <th>فاکتور</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in recent_orders %}
+            <tr>
+              <td><b>{{ o.tracking_code }}</b></td>
+              <td>{{ o.full_name }}</td>
+              <td>{{ o.carrier.name }}</td>
+              <td>
+                {% if o.is_gift_wrapped %}
+                  <span class="badge" style="background:#fef3c7; color:#b45309;">🎁 هدیه</span>
+                {% else %}
+                  <span style="color:#94a3b8; font-size:11px;">عادی</span>
+                {% endif %}
+              </td>
+              <td>{{ o.total_amount|toman }}</td>
+              <td>
+                <span class="badge" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0;">{{ o.get_status_display }}</span>
+              </td>
+              <td>
+                <form method="post" style="display: flex; gap: 4px; align-items: center;">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="update_order_status">
+                  <input type="hidden" name="order_id" value="{{ o.id }}">
+                  <select name="new_status" style="padding: 3px 6px; border-radius: var(--radius-xs); border: 1px solid var(--border); font-family: inherit; font-size: 11px;">
+                    <option value="pending_payment" {% if o.status == 'pending_payment' %}selected{% endif %}>در انتظار پرداخت</option>
+                    <option value="paid" {% if o.status == 'paid' %}selected{% endif %}>پرداخت شده</option>
+                    <option value="processing" {% if o.status == 'processing' %}selected{% endif %}>در حال بسته‌بندی</option>
+                    <option value="shipped" {% if o.status == 'shipped' %}selected{% endif %}>ارسال شده</option>
+                    <option value="delivered" {% if o.status == 'delivered' %}selected{% endif %}>تحویل داده شد</option>
+                    <option value="cancelled" {% if o.status == 'cancelled' %}selected{% endif %}>لغو شده</option>
+                  </select>
+                  <button type="submit" class="btn-action" style="font-size: 10.5px; padding: 3px 6px;">ثبت</button>
+                </form>
+              </td>
+              <td>
+                <a href="{% url 'orders:invoice' tracking_code=o.tracking_code %}" target="_blank" class="btn-action" style="font-size: 10.5px; padding: 3px 6px;">
+                  📄 چاپ
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p style="color: #64748b; font-size: 12px;">هنوز سفارشی ثبت نشده است.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

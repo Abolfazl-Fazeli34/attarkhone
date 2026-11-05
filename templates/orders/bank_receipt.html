@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}ثبت اطلاعات فیش بانکی (کارگاه ۱۷) | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 650px; margin: 24px auto;">
+
+  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+    
+    <div style="border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 18px;">
+      <h1 style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">
+        📑 ثبت اطلاعات فیش واریزی و کارت‌به‌کارت (کارگاه ۱۷ کتاب)
+      </h1>
+      <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
+        سفارش شماره <b>{{ order.tracking_code }}</b> به مبلغ <b>{{ order.total_amount|toman }}</b>
+      </p>
+    </div>
+
+    <!-- اطلاعات حساب بانکی فروشگاه -->
+    <div style="background: #f0fdf4; border: 1px solid var(--primary-border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+      <h4 style="font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">💳 مشخصات حساب بانکی فروشگاه عطارخونه:</h4>
+      <div style="font-size: 12px; line-height: 1.8; color: #166534;">
+        <div>بانک: <b>بانک ملی ایران - شعبه طالقانی</b></div>
+        <div>شماره کارت شتاب: <b style="font-family: monospace; font-size: 14px; direction: ltr; display: inline-block;">۶۰۳۷-۹۹۷۵-۱۱۲۲-۳۳۴۴</b></div>
+        <div>شماره شبا: <b style="font-family: monospace; font-size: 13px; direction: ltr; display: inline-block;">IR12-0170-0000-0011-2233-4455</b></div>
+        <div>به نام: <b>شرکت سلامت و عطاری عطارخونه</b></div>
+      </div>
+    </div>
+
+    <!-- فرم ثبت اطلاعات فیش -->
+    <form action="{% url 'orders:bank_receipt' tracking_code=order.tracking_code %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; font-size: 12px; color: #444; margin-bottom: 5px;">نام بانک واریزکننده یا مبدا *</label>
+        <input type="text" name="bank_name" required placeholder="مثال: بانک ملت یا بانک صادرات" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-family: inherit;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; font-size: 12px; color: #444; margin-bottom: 5px;">شماره پیگیری / ارجاع واریز فیش بانکی *</label>
+        <input type="text" name="tracking_number" required placeholder="مثال: 987654321" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-family: inherit;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; font-size: 12px; color: #444; margin-bottom: 5px;">۴ رقم آخر شماره کارت واریزکننده (جهت تطبیق)</label>
+        <input type="text" name="card_last_digits" maxlength="4" placeholder="مثال: 4567" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-family: inherit;">
+      </div>
+
+      <div style="margin-bottom: 25px;">
+        <label style="display: block; font-size: 12px; color: #444; margin-bottom: 5px;">تصویر رسید یا اسکرین‌شات فیش واریز (اختیاری)</label>
+        <input type="file" name="receipt_image" accept="image/*" style="width: 100%; padding: 8px; border: 1px dashed var(--border-color); border-radius: var(--radius-sm);">
+      </div>
+
+      <div>
+        <button type="submit" class="btn-hero" style="width: 100%; border: none; cursor: pointer; font-size: 14px;">
+          ثبت فیش بانکی و ارسال به واحد حسابداری »
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

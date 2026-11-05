@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}تسویه حساب و نهایی‌سازی سفارش | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 20px auto;">
+
+  <div style="border-bottom: 1.5px solid var(--primary); padding-bottom: 8px; margin-bottom: 16px;">
+    <h1 style="font-size: 16px; font-weight: 700; color: var(--primary-dark);">📦 نهایی‌سازی و ثبت سفارش</h1>
+  </div>
+
+  <form action="{% url 'orders:checkout' %}" method="post">
+    {% csrf_token %}
+
+    <div class="checkout-layout">
+
+      <div>
+        
+        <!-- ۱. مشخصات تحویل‌گیرنده -->
+        <div style="background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 16px; box-shadow: var(--shadow-xs);">
+          <h3 style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 6px;">
+            ۱. نشانی و مشخصات تحویل‌گیرنده
+          </h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">نام و نام خانوادگی *</label>
+              <input type="text" name="full_name" required value="{{ user.get_full_name }}" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+            </div>
+            <div>
+              <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">شماره تلفن همراه *</label>
+              <input type="tel" name="phone" required value="{{ user.phone }}" placeholder="09123456789" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">استان (کارگاه ۱۰) *</label>
+              <select name="province" required style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+                <option value="">انتخاب استان...</option>
+                {% for p in provinces %}
+                  <option value="{{ p.id }}">{{ p.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">شهر *</label>
+              <input type="text" name="city" required placeholder="مثال: تهران" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+            </div>
+            <div>
+              <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">کد پستی ۱۰ رقمی *</label>
+              <input type="text" name="postal_code" required value="{{ user.postal_code }}" placeholder="1234567890" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">نشانی دقیق پستی *</label>
+            <textarea name="address" required rows="2" placeholder="خیابان، کوچه، پلاک، زنگ، واحد..." style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">{{ user.address }}</textarea>
+          </div>
+
+          <div>
+            <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 3px;">یادداشت خریدار (اختیاری)</label>
+            <input type="text" name="order_notes" placeholder="توضیحات اختیاری..." style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+          </div>
+        </div>
+
+        <!-- ۲. انتخاب حامل پستی (کارگاه ۱۰) -->
+        <div style="background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 16px; box-shadow: var(--shadow-xs);">
+          <h3 style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; border-bottom: 1px solid var(--border-light); padding-bottom: 6px;">
+            ۲. شرکت حمل و ارسال مرسوله (کارگاه ۱۰ کتاب)
+          </h3>
+
+          <div class="carrier-options">
+            {% for c in carriers %}
+              <label class="carrier-label">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <input type="radio" name="carrier" value="{{ c.id }}" {% if forloop.first %}checked{% endif %} required>
+                  <div>
+                    <div style="font-weight: 600; font-size: 12px;">{{ c.name }}</div>
+                    <div style="font-size: 10.5px; color: #64748b;">مدت تحویل: {{ c.delivery_time }}</div>
+                  </div>
+                </div>
+                <div>
+                  {% if subtotal >= c.free_shipping_min_order %}
+                    <span class="badge" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0;">ارسال رایگان</span>
+                  {% else %}
+                    <span style="font-weight: 700; color: var(--primary);">{{ c.cost|toman }}</span>
+                  {% endif %}
+                </div>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- ۳. شیوه پرداخت (کارگاه ۱۷) -->
+        <div style="background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-xs);">
+          <h3 style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; border-bottom: 1px solid var(--border-light); padding-bottom: 6px;">
+            ۳. شیوه پرداخت (کارگاه ۱۷ کتاب)
+          </h3>
+
+          <div class="payment-options">
+            <label class="payment-label">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="radio" name="payment_method" value="online" checked>
+                <div>
+                  <div style="font-weight: 600; font-size: 12px;">💳 درگاه امن شاپرک (پرداخت آنلاین آنی)</div>
+                  <div style="font-size: 10.5px; color: #64748b;">پرداخت امن با کلیه کارت‌های عضو شتاب</div>
+                </div>
+              </div>
+              <span class="badge" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0;">آنی</span>
+            </label>
+
+            <label class="payment-label">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="radio" name="payment_method" value="bank_receipt">
+                <div>
+                  <div style="font-weight: 600; font-size: 12px;">📑 فیش بانکی و کارت‌به‌کارت (کارگاه ۱۷)</div>
+                  <div style="font-size: 10.5px; color: #64748b;">واریز به کارت فروشگاه و ثبت فیش در سامانه</div>
+                </div>
+              </div>
+              <span class="badge" style="background:#fefce8; color:#854d0e; border:1px solid #fde68a;">حسابداری</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- خلاصه فاکتور -->
+      <aside>
+        <div class="cart-summary-card">
+          <h3 style="font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; border-bottom: 1.5px solid var(--border); padding-bottom: 6px;">
+            خلاصه اقلام سفارش
+          </h3>
+
+          <div style="max-height: 180px; overflow-y: auto; margin-bottom: 12px;">
+            {% for item in cart.items.all %}
+              <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 6px; border-bottom: 1px dotted var(--border-light); padding-bottom: 4px;">
+                <span>{{ item.quantity|fa_digits }} × {{ item.product.name }}</span>
+                <span>{{ item.total_price|toman }}</span>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px;">
+            <span style="color: #64748b;">جمع اقلام:</span>
+            <span>{{ subtotal|toman }}</span>
+          </div>
+
+          {% if is_gift_wrapped %}
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; color: #b45309;">
+              <span>🎁 کادوپیچی هدیه:</span>
+              <span>{{ gift_cost|toman }}</span>
+            </div>
+          {% endif %}
+
+          {% if coupon %}
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; color: var(--primary);">
+              <span>تخفیف ({{ coupon.code }}):</span>
+              <span>- {{ discount_amount|toman }}</span>
+            </div>
+          {% endif %}
+
+          <div style="margin-top: 14px; border-top: 1.5px solid var(--primary); padding-top: 12px;">
+            <button type="submit" class="btn-hero" style="width: 100%; font-size: 13px; border: none; cursor: pointer; padding: 9px;">
+              تایید و ثبت نهایی سفارش »
+            </button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </form>
+
+</div>
+{% endblock %}

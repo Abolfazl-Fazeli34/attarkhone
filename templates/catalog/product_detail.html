@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}{{ product.name }} | عطارخونه{% endblock %}
+{% block meta_description %}{{ product.short_description }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; margin: 16px auto;">
+
+  <!-- ۱. مسیر پیمایش (عین موکاپ: خانه > فروشگاه > دمنوش آرامش‌بخش) -->
+  <nav class="mockup-breadcrumbs">
+    <a href="{% url 'core:home' %}">خانه</a>
+    <span class="breadcrumb-separator">&gt;</span>
+    <a href="{% url 'catalog:product_list' %}">فروشگاه</a>
+    <span class="breadcrumb-separator">&gt;</span>
+    <span class="breadcrumb-current">{{ product.name }}</span>
+  </nav>
+
+  <!-- ۲. کارت اصلی جزئیات محصول (عین موکاپ) -->
+  <div class="product-detail-mockup-card">
+
+    <!-- ستون گالری تصویر محصول (چپ در موکاپ) -->
+    <div class="product-gallery-side">
+      <div class="main-image-frame">
+        <img src="{{ product.get_display_image }}" alt="{{ product.name }}" id="mainProductImage">
+      </div>
+
+      <!-- ۳ تصویر بندانگشتی در زیر عکس اصلی (عین موکاپ) -->
+      <div class="thumbnails-row">
+        <div class="thumb-box active" onclick="document.getElementById('mainProductImage').src=this.querySelector('img').src">
+          <img src="{{ product.get_display_image }}" alt="تصویر ۱">
+        </div>
+        <div class="thumb-box" onclick="document.getElementById('mainProductImage').src=this.querySelector('img').src">
+          <img src="{% static 'img/products/real_tea.jpg' %}" alt="تصویر ۲">
+        </div>
+        <div class="thumb-box" onclick="document.getElementById('mainProductImage').src=this.querySelector('img').src">
+          <img src="{% static 'img/products/real_herb.jpg' %}" alt="تصویر ۳">
+        </div>
+      </div>
+    </div>
+
+    <!-- ستون اطلاعات، قیمت و خرید (راست در موکاپ) -->
+    <div class="product-info-side">
+      <h1 class="detail-product-title">{{ product.name }}</h1>
+
+      <!-- امتیاز ستاره‌ای و تعداد نظرات (عین موکاپ: ۴.۸ ★★★★★ ۱۲۸ نظر) -->
+      <div class="detail-rating-row">
+        <span class="rating-badge-score">۴.۸</span>
+        <span class="stars-gold">★★★★★</span>
+        <span class="review-count-text">(۱۲۸ نظر)</span>
+      </div>
+
+      <!-- قیمت و تخفیف ویژه -->
+      <div class="detail-price-row">
+        <div class="current-price-huge" id="dynamicProductPrice">
+          {% if variants %}
+            {{ variants.first.price|toman }}
+          {% else %}
+            {{ product.final_price|toman }}
+          {% endif %}
+        </div>
+        {% if product.discount_percent > 0 %}
+          <div class="old-price-strike">{{ product.base_price|toman }}</div>
+          <span class="badge-special-discount">تخفیف ویژه</span>
+        {% endif %}
+      </div>
+
+      <!-- توضیحات کالا -->
+      <p class="detail-product-description">
+        {{ product.description|truncatewords:45 }}
+      </p>
+
+      <!-- فرم خرید و مشخصه‌های وزنی (کارگاه ۱۳) -->
+      <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="variant_id" id="selectedVariantId" value="{% if variants %}{{ variants.first.id }}{% endif %}">
+
+        {% if variants %}
+          <div class="variants-selector-box">
+            <span class="variant-label-title">وزن / بسته‌بندی:</span>
+            <div class="variant-chips-wrap">
+              {% for v in variants %}
+                <button type="button" class="variant-chip-btn {% if forloop.first %}selected{% endif %}" data-id="{{ v.id }}" data-price="{{ v.price }}">
+                  {{ v.weight_label }}
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- دکمه پهن افزودن به سبد خرید (عین موکاپ) -->
+        <button type="submit" class="btn-wide-dark-green-cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>افزودن به سبد خرید</span>
+        </button>
+      </form>
+
+      <!-- سه نماد اطمینان در پایین صفحه (عین موکاپ: بازگشت وجه، تضمین کیفیت، ارسال سریع) -->
+      <div class="detail-guarantees-bar">
+        <div class="guarantee-badge-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>بازگشت وجه</span>
+        </div>
+
+        <div class="guarantee-badge-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+          <span>تضمین کیفیت</span>
+        </div>
+
+        <div class="guarantee-badge-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          <span>ارسال سریع</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

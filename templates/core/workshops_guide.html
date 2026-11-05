@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}راهنمای ارزشیابی و تطبیق ۲۷ کارگاه پودمان ۲ | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 22px auto;">
+
+  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+    
+    <div style="border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 20px;">
+      <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark);">
+        🎓 شناسنامه دفاع پروژه: انطباق کامل با ۲۷ کارگاه پودمان دوم
+      </h1>
+      <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">
+        کتاب درسی تجارت الکترونیک و امنیت شبکه (کد ۲۱۲۲۹۰) — پیاده‌سازی‌شده با Python/Django به عنوان بستر جایگزین پرستاشاپ طبق مجوز هنرآموز محترم
+      </p>
+    </div>
+
+    <div style="margin-bottom: 18px; background: #f0fdf4; border: 1px solid var(--primary-border); padding: 14px 16px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.8; color: #166534;">
+      <b>نحوه ارائه به استاد جهت کسب نمره ۲۰:</b><br>
+      این جدول به ترتیب صفحات کتاب تنظیم شده است. برای هر کارگاه، لینک دسترسی و نحوه کارکرد آن مشخص گردیده است. شما می‌توانید در حضور هنرآموز هر بخش را باز کرده و عملکرد عملی آن را نشان دهید.
+    </div>
+
+    <!-- جدول ۲۷ کارگاه -->
+    <div style="overflow-x: auto;">
+      <table class="cart-table" style="font-size: 12px;">
+        <thead>
+          <tr style="background: #f5f5f5;">
+            <th style="width: 5%;">شماره</th>
+            <th style="width: 25%;">عنوان کارگاه در کتاب درسی</th>
+            <th style="width: 10%;">صفحه کتاب</th>
+            <th style="width: 40%;">نحوه پیاده‌سازی و عملکرد در عطارخونه</th>
+            <th style="width: 20%;">لینک تست و بررسی</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>۱</b></td>
+            <td><b>ایجاد نمایه (Roles & Permissions)</b></td>
+            <td>۶۸</td>
+            <td>تعریف نمایه‌های مدیر ارشد، حسابدار، انباردار و پشتیبان در مدل سفارشی کاربر</td>
+            <td><a href="/attar-management/accounts/user/" target="_blank">پنل مدیریت کاربران ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۲</b></td>
+            <td><b>ایجاد کارمند جدید</b></td>
+            <td>۶۹</td>
+            <td>ایجاد حساب کارمندان (admin, hesabdar, anbardar, poshtiban) با کلمات عبور قوی هش‌شده</td>
+            <td><a href="{% url 'accounts:staff_dashboard' %}">داشبورد کارمندان ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۳</b></td>
+            <td><b>غیرفعال کردن فروشگاه (تعمیرات)</b></td>
+            <td>۷۰</td>
+            <td>میدلور کنترل وضعیت با فیلد IP مجاز برای دسترسی کارمندان در زمان ارتقا</td>
+            <td><a href="/attar-management/core/storesetting/1/change/" target="_blank">تنظیمات تعمیرات ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۴</b></td>
+            <td><b>تنظیم نام و اطلاعات فروشگاه</b></td>
+            <td>۷۱</td>
+            <td>مدل اختصاصی StoreSetting حاوی نام، شعار، تلفن، ایمیل، استان و آدرس رسمی</td>
+            <td><a href="{% url 'pages:contact_us' %}">صفحه تماس و فوتر ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۵</b></td>
+            <td><b>تنظیم لوگو و فاوآیکون</b></td>
+            <td>۷۲</td>
+            <td>طراحی وکتور اختصاصی SVG هاون سنتی و برگ دارویی برای لوگو و تگ favicon</td>
+            <td><a href="{% static 'img/logo.svg' %}" target="_blank">مشاهده لوگو SVG ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۶</b></td>
+            <td><b>تنظیم محتوای صفحات ایستا (CMS)</b></td>
+            <td>۷۳</td>
+            <td>سیستم مدیریت محتوا برای صفحات: شرایط و ضوابط، درباره ما، روش ارسال، سلب مسئولیت</td>
+            <td><a href="{% url 'pages:page_detail' slug='about-us' %}">صفحه درباره ما ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۷</b></td>
+            <td><b>پیکربندی اسلایدر تصویر</b></td>
+            <td>۷۴</td>
+            <td>مدل Slider با امکان تغییر اولویت، پیوند، عنوان و تصویر متحرک صفحه اول</td>
+            <td><a href="{% url 'core:home' %}">اسلایدر صفحه نخست ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۸</b></td>
+            <td><b>پیکربندی بنر صفحه اصلی</b></td>
+            <td>۷۵</td>
+            <td>بنرهای تبلیغاتی میانی و سایدبار متصل به کمپین‌ها و عارضه‌یاب</td>
+            <td><a href="{% url 'core:home' %}">بنرهای صفحه اول ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۹</b></td>
+            <td><b>حذف محتوای پیش‌فرض فروشگاه</b></td>
+            <td>۷۷</td>
+            <td>فرمان مدیریتی <code>python manage.py clean_demo</code> جهت پاکسازی دیتای تستی</td>
+            <td>اجرا در ترمینال</td>
+          </tr>
+          <tr>
+            <td><b>۱۰</b></td>
+            <td><b>پیکربندی مناطق، استان‌ها و حامل‌ها</b></td>
+            <td>۷۹</td>
+            <td>تعریف لیست استان‌های کشور و حامل‌های پستی (پیشتاز، تیپاکس، پیک سلامت) با هزینه ارسال</td>
+            <td><a href="{% url 'orders:checkout' %}">فرم انتخاب حامل ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۱</b></td>
+            <td><b>افزودن شاخه جدید</b></td>
+            <td>۸۲</td>
+            <td>دسته‌بندی‌های تودرتوی درختی (گیاهان دارویی، دمنوش‌ها، عرقیات، روغن‌ها)</td>
+            <td><a href="{% url 'catalog:product_list' %}">مشاهده شاخه‌ها ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۲</b></td>
+            <td><b>پیکربندی منوی اصلی تارنما</b></td>
+            <td>۸۴</td>
+            <td>ناوبری کامل و ریسپانسیو هدر شامل لینک دسته‌ها، عارضه‌یاب و پیگیری سفارش</td>
+            <td>منوی بالای سایت</td>
+          </tr>
+          <tr>
+            <td><b>۱۳</b></td>
+            <td><b>تعریف مشخصه‌ها (Attributes)</b></td>
+            <td>۸۵</td>
+            <td>متغیرهای وزنی کالا (۵۰ گرم، ۱۰۰ گرم، ۲۵۰ گرم) با تغییر آنی قیمت و موجودی</td>
+            <td><a href="/shop/product/gol-e-gavzaban-aala/">مشخصه وزنی گل‌گاوزبان ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۴</b></td>
+            <td><b>تعریف ویژگی‌ها (Features)</b></td>
+            <td>۸۶</td>
+            <td>جدول مشخصات فنی ثابت: طبع و مزاج، اندام مصرفی، مصلح، طریقه مصرف</td>
+            <td><a href="/shop/product/gol-e-gavzaban-aala/">جدول ویژگی‌های کالا ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۵</b></td>
+            <td><b>افزودن برند</b></td>
+            <td>۸۷</td>
+            <td>ثبت تولیدکنندگان معتبر گیاهی (مزارع احیاء، کیمیا دارو، گلستان کاشان)</td>
+            <td><a href="{% url 'catalog:product_list' %}">فیلتر برند در فروشگاه ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۶</b></td>
+            <td><b>افزودن تأمین‌کننده</b></td>
+            <td>۸۸</td>
+            <td>مدل تأمین‌کنندگان گیاهان خام و تعاونی‌های کشت جهت مدیریت زنجیره تأمین</td>
+            <td><a href="/attar-management/catalog/supplier/" target="_blank">تأمین‌کنندگان در ادمین ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۷</b></td>
+            <td><b>پیکربندی پرداخت با فیش بانکی</b></td>
+            <td>۹۰</td>
+            <td>فرم واریز کارت‌به‌کارت با آپلود تصویر فیش، ثبت شماره پیگیری و تایید حسابدار</td>
+            <td><a href="{% url 'orders:checkout' %}">انتخاب پرداخت فیش ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۸</b></td>
+            <td><b>پیکربندی جستجوی لایه‌ای (Faceted)</b></td>
+            <td>۹۲</td>
+            <td>فیلتر همزمان محصولات بر اساس شاخه، طبع، برند، حداقل/حداکثر قیمت و جستجوی متنی</td>
+            <td><a href="{% url 'catalog:product_list' %}">فیلتر لایه‌ای فروشگاه ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۱۹</b></td>
+            <td><b>ترجمه قالب و بومی‌سازی کامل</b></td>
+            <td>۹۳</td>
+            <td>رابط کاربری راست‌چین (RTL)، ارقام زیبای فارسی، واحد پول تومان و تقویم جلالی</td>
+            <td>سراسر فروشگاه</td>
+          </tr>
+          <tr>
+            <td><b>۲۰</b></td>
+            <td><b>تهیه نسخه پشتیبان (Backup)</b></td>
+            <td>۹۴</td>
+            <td>فرمان‌های <code>backup_store</code> و <code>restore_store</code> جهت پشتیبان‌گیری دیتابیس</td>
+            <td>پوشه <code>backups/</code></td>
+          </tr>
+          <tr>
+            <td><b>۲۱</b></td>
+            <td><b>ارتقا به نسخه جدید</b></td>
+            <td>۹۵</td>
+            <td>مایگریشن‌های دیتابیس و مدیریت ارتقای ساختار داده بدون از دست رفتن رکوردها</td>
+            <td>پایگاه داده جنگو</td>
+          </tr>
+          <tr>
+            <td><b>۲۲</b></td>
+            <td><b>آزمایش صحت ارتقا و سلامت سامانه</b></td>
+            <td>۹۷</td>
+            <td>داشبورد زنده تست پایگاه داده، مجوزهای دایرکتوری و ارزیابی شایستگی</td>
+            <td><a href="{% url 'core:health_check' %}">تست سلامت سیستم ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۲۳</b></td>
+            <td><b>ایجاد کد تخفیف برای مشتریان</b></td>
+            <td>۹۹</td>
+            <td>کوپن‌های تخفیف درصدی و مبلغ ثابت با تاریخ انقضا و سقف خرید (کد: <code>NOBAHAR1403</code>)</td>
+            <td><a href="{% url 'orders:cart' %}">فرم کوپن در سبد خرید ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۲۴</b></td>
+            <td><b>مدیریت سفارش‌ها و پیشنهاد کادوپیچی</b></td>
+            <td>۱۰۰</td>
+            <td>گردش کار سفارش‌ها + <b>امکان انتخاب کادوپیچی ویژه و درج پیام هدیه (ارزشیابی ص ۱۱۲)</b></td>
+            <td><a href="{% url 'orders:cart' %}">تست کادوپیچی در سبد ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۲۵</b></td>
+            <td><b>بررسی واکنش‌گرایی با Chrome Inspect</b></td>
+            <td>۱۰۴</td>
+            <td>طراحی ریسپانسیو Mobile-First با CSS مدرن، تست شده در اندازه‌های موبایل و تبلت</td>
+            <td>با زدن F12 در مرورگر</td>
+          </tr>
+          <tr>
+            <td><b>۲۶</b></td>
+            <td><b>ثبت نشانی دامنه در گوگل و نقشه سایت</b></td>
+            <td>۱۰۵</td>
+            <td>تولید اتوماتیک <code>sitemap.xml</code> و فایل <code>robots.txt</code> استاندارد</td>
+            <td><a href="/sitemap.xml" target="_blank">مشاهده sitemap.xml ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>۲۷</b></td>
+            <td><b>تحقیق واژه‌های کلیدی با KWFinder و سئو</b></td>
+            <td>۱۰۷</td>
+            <td>متاتگ‌های عنوان، توضیحات، کلمات کلیدی هدف و ساختار داده Schema.org</td>
+            <td>در کدهای HTML صفحات محصول</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

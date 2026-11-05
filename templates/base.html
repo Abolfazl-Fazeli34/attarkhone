@@ -1,0 +1,194 @@
+{% load static persian_tags %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ store_setting.store_name|default:"عطارخونه" }} | دانش کهن، سلامت مدرن{% endblock %}</title>
+  
+  <meta name="description" content="{% block meta_description %}{{ store_setting.about_summary }}{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}گیاهان دارویی, خرید دمنوش آرامش بخش, گل گاوزبان, طب سنتی, دستیار هوشمند سلامت, عطارخونه{% endblock %}">
+  <meta name="robots" content="index, follow">
+  
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- هدر اصلی مطابق موکاپ -->
+  <header class="site-header">
+    <div class="container header-main">
+      
+      <!-- ۱. آیکون‌های سمت چپ (کاربری، علاقه‌مندی، سبد خرید) -->
+      <div class="header-user-icons">
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:profile' %}" class="icon-btn" title="حساب کاربری: {{ user.get_full_name|default:user.username }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="icon-btn" title="ورود / عضویت">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+        {% endif %}
+
+        <!-- آیکون علاقه‌مندی‌ها -->
+        <a href="{% url 'accounts:profile' %}" class="icon-btn" title="علاقه‌مندی‌ها">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </a>
+
+        <!-- آیکون سبد خرید با نشانگر عددی -->
+        <a href="{% url 'orders:cart' %}" class="icon-btn cart-icon-btn" title="سبد خرید">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-floating-badge">{{ cart_count|fa_digits }}</span>
+        </a>
+
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="منو">☰</button>
+      </div>
+
+      <!-- ۲. فیلد جستجوی کپسولی وسط -->
+      <form class="header-search-wrap" action="{% url 'catalog:product_list' %}" method="get">
+        <input type="text" name="q" placeholder="جستجو در میان محصولات..." value="{{ request.GET.q }}">
+        <button type="submit" aria-label="جستجو">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
+
+      <!-- ۳. لوگوی برند عطارخونه سمت راست -->
+      <a href="{% url 'core:home' %}" class="brand-logo-link">
+        <div class="logo-text-group">
+          <span class="logo-title">عطارخونه</span>
+          <span class="logo-subtitle">دانش کهن، سلامت مدرن</span>
+        </div>
+        <div class="logo-shield-icon">
+          <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+            <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M18 7 L18 28" stroke="#1b4332" stroke-width="2" stroke-linecap="round"/>
+            <path d="M18 12 Q25 14 26 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M18 18 Q24 21 24 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M18 12 Q11 14 10 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M18 18 Q12 21 12 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ناوبری اصلی هدر -->
+    <nav class="site-nav" id="siteNav">
+      <div class="container">
+        <ul class="nav-links-list">
+          <li class="nav-link-item {% if request.path == '/' %}active{% endif %}">
+            <a href="{% url 'core:home' %}">خانه</a>
+          </li>
+          <li class="nav-link-item {% if '/shop/' in request.path %}active{% endif %}">
+            <a href="{% url 'catalog:product_list' %}">فروشگاه</a>
+          </li>
+          <li class="nav-link-item {% if '/remedy/' in request.path %}active{% endif %}">
+            <a href="{% url 'remedy:wizard' %}">دستیار سلامت</a>
+          </li>
+          <li class="nav-link-item">
+            <a href="{% url 'pages:page_detail' slug='about-us' %}">مقالات و آموزش‌ها</a>
+          </li>
+          <li class="nav-link-item {% if '/pages/about-us/' in request.path %}active{% endif %}">
+            <a href="{% url 'pages:page_detail' slug='about-us' %}">درباره ما</a>
+          </li>
+          <li class="nav-link-item {% if '/pages/contact-us/' in request.path %}active{% endif %}">
+            <a href="{% url 'pages:contact_us' %}">تماس با ما</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- پیام‌های سامانه -->
+  <div class="container messages-container">
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }}">
+          <span>{{ msg }}</span>
+          <span style="cursor:pointer;" onclick="this.parentElement.style.display='none'">✕</span>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- محتوای اصلی -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- فوتر عطارخونه -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>عطارخونه؛ دانش کهن، سلامت مدرن</h4>
+          <p style="margin-bottom: 8px; line-height: 1.6;">
+            مرجع تخصصی گیاهان دارویی ارگانیک، دمنوش‌های طبیعی و دستیار هوشمند سلامت با بررسی تداخلات دارویی.
+          </p>
+          <p style="font-size: 11px; color: #86efac;">
+            🌱 توجهات زیست‌محیطی: کلیه سفارش‌ها در پاکت‌های کرافت تجدیدپذیر و بسته‌بندی سبز دوستدار محیط زیست ارسال می‌شوند.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>دسترسی سریع</h4>
+          <ul>
+            <li><a href="{% url 'catalog:product_list' %}">فروشگاه و محصولات</a></li>
+            <li><a href="{% url 'remedy:wizard' %}">دستیار هوشمند سلامت</a></li>
+            <li><a href="{% url 'orders:tracking' %}">پیگیری سفارش</a></li>
+            <li><a href="{% url 'core:workshops_guide' %}">شناسنامه ۲۷ کارگاه کتاب</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>راهنمای مشتریان (کارگاه ۶)</h4>
+          <ul>
+            <li><a href="{% url 'pages:page_detail' slug='terms' %}">قوانین و سلب مسئولیت</a></li>
+            <li><a href="{% url 'pages:page_detail' slug='shipping-policy' %}">روش‌های ارسال و کادوپیچی</a></li>
+            <li><a href="{% url 'pages:page_detail' slug='about-us' %}">درباره ما</a></li>
+            <li><a href="{% url 'pages:contact_us' %}">تماس با ما</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>اطلاعات تماس (کارگاه ۴)</h4>
+          <p>📍 {{ store_setting.address }}</p>
+          <p style="margin-top: 4px;">📞 تلفن: {{ store_setting.phone|fa_digits }}</p>
+          <p style="margin-top: 4px;">📱 پشتیبانی: {{ store_setting.mobile|fa_digits }}</p>
+          <p style="margin-top: 4px;">✉️ ایمیل: {{ store_setting.email }}</p>
+          <div style="margin-top: 8px;">
+            <a href="{% url 'core:health_check' %}" style="color:#fde047; font-size:11px;">🩺 تست سلامت سیستم (کارگاه ۲۲)</a>
+            {% if user.is_authenticated and user.is_store_staff %}
+              | <a href="{% url 'accounts:staff_dashboard' %}" style="color:#86efac; font-size:11px;">داشبورد کارمند</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        طراحی و پیاده‌سازی طبق پودمان دوم کتاب درسی «تجارت الکترونیک و امنیت شبکه» (کد ۲۱۲۲۹۰) | تمامی حقوق برای عطارخونه محفوظ است.
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

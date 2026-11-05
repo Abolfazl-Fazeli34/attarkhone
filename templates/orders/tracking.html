@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}پیگیری آنلاین وضعیت سفارش | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin: 24px auto;">
+
+  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+    
+    <div style="border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 20px; text-align: center;">
+      <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark);">🔍 پیگیری آنلاین سفارش‌های عطارخونه</h1>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">کد رهگیری پیامک‌شده را در کادر زیر وارد کنید:</p>
+    </div>
+
+    <!-- فرم جستجوی کد رهگیری -->
+    <form action="{% url 'orders:tracking' %}" method="get" style="display: flex; gap: 8px; margin-bottom: 22px;">
+      <input type="text" name="code" value="{{ search_code }}" placeholder="کد رهگیری سفارش (مثال: ATK-123456)" required style="flex: 1; padding: 9px 14px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px;">
+      <button type="submit" class="btn-hero" style="border: none; cursor: pointer; padding: 9px 20px; font-size: 12.5px;">رهگیری</button>
+    </form>
+
+    {% if order %}
+      <div style="background: #f0fdf4; border: 1px solid var(--primary-border); border-radius: var(--radius-sm); padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--primary-border); padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div style="font-size: 12px; color: #558b2f;">شماره رهگیری:</div>
+            <div style="font-size: 18px; font-weight: bold; color: var(--primary-dark);">{{ order.tracking_code }}</div>
+          </div>
+          <div style="text-align: left;">
+            <div style="font-size: 12px; color: #558b2f;">وضعیت پردازش کنونی:</div>
+            <span class="badge" style="background: var(--primary); color: #fff; font-size: 13px; padding: 6px 12px;">
+              {{ order.get_status_display }}
+            </span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 13px; line-height: 1.8; margin-bottom: 20px;">
+          <div>
+            <div>تحویل‌گیرنده: <b>{{ order.full_name }}</b></div>
+            <div>تاریخ ثبت سفارش: <b>{{ order.created_at|date:"Y/m/d - H:i" }}</b></div>
+            <div>شرکت پستی / حامل: <b>{{ order.carrier.name }}</b></div>
+          </div>
+          <div>
+            <div>مبلغ فاکتور: <b>{{ order.total_amount|toman }}</b></div>
+            <div>کادوپیچی ویژه: <b>{% if order.is_gift_wrapped %}بله (دارد){% else %}خیر{% endif %}</b></div>
+            <div>وضعیت تسویه مالی: <b>{% if order.is_paid %}پرداخت شده ✓{% else %}در انتظار پرداخت{% endif %}</b></div>
+          </div>
+        </div>
+
+        {% if order.admin_notes %}
+          <div style="background: #fff; padding: 12px; border-radius: var(--radius-sm); border: 1px dashed #aed581; font-size: 12px; color: #33691e; margin-bottom: 15px;">
+            <b>یادداشت انبارداری و ارسال:</b> {{ order.admin_notes }}
+          </div>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 15px;">
+          <a href="{% url 'orders:invoice' tracking_code=order.tracking_code %}" class="btn-action" style="background: #fff;">
+            📄 مشاهده و چاپ فاکتور سفارش
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}
