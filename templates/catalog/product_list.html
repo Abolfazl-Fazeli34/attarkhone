@@ -14,10 +14,69 @@
     </div>
   </section>
 
-  <!-- ۲. ساختار دو ستونه: فیلترها در سایدبار + کاتالوگ محصولات -->
+  <!-- ۲. ساختار دو ستونه: کاتالوگ محصولات سمت راست + سایدبار فیلترها سمت چپ (عین موکاپ) -->
   <div class="shop-mockup-layout">
 
-    <!-- سایدبار فیلتر محصولات (عین موکاپ) -->
+    <!-- ستون سمت راست: لیست و کاتالوگ محصولات -->
+    <main class="shop-main-catalog">
+      
+      <!-- نوار بالای محصولات: مرتب‌سازی -->
+      <div class="shop-top-sorter">
+        <span class="sort-label">مرتب‌سازی بر اساس:</span>
+        <select onchange="location.href=this.value" class="sort-select">
+          <option value="?sort=popular" {% if current_sort == 'popular' %}selected{% endif %}>محبوب‌ترین</option>
+          <option value="?sort=newest" {% if current_sort == 'newest' %}selected{% endif %}>جدیدترین</option>
+          <option value="?sort=price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>ارزان‌ترین</option>
+          <option value="?sort=price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>گران‌ترین</option>
+        </select>
+      </div>
+
+      <!-- گرید محصولات (عین ۳ کارت ردیف موکاپ: چای سبز، گل‌گاوزبان، دمنوش/پک هدیه) -->
+      <div class="products-grid">
+        {% for product in products %}
+          <div class="product-card">
+            <div class="product-img-box">
+              <img src="{{ product.get_display_image }}" alt="{{ product.name }}" loading="lazy">
+            </div>
+
+            <div class="product-info">
+              <h3 class="product-title">
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+              </h3>
+
+              <div class="product-rating-stars">
+                <span class="stars-gold">★★★★★</span>
+                <span class="rating-num">۴.۸</span>
+              </div>
+
+              <div class="product-price-box">
+                <div class="price-values">
+                  {% if product.discount_percent > 0 %}
+                    <span class="old-price">{{ product.base_price|toman }}</span>
+                  {% endif %}
+                  <span class="current-price">{{ product.final_price|toman }}</span>
+                </div>
+
+                <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-card-add-cart">
+                    <span>🛒</span>
+                    <span>افزودن به سبد</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #fff; border-radius: var(--radius-sm); border: 1px dashed var(--border);">
+            <p style="color: #64748b;">هیچ محصولی با فیلتر انتخابی یافت نشد.</p>
+          </div>
+        {% endfor %}
+      </div>
+
+    </main>
+
+    <!-- ستون سمت چپ: سایدبار فیلتر محصولات (عین موکاپ) -->
     <aside class="shop-filter-sidebar">
       <form action="{% url 'catalog:product_list' %}" method="get" id="filterForm">
         {% if search_query %}
@@ -67,65 +126,6 @@
 
       </form>
     </aside>
-
-    <!-- لیست محصولات -->
-    <main class="shop-main-catalog">
-      
-      <!-- نوار بالای محصولات: مرتب‌سازی -->
-      <div class="shop-top-sorter">
-        <span class="sort-label">مرتب‌سازی بر اساس:</span>
-        <select onchange="location.href=this.value" class="sort-select">
-          <option value="?sort=newest" {% if current_sort == 'newest' %}selected{% endif %}>جدیدترین</option>
-          <option value="?sort=popular" {% if current_sort == 'popular' %}selected{% endif %}>محبوب‌ترین</option>
-          <option value="?sort=price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>ارزان‌ترین</option>
-          <option value="?sort=price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>گران‌ترین</option>
-        </select>
-      </div>
-
-      <!-- گرید محصولات (عین ۳ کارت ردیف موکاپ) -->
-      <div class="products-grid">
-        {% for product in products %}
-          <div class="product-card">
-            <div class="product-img-box">
-              <img src="{{ product.get_display_image }}" alt="{{ product.name }}" loading="lazy">
-            </div>
-
-            <div class="product-info">
-              <h3 class="product-title">
-                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-              </h3>
-
-              <div class="product-rating-stars">
-                <span class="stars-gold">★★★★★</span>
-                <span class="rating-num">۴.۸</span>
-              </div>
-
-              <div class="product-price-box">
-                <div class="price-values">
-                  {% if product.discount_percent > 0 %}
-                    <span class="old-price">{{ product.base_price|toman }}</span>
-                  {% endif %}
-                  <span class="current-price">{{ product.final_price|toman }}</span>
-                </div>
-
-                <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn-card-add-cart">
-                    <span>🛒</span>
-                    <span>افزودن به سبد</span>
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        {% empty %}
-          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #fff; border-radius: var(--radius-sm); border: 1px dashed var(--border);">
-            <p style="color: #64748b;">هیچ محصولی با فیلتر انتخابی یافت نشد.</p>
-          </div>
-        {% endfor %}
-      </div>
-
-    </main>
 
   </div>
 

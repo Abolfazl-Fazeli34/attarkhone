@@ -66,9 +66,9 @@ class ProductListView(View):
             # پیش‌فرض و محبوب‌ترین: اولویت با اقلام اصلی موکاپ
             from django.db.models import Case, When, Value, IntegerField
             priority_slugs = [
-                'damnoosh-aramesh-bakhsh',
-                'gol-gavzaban-momtaz',
                 'green-tea-organic',
+                'gol-gavzaban-momtaz',
+                'damnoosh-aramesh-bakhsh',
                 'health-gift-box',
                 'black-seed-oil-pure',
                 'darchin-asl',

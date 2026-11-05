@@ -13,16 +13,8 @@ def store_context(request):
     # شمارش اقلام سبد خرید کاربر یا مهمان
     cart_items_count = 0
     try:
-        from orders.models import Cart
-        if request.user.is_authenticated:
-            cart = Cart.objects.filter(user=request.user).first()
-        else:
-            session_key = request.session.session_key
-            if not session_key:
-                request.session.save()
-                session_key = request.session.session_key
-            cart = Cart.objects.filter(session_key=session_key).first()
-
+        from orders.views import get_or_create_cart
+        cart = get_or_create_cart(request)
         if cart:
             cart_items_count = sum(item.quantity for item in cart.items.all())
     except Exception:

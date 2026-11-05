@@ -22,9 +22,9 @@ class HomeView(View):
         middle_banners = Banner.objects.filter(position='home_middle', is_active=True)[:2]
         
         priority_slugs = [
-            'damnoosh-aramesh-bakhsh',
-            'gol-gavzaban-momtaz',
             'green-tea-organic',
+            'gol-gavzaban-momtaz',
+            'damnoosh-aramesh-bakhsh',
             'health-gift-box',
             'black-seed-oil-pure',
             'darchin-asl',

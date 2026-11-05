@@ -19,7 +19,25 @@
         {% for item in cart.items.all %}
           <div class="cart-item-row-card">
             
-            <!-- سطل زباله حذف آیتم سمت چپ -->
+            <!-- تصویر محصول سمت راست (عین موکاپ) -->
+            <div class="cart-item-thumb-box">
+              <img src="{{ item.product.get_display_image }}" alt="{{ item.product.name }}">
+            </div>
+
+            <!-- اطلاعات محصول و دکمه‌های تعداد در وسط (عین موکاپ) -->
+            <div class="cart-item-center-info">
+              <h4 class="cart-item-title">{{ item.product.name }}</h4>
+              <div class="cart-stepper-and-price">
+                <div class="stepper-box">
+                  <span class="stepper-btn minus">-</span>
+                  <span class="stepper-val">{{ item.quantity|fa_digits }}</span>
+                  <span class="stepper-btn plus">+</span>
+                </div>
+                <span class="cart-item-unit-price">{{ item.total_price|toman }}</span>
+              </div>
+            </div>
+
+            <!-- سطل زباله حذف آیتم سمت چپ (عین موکاپ) -->
             <form action="{% url 'orders:remove_from_cart' item_id=item.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn-trash-delete" title="حذف کالا">
@@ -29,25 +47,6 @@
                 </svg>
               </button>
             </form>
-
-            <!-- اطلاعات محصول و دکمه‌های تعداد -->
-            <div class="cart-item-center-info">
-              <h4 class="cart-item-title">{{ item.product.name }}</h4>
-              <div class="cart-stepper-and-price">
-                <span class="cart-item-unit-price">{{ item.total_price|toman }}</span>
-                
-                <div class="stepper-box">
-                  <span class="stepper-btn plus">+</span>
-                  <span class="stepper-val">{{ item.quantity|fa_digits }}</span>
-                  <span class="stepper-btn minus">-</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- تصویر محصول سمت راست -->
-            <div class="cart-item-thumb-box">
-              <img src="{{ item.product.get_display_image }}" alt="{{ item.product.name }}">
-            </div>
 
           </div>
         {% endfor %}

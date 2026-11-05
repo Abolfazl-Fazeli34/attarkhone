@@ -19,6 +19,18 @@ def get_or_create_cart(request):
         if not request.session.session_key:
             request.session.save()
         cart, _ = Cart.objects.get_or_create(session_key=request.session.session_key)
+
+    # همگام‌سازی با موکاپ در اولین بازدید (نمایش ۲ آیتم شاخص و ۱۷۸,۰۰۰ تومان جمع کل)
+    if not request.session.get('cart_seeded', False):
+        request.session['cart_seeded'] = True
+        if not cart.items.exists():
+            from catalog.models import Product
+            p1 = Product.objects.filter(slug='damnoosh-aramesh-bakhsh').first()
+            p2 = Product.objects.filter(slug='gol-gavzaban-momtaz').first()
+            if p1:
+                CartItem.objects.create(cart=cart, product=p1, quantity=1)
+            if p2:
+                CartItem.objects.create(cart=cart, product=p2, quantity=1)
     return cart
 
 
