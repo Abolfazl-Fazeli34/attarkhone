@@ -106,18 +106,9 @@ class Command(BaseCommand):
             slug="kimiya-darou",
             defaults={'description': 'دارنده گواهی سلامت و بهداشت'}
         )
-        brand_kashan, _ = Brand.objects.get_or_create(
-            name="گلستان سنتی کاشان",
-            slug="golestan-kashan",
-            defaults={'description': 'مرکز تولید عرقیات و گل محمدی قمصر'}
-        )
         sup_damavand, _ = Supplier.objects.get_or_create(
             name="مزارع کوهپایه البرز و دماوند",
             defaults={'contact_person': 'مهندس رادمنش', 'phone': '021-76543210'}
-        )
-        sup_kashan, _ = Supplier.objects.get_or_create(
-            name="تعاونی گل‌کاران قمصر و کاشان",
-            defaults={'contact_person': 'حاج علی کاشانی', 'phone': '031-55443322'}
         )
 
         # ۴. دسته‌بندی‌های ۶ گانه مطابق موکاپ
@@ -250,128 +241,7 @@ class Command(BaseCommand):
             }
         )
 
-        # ۵ محصول پرفروش صفحه نخست (دقیقاً مطابق موکاپ جدید)
-        # ۱. دارچین اصل (۸۹,۰۰۰ تومان)
-        p_darchin, _ = Product.objects.get_or_create(
-            slug="darchin-asl",
-            defaults={
-                'name': "دارچین اصل",
-                'category': cat_spices,
-                'brand': brand_ehya,
-                'supplier': sup_damavand,
-                'temperament': 'hot_dry',
-                'base_price': 89000,
-                'discount_percent': 0,
-                'is_featured': True,
-                'is_organic': True,
-                'short_description': "چوب دارچین اعلای سیلان، معطر، کاهش قند خون و تنظیم سوخت و ساز.",
-                'description': "چوب دارچین خالص بدون اسانس مصنوعی، مناسب دمنوش و چاشنی آشپزی اصیل.",
-                'meta_title': "خرید دارچین اصل سیلان | عطارخونه",
-                'meta_keywords': "دارچین اصل, خرید چوب دارچین, ادویه دارویی",
-                'meta_description': "دارچین اصل با کیفیت اعلا در فروشگاه عطارخونه.",
-            }
-        )
-        p_darchin.base_price = 89000
-        p_darchin.is_featured = True
-        p_darchin.save()
-
-        # ۲. نعناع خشک (۶۹,۰۰۰ تومان)
-        p_mint, _ = Product.objects.get_or_create(
-            slug="nana-khoshk",
-            defaults={
-                'name': "نعناع خشک",
-                'category': cat_herbs,
-                'brand': brand_ehya,
-                'supplier': sup_damavand,
-                'temperament': 'hot_dry',
-                'base_price': 69000,
-                'discount_percent': 0,
-                'is_featured': True,
-                'is_organic': True,
-                'short_description': "نعناع خشک معطر کوهی، مقوی معده، ضدنفخ قوی و آرام‌بخش دستگاه گوارش.",
-                'description': "برگ‌های سبز و سورت‌شده نعناع معطر بدون خاکه و ساقه.",
-                'meta_title': "خرید نعناع خشک ارگانیک | عطارخونه",
-                'meta_keywords': "نعناع خشک, ضد نفخ طبیعی, سبزی دارویی",
-                'meta_description': "نعناع خشک معطر دستچین اعلا در عطارخونه.",
-            }
-        )
-        p_mint.base_price = 69000
-        p_mint.is_featured = True
-        p_mint.save()
-
-        # ۳. زعفران اصل ایرانی (۲,۹۹۰,۰۰۰ تومان)
-        p_saffron, _ = Product.objects.get_or_create(
-            slug="zaferan-asl-irani",
-            defaults={
-                'name': "زعفران اصل ایرانی",
-                'category': cat_herbs,
-                'brand': brand_kimiya,
-                'supplier': sup_kashan,
-                'temperament': 'hot_dry',
-                'base_price': 2990000,
-                'discount_percent': 0,
-                'is_featured': True,
-                'is_organic': True,
-                'short_description': "زعفران سرگل ممتاز قائنات، عیار عطر و رنگ فوق‌العاده، نشاط‌آور و مقوی قلب.",
-                'description': "زعفران صادراتی رشته‌ای تمام قرمز سوپر نگین، برداشت امسالی مزارع خراسان.",
-                'meta_title': "خرید زعفران اصل ایرانی قائنات | عطارخونه",
-                'meta_keywords': "زعفران اصل ایرانی, خرید زعفران قائنات, زعفران سوپر نگین",
-                'meta_description': "زعفران اصل ایرانی با شناسنامه آزمایشگاهی اصالت و کیفیت.",
-            }
-        )
-        p_saffron.base_price = 2990000
-        p_saffron.is_featured = True
-        p_saffron.save()
-
-        # ۴. بابونه اعلا (۷۹,۰۰۰ تومان)
-        p_chamomile, _ = Product.objects.get_or_create(
-            slug="baboneh-aala",
-            defaults={
-                'name': "بابونه اعلا",
-                'category': cat_tea,
-                'brand': brand_ehya,
-                'supplier': sup_damavand,
-                'temperament': 'hot_dry',
-                'base_price': 79000,
-                'discount_percent': 0,
-                'is_featured': True,
-                'is_organic': True,
-                'short_description': "گل بابونه ارگانیک، التیام‌بخش التهابات معده، آرامش‌بخش اعصاب و ضد استرس.",
-                'description': "گل‌های زردرنگ بابونه آلمانی خشک‌شده در سایه با بالاترین درصد اسانس کامازولن.",
-                'meta_title': "خرید بابونه اعلا ارگانیک | عطارخونه",
-                'meta_keywords': "بابونه اعلا, دمنوش بابونه, تسکین معده",
-                'meta_description': "بابونه اعلا کوهی خالص و سورت‌شده در فروشگاه عطارخونه.",
-            }
-        )
-        p_chamomile.base_price = 79000
-        p_chamomile.is_featured = True
-        p_chamomile.save()
-
-        # ۵. گل محمدی درجه یک (۹۹,۰۰۰ تومان)
-        p_rose, _ = Product.objects.get_or_create(
-            slug="gol-mohammadi-daraje-yek",
-            defaults={
-                'name': "گل محمدی درجه یک",
-                'category': cat_herbs,
-                'brand': brand_kashan,
-                'supplier': sup_kashan,
-                'temperament': 'moderate',
-                'base_price': 99000,
-                'discount_percent': 0,
-                'is_featured': True,
-                'is_organic': True,
-                'short_description': "غنچه گل محمدی کاشان، عطر دل‌انگیز طبیعی، مقوی اعصاب و نشاط‌آور قلب.",
-                'description': "غنچه‌های صورتی گل سرخ قمصر کاشان، مناسب برای افزودن به چای، دمنوش و شربت سنتی.",
-                'meta_title': "خرید گل محمدی درجه یک کاشان | عطارخونه",
-                'meta_keywords': "گل محمدی درجه یک, غنچه گل سرخ, گلاب کاشان",
-                'meta_description': "غنچه گل محمدی درجه یک اعلای کاشان در بسته محافظ رطوبت.",
-            }
-        )
-        p_rose.base_price = 99000
-        p_rose.is_featured = True
-        p_rose.save()
-
-        # محصول روغن سیاه‌دانه درمانی
+        # محصول ۵: روغن سیاه‌دانه درمانی
         p_oil, _ = Product.objects.get_or_create(
             slug="black-seed-oil-pure",
             defaults={
@@ -382,7 +252,7 @@ class Command(BaseCommand):
                 'temperament': 'hot_dry',
                 'base_price': 89000,
                 'discount_percent': 0,
-                'is_featured': False,
+                'is_featured': True,
                 'is_organic': True,
                 'short_description': "روغن خالص سیاه‌دانه پرس سرد در قطره‌چکان کهربایی، تسکین دردهای مفصلی و روماتیسم.",
                 'description': "روغن‌گیری کلدپرس بدون حرارت، حفظ کامل ماده مؤثره تیموکینون.",

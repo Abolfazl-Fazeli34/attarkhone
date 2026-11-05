@@ -1,46 +1,34 @@
 /* ==========================================================================
    فروشگاه اینترنتی عطارخونه (AttarKhooneh)
-   سیستم طراحی جامع، دقیق و منطبق بر استانداردهای بصری و موکاپ ارائه‌شده
-   Design System Tokens: Forest Green, Deep Green, Olive Green, Natural Cream, Gold Accent
+   سیستم طراحی دقیق، هماهنگ و منطبق بر موکاپ ارائه‌شده (Pixel-Perfect Mockup Match)
+   رنگ‌بندی طبیعی: سبز زمردی جنگلی، طلایی کهربایی و پس‌زمینه گرم ارگانیک
    ========================================================================== */
 
 :root {
-  /* پالت رنگی اصلی بر اساس هویت بصری */
-  --forest-green: #245B3F;
-  --deep-green: #173F35;
-  --olive-green: #84966A;
-  --natural-cream: #F8F5EC;
-  --soft-beige: #EFE8D9;
-  --gold-accent: #C5A568;
-  --primary-text: #24352C;
-  --secondary-text: #7A8077;
-  --white: #FFFFFF;
+  --primary-dark: #1b4332;
+  --primary: #2d6a4f;
+  --primary-light: #40916c;
+  --primary-subtle: #f0fdf4;
+  --primary-border: #d1fae5;
 
-  /* متغیرهای منطبق بر مؤلفه‌ها */
-  --primary: var(--forest-green);
-  --primary-dark: var(--deep-green);
-  --primary-light: var(--olive-green);
-  --primary-subtle: #f1f7f4;
-  --primary-border: #d2e4da;
+  --amber: #eab308;
+  --amber-dark: #ca8a04;
+  --amber-light: #fef08a;
 
-  --amber: var(--gold-accent);
-  --amber-dark: #ab8b4e;
-  --amber-light: #f5eedf;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+  --text-light: #9ca3af;
 
-  --text-dark: var(--primary-text);
-  --text-muted: var(--secondary-text);
-  --text-light: #9ea49b;
+  --bg-page: #fbfbfa;
+  --bg-card: #ffffff;
+  --border: #e5e7eb;
+  --border-light: #f3f4f6;
+  --border-color: #e5e7eb;
 
-  --bg-page: var(--natural-cream);
-  --bg-card: var(--white);
-  --border: #e3dcce;
-  --border-light: #ede7db;
-  --border-color: #e3dcce;
-
-  --accent: var(--gold-accent);
-  --warning: #d97706;
-  --danger: #dc2626;
-  --success: var(--forest-green);
+  --accent: #f59e0b;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --success: #15803d;
 
   --radius-xs: 4px;
   --radius-sm: 8px;
@@ -48,13 +36,13 @@
   --radius-lg: 16px;
   --radius-full: 9999px;
 
-  --shadow-xs: 0 1px 3px rgba(23, 63, 53, 0.05);
-  --shadow-sm: 0 2px 6px rgba(23, 63, 53, 0.08);
-  --shadow-md: 0 6px 14px rgba(23, 63, 53, 0.09);
-  --shadow-card: 0 3px 10px rgba(23, 63, 53, 0.06);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* بازنشانی و مقادیر پایه */
+/* بازنشانی */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -90,58 +78,17 @@ img {
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1140px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
 /* ==========================================================================
-   ۱. نوار اطلاعات بالا و هدر اصلی (Top Utility Bar & Header)
+   ۱. هدر و ناوبری اصلی (مطابق موکاپ)
    ========================================================================== */
 
-.top-utility-bar {
-  background: var(--deep-green);
-  color: #ffffff;
-  font-size: 11px;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.top-utility-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.top-utility-slogan {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #e5e7eb;
-}
-
-.top-utility-contact {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.top-link {
-  color: #cbd5e1;
-  transition: color 0.15s;
-}
-
-.top-link:hover {
-  color: #ffffff;
-}
-
-.top-divider {
-  color: rgba(255, 255, 255, 0.25);
-  font-size: 10px;
-}
-
 .site-header {
-  background: var(--natural-cream);
+  background: #ffffff;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -153,7 +100,7 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0 10px 0;
+  padding: 10px 0;
   gap: 16px;
 }
 
@@ -173,20 +120,18 @@ img {
 }
 
 .logo-title {
-  font-size: 22px;
-  font-weight: 900;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--primary-dark);
   line-height: 1.1;
   letter-spacing: -0.5px;
 }
 
 .logo-subtitle {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--secondary-text);
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--primary);
   margin-top: 1px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: 0.5px;
 }
 
 .logo-shield-icon {
@@ -198,44 +143,44 @@ img {
 /* کادر جستجوی کپسولی وسط */
 .header-search-wrap {
   flex: 1;
-  max-width: 520px;
+  max-width: 450px;
   position: relative;
-  margin: 0 16px;
+  margin: 0 14px;
 }
 
 .header-search-wrap input {
   width: 100%;
-  padding: 9px 20px 9px 42px;
-  background: #ffffff;
-  border: 1px solid var(--border);
+  padding: 8px 18px 8px 40px;
+  background: #f3f4f6;
+  border: 1px solid transparent;
   border-radius: var(--radius-full);
   font-family: inherit;
   font-size: 12px;
   outline: none;
   transition: all 0.2s;
-  box-shadow: var(--shadow-xs);
 }
 
 .header-search-wrap input:focus {
+  background: #ffffff;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(36, 91, 63, 0.12);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .header-search-wrap button {
   position: absolute;
-  left: 12px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--secondary-text);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* دکمه‌های کاربری سمت چپ */
+/* آیکون‌های گرد سمت چپ */
 .header-user-icons {
   display: flex;
   align-items: center;
@@ -243,56 +188,36 @@ img {
   flex-shrink: 0;
 }
 
-.user-account-pill-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--primary-text);
-  box-shadow: var(--shadow-xs);
-  transition: all 0.15s;
-}
-
-.user-account-pill-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.header-circle-icon-btn {
+.icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  color: var(--primary-text);
+  color: #374151;
   background: #ffffff;
   border: 1px solid var(--border);
   transition: all 0.15s;
   position: relative;
-  box-shadow: var(--shadow-xs);
 }
 
-.header-circle-icon-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+.icon-btn:hover {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border);
+  color: var(--primary-dark);
 }
 
-.circle-badge {
+.cart-floating-badge {
   position: absolute;
   top: -3px;
   right: -3px;
-  background: var(--forest-green);
+  background: #1b4332;
   color: #ffffff;
   font-size: 10px;
   font-weight: 700;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -312,7 +237,7 @@ img {
 
 /* منوی ناوبری اصلی هدر */
 .site-nav {
-  background: var(--natural-cream);
+  background: #ffffff;
   border-top: 1px solid var(--border-light);
 }
 
@@ -320,51 +245,18 @@ img {
   display: flex;
   justify-content: center;
   list-style: none;
-  gap: 26px;
+  gap: 24px;
   padding: 8px 0;
 }
 
 .nav-link-item a {
-  color: var(--primary-text);
+  color: #4b5563;
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 500;
   padding-bottom: 6px;
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  display: block;
 }
-
-.nav-link-item a:hover,
-.nav-link-item.active a {
-  color: var(--forest-green);
-  font-weight: 800;
-}
-
-.nav-link-item.active a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  height: 2.5px;
-  background: var(--forest-green);
-  border-radius: 2px;
-}
-
-.nav-arrow {
-  font-size: 9px;
-  color: var(--secondary-text);
-}
-
-.nav-icon {
-  font-size: 13px;
-}
-
-.nav-icon.star {
-  color: #f59e0b;
-}
-
 
 .nav-link-item a:hover,
 .nav-link-item.active a {
@@ -384,7 +276,7 @@ img {
 }
 
 /* ==========================================================================
-   ۲. بنر قهرمان صفحه اصلی (Hero Banner) - عین موکاپ ارائه‌شده
+   ۲. بنر قهرمان صفحه اصلی (Hero Banner) - ابعاد دست‌ودلباز و استاندارد
    ========================================================================== */
 
 .mockup-hero-banner {
@@ -392,24 +284,25 @@ img {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  background: #173F35 url('/static/img/ui/hero_real.jpg') center/cover no-repeat;
-  min-height: 280px;
+  background: #1e3a2f url('/static/img/ui/hero_real.jpg') center/cover no-repeat;
+  min-height: 380px;
   display: flex;
   align-items: center;
+  margin: 12px 0 20px 0;
 }
 
 .hero-overlay {
   width: 100%;
   height: 100%;
-  min-height: 280px;
-  background: linear-gradient(270deg, rgba(23, 63, 53, 0.94) 0%, rgba(23, 63, 53, 0.82) 48%, rgba(23, 63, 53, 0.28) 100%);
+  min-height: 380px;
+  background: linear-gradient(270deg, rgba(20, 45, 33, 0.94) 0%, rgba(20, 45, 33, 0.82) 48%, rgba(20, 45, 33, 0.28) 100%);
   display: flex;
   align-items: center;
-  padding: 35px 50px;
+  padding: 48px 56px;
 }
 
 .hero-text-content {
-  max-width: 520px;
+  max-width: 560px;
   color: #ffffff;
 }
 
@@ -417,111 +310,74 @@ img {
   font-size: 38px;
   font-weight: 900;
   color: #ffffff;
-  line-height: 1.1;
-  margin-bottom: 6px;
-  letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
 }
 
 .hero-tagline {
-  font-size: 20px;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 10px;
-  line-height: 1.35;
+  font-size: 18.5px;
+  font-weight: 700;
+  color: #fef08a;
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 
 .hero-desc {
-  font-size: 13px;
-  color: #e5e7eb;
-  line-height: 1.65;
-  margin-bottom: 22px;
+  font-size: 13.5px;
+  color: #f1f5f9;
+  line-height: 1.8;
+  margin-bottom: 24px;
 }
 
-.btn-hero-gold {
-  background: var(--gold-accent);
-  color: var(--primary-text);
+.hero-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-amber-remedy {
+  background: #f59e0b;
+  color: #1b4332;
   font-weight: 800;
   font-size: 13px;
-  padding: 9px 22px;
-  border-radius: var(--radius-full);
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 3px 8px rgba(197, 165, 104, 0.35);
-  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  transition: all 0.2s ease;
 }
 
-.btn-hero-gold:hover {
-  background: #b59453;
+.btn-amber-remedy:hover {
+  background: #d97706;
   color: #ffffff;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.45);
 }
 
-.btn-hero-gold .btn-arrow {
-  font-size: 15px;
-  transition: transform 0.15s;
-}
-
-.btn-hero-gold:hover .btn-arrow {
-  transform: translateX(-3px);
-}
-
-.hero-arrow-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: rgba(23, 63, 53, 0.75);
+.btn-outline-intro {
+  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
-  display: flex;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.15s;
-  user-select: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 8px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
 }
 
-.hero-arrow-btn:hover {
-  background: var(--forest-green);
+.btn-outline-intro:hover {
+  background: rgba(255, 255, 255, 0.22);
   border-color: #ffffff;
-}
-
-.hero-prev {
-  left: 14px;
-}
-
-.hero-next {
-  right: 14px;
-}
-
-.hero-pagination-dots {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  z-index: 10;
-}
-
-.hero-pagination-dots .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  transition: all 0.2s;
-  cursor: pointer;
-}
-
-.hero-pagination-dots .dot.active {
-  width: 22px;
-  border-radius: var(--radius-full);
-  background: #ffffff;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -531,131 +387,132 @@ img {
 .mockup-features-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin: 16px 0;
+  gap: 14px;
+  margin: 20px 0;
 }
 
 .feature-item-card {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 12px 16px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: var(--shadow-xs);
-  transition: all 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-item-card:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
-  border-color: var(--forest-green);
 }
 
 .feature-icon-box {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-sm);
-  background: #f1f7f4;
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--forest-green);
 }
 
 .feature-text h4 {
   font-size: 12.5px;
-  font-weight: 700;
-  color: var(--primary-text);
+  font-weight: 800;
+  color: var(--text-dark);
   margin-bottom: 2px;
 }
 
 .feature-text p {
   font-size: 11px;
-  color: var(--secondary-text);
+  color: var(--text-muted);
 }
 
 /* ==========================================================================
-   ۴. دسته‌بندی محصولات (Categories Carousel) - عین موکاپ
+   ۴. دسته‌بندی محصولات (Categories Strip) - تصاویر دایره‌ای درشت و شکیل
    ========================================================================== */
 
 .mockup-categories-section {
   background: #ffffff;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
-  margin: 16px 0;
-  box-shadow: var(--shadow-xs);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin: 24px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .cat-section-title-wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding: 0 4px;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .cat-section-title {
-  font-size: 14.5px;
+  font-size: 16px;
   font-weight: 800;
-  color: var(--deep-green);
-  text-align: center;
-  flex: 1;
+  color: var(--primary-dark);
+  letter-spacing: -0.3px;
 }
 
 .carousel-arrow {
-  color: var(--secondary-text);
-  font-size: 22px;
+  color: #94a3b8;
+  font-size: 20px;
   cursor: pointer;
   user-select: none;
-  padding: 0 6px;
   transition: color 0.15s;
 }
 
 .carousel-arrow:hover {
-  color: var(--forest-green);
+  color: var(--primary-dark);
 }
 
 .cat-cards-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  gap: 16px;
 }
 
-.cat-rounded-card {
+.cat-circle-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   padding: 10px 6px;
   border-radius: var(--radius-md);
-  background: var(--natural-cream);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 2px 6px rgba(36, 91, 63, 0.04);
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
 }
 
-.cat-rounded-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: var(--forest-green);
-  background: #ffffff;
+.cat-circle-card:hover {
+  background: #f0fdf4;
+  transform: translateY(-4px);
 }
 
 .cat-img-wrap {
-  width: 72px;
-  height: 72px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   overflow: hidden;
-  margin-bottom: 8px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
+  border: 3px solid #e5e7eb;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+}
+
+.cat-circle-card:hover .cat-img-wrap {
+  border-color: var(--primary);
+  box-shadow: 0 6px 18px rgba(45, 106, 79, 0.25);
+  transform: scale(1.05);
 }
 
 .cat-img-wrap img {
@@ -665,395 +522,25 @@ img {
 }
 
 .cat-title-label {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--primary-text);
-}
-
-/* ==========================================================================
-   ۵. چیدمان ۳ ستونه صفحه اصلی (3-Column Main Body)
-   ========================================================================== */
-
-.home-main-3col-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr 240px;
-  gap: 16px;
-  margin: 20px 0 35px 0;
-  align-items: start;
-}
-
-/* ستون سمت چپ: ویجت دستیار سلامت */
-.health-assistant-card-widget {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-}
-
-.health-widget-header {
-  background: var(--forest-green);
-  color: #ffffff;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.health-icon-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.health-widget-header h4 {
   font-size: 13px;
-  font-weight: 800;
-}
-
-.health-widget-body {
-  padding: 14px;
-}
-
-.health-widget-sub {
-  font-size: 11px;
-  color: var(--secondary-text);
-  margin-bottom: 12px;
-  line-height: 1.5;
-}
-
-.health-widget-input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: #faf8f3;
-  font-family: inherit;
-  font-size: 11px;
-  margin-bottom: 10px;
-  outline: none;
-}
-
-.health-widget-input:focus {
-  border-color: var(--forest-green);
-  background: #ffffff;
-}
-
-.btn-health-widget-submit {
-  width: 100%;
-  background: var(--deep-green);
-  color: #ffffff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 11.5px;
   font-weight: 700;
-  font-family: inherit;
-  transition: background 0.15s;
+  color: var(--text-dark);
+  transition: color 0.2s;
 }
 
-.btn-health-widget-submit:hover {
-  background: var(--forest-green);
+.cat-circle-card:hover .cat-title-label {
+  color: var(--primary-dark);
 }
-
-.health-widget-disclaimer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 14px;
-  padding: 6px 10px;
-  background: #f1f7f4;
-  border: 1px solid var(--primary-border);
-  border-radius: var(--radius-xs);
-  font-size: 10px;
-  color: var(--forest-green);
-  font-weight: 600;
-}
-
-/* ستون وسط: گرید محصولات پرفروش (۵ محصول در یک ردیف) */
-.bestsellers-center-col {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  box-shadow: var(--shadow-sm);
-}
-
-.bestsellers-header-wrap {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.bestsellers-title {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--deep-green);
-}
-
-.bestsellers-5grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-}
-
-.bestseller-card {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 8px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  transition: all 0.2s;
-}
-
-.bestseller-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--forest-green);
-  transform: translateY(-2px);
-}
-
-.card-wishlist-icon {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--secondary-text);
-  padding: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.15s;
-  z-index: 2;
-}
-
-.card-wishlist-icon:hover {
-  color: #ef4444;
-}
-
-.bestseller-img-box {
-  width: 100%;
-  height: 95px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-
-.bestseller-img-box img {
-  max-height: 90px;
-  width: auto;
-  object-fit: contain;
-}
-
-.bestseller-title {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--primary-text);
-  margin-bottom: 4px;
-  text-align: center;
-  line-height: 1.3;
-  height: 28px;
-  overflow: hidden;
-}
-
-.bestseller-title a {
-  color: inherit;
-}
-
-.bestseller-rating {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin-bottom: 6px;
-}
-
-.stars-gold {
-  color: #f59e0b;
-  font-size: 10px;
-  letter-spacing: 1px;
-}
-
-.bestseller-rating .rating-num {
-  font-size: 9.5px;
-  color: var(--secondary-text);
-  font-weight: 600;
-}
-
-.bestseller-price-row {
-  margin-top: auto;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.bestseller-price {
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--forest-green);
-}
-
-.btn-bestseller-cart {
-  width: 100%;
-  background: var(--forest-green);
-  color: #ffffff;
-  border: none;
-  padding: 6px 4px;
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: 700;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  transition: background 0.15s;
-}
-
-.btn-bestseller-cart:hover {
-  background: var(--deep-green);
-}
-
-/* ستون سمت راست: ویجت‌های تخفیف و چرا عطارخونه */
-.sidebar-promo-col {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.promo-discount-card {
-  background: var(--deep-green);
-  color: #ffffff;
-  border-radius: var(--radius-md);
-  padding: 16px;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-}
-
-.promo-discount-text {
-  flex: 1;
-  z-index: 2;
-}
-
-.promo-discount-text .promo-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 4px;
-}
-
-.promo-discount-text .promo-subtitle {
-  font-size: 11px;
-  color: #e5e7eb;
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-
-.btn-promo-gold {
-  background: var(--gold-accent);
-  color: var(--primary-text);
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
-  font-size: 10.5px;
-  font-weight: 700;
-  display: inline-block;
-  transition: all 0.15s;
-}
-
-.btn-promo-gold:hover {
-  background: #b59453;
-  color: #ffffff;
-}
-
-.promo-discount-img {
-  width: 80px;
-  height: 80px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  flex-shrink: 0;
-  margin-right: 8px;
-}
-
-.promo-discount-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.why-attarkhone-card {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-}
-
-.why-title {
-  font-size: 13.5px;
-  font-weight: 800;
-  color: var(--deep-green);
-  margin-bottom: 12px;
-}
-
-.why-checklist {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.why-checklist li {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--primary-text);
-}
-
-.why-check {
-  color: var(--forest-green);
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.btn-why-green {
-  display: inline-block;
-  background: var(--deep-green);
-  color: #ffffff;
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 11px;
-  font-weight: 700;
-  transition: background 0.15s;
-}
-
-.btn-why-green:hover {
-  background: var(--forest-green);
-  color: #ffffff;
-}
-
 
 /* ==========================================================================
-   ۵. کارت‌های محصول فروشگاه (Product Cards) - عین موکاپ
+   ۵. کارت‌های محصول فروشگاه (Product Cards) - عین موکاپ و استانداردهای فروشگاهی
    ========================================================================== */
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 12px;
-  margin: 12px 0;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+  margin: 18px 0;
 }
 
 .product-card {
@@ -1063,72 +550,91 @@ img {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-xs);
-  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
 }
 
 .product-card:hover {
   border-color: var(--primary-light);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
 }
 
 .product-img-box {
-  background: #f8fafc;
-  height: 140px;
+  background: #ffffff;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 12px;
   border-bottom: 1px solid var(--border-light);
+  overflow: hidden;
 }
 
 .product-img-box img {
-  max-height: 124px;
+  max-height: 155px;
   width: auto;
   object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.product-card:hover .product-img-box img {
+  transform: scale(1.05);
 }
 
 .product-info {
-  padding: 10px 12px;
+  padding: 12px 14px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .product-title {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--text-dark);
-  margin-bottom: 4px;
-  line-height: 1.3;
+  margin-bottom: 6px;
+  line-height: 1.4;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.product-title a {
+  color: var(--text-dark);
+}
+
+.product-title a:hover {
+  color: var(--primary);
 }
 
 .product-rating-stars {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
 .stars-gold {
   color: #f59e0b;
-  font-size: 11px;
-  letter-spacing: 1px;
+  font-size: 12px;
+  letter-spacing: 2px;
 }
 
 .rating-num {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-muted);
+  font-weight: 600;
 }
 
 .product-price-box {
   margin-top: auto;
-  padding-top: 8px;
+  padding-top: 10px;
   border-top: 1px dashed var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
 
 .price-values {
@@ -1137,13 +643,13 @@ img {
 }
 
 .old-price {
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--text-light);
   text-decoration: line-through;
 }
 
 .current-price {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 800;
   color: var(--primary-dark);
 }
@@ -1152,20 +658,22 @@ img {
   background: #1b4332;
   color: #ffffff;
   border: none;
-  padding: 6px 10px;
+  padding: 7px 12px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 11.5px;
+  font-weight: 700;
   font-family: inherit;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  transition: background 0.15s;
+  gap: 5px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .btn-card-add-cart:hover {
   background: var(--primary);
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================
@@ -1358,48 +866,51 @@ img {
    ========================================================================== */
 
 .shop-mockup-header-banner {
-  background: linear-gradient(135deg, #1e3a2f 0%, #15803d 100%);
+  background: linear-gradient(270deg, rgba(27, 67, 50, 0.94) 0%, rgba(45, 106, 79, 0.88) 55%, rgba(27, 67, 50, 0.72) 100%), url('/static/img/ui/hero_real.jpg') center/cover no-repeat;
   color: #ffffff;
-  padding: 24px;
+  padding: 34px 40px;
   border-radius: var(--radius-md);
-  margin-bottom: 16px;
-  text-align: center;
+  margin-bottom: 22px;
+  text-align: right;
+  box-shadow: 0 4px 16px rgba(27, 67, 50, 0.12);
 }
 
 .shop-title {
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 4px;
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
 }
 
 .shop-subtitle {
-  font-size: 12px;
+  font-size: 13.5px;
   color: #dcfce7;
+  font-weight: 500;
 }
 
 .shop-mockup-layout {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 16px;
-  margin-bottom: 30px;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
 .shop-filter-sidebar {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 14px;
+  padding: 18px;
   box-shadow: var(--shadow-xs);
   align-self: flex-start;
 }
 
 .filter-sidebar-title {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--border-light);
-  padding-bottom: 6px;
+  margin-bottom: 14px;
+  border-bottom: 1.5px solid var(--border-light);
+  padding-bottom: 8px;
 }
 
 .filter-group-block {
@@ -1538,50 +1049,55 @@ img {
 
 .product-detail-mockup-card {
   display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 24px;
+  grid-template-columns: 380px 1fr;
+  gap: 32px;
   background: #ffffff;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 30px;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  margin-bottom: 35px;
 }
 
 .main-image-frame {
-  background: #f8fafc;
-  border: 1px solid var(--border-light);
+  background: #ffffff;
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 20px;
+  min-height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-xs);
 }
 
 .main-image-frame img {
-  max-height: 230px;
+  max-height: 250px;
   width: auto;
   object-fit: contain;
 }
 
 .thumbnails-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .thumb-box {
-  width: 60px;
-  height: 60px;
-  border: 1.5px solid var(--border);
+  width: 68px;
+  height: 68px;
+  border: 2px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 4px;
   cursor: pointer;
   background: #ffffff;
+  transition: all 0.2s ease;
 }
 
 .thumb-box.active, .thumb-box:hover {
   border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(45, 106, 79, 0.15);
 }
 
 .thumb-box img {
@@ -1592,48 +1108,51 @@ img {
 }
 
 .detail-product-title {
-  font-size: 19px;
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 900;
   color: var(--primary-dark);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  line-height: 1.3;
 }
 
 .detail-rating-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .rating-badge-score {
   background: #fef3c7;
   color: #b45309;
-  font-weight: 700;
-  font-size: 10.5px;
-  padding: 1px 6px;
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 2px 8px;
   border-radius: var(--radius-xs);
 }
 
 .review-count-text {
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 
 .detail-price-row {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border);
 }
 
 .current-price-huge {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 900;
   color: var(--primary-dark);
 }
 
 .old-price-strike {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-light);
   text-decoration: line-through;
 }
@@ -1641,45 +1160,46 @@ img {
 .badge-special-discount {
   background: #ef4444;
   color: #ffffff;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: var(--radius-xs);
 }
 
 .detail-product-description {
-  font-size: 12.5px;
+  font-size: 13px;
   color: #475569;
-  line-height: 1.7;
-  margin-bottom: 18px;
+  line-height: 1.8;
+  margin-bottom: 20px;
 }
 
 .variants-selector-box {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .variant-label-title {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-dark);
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .variant-chips-wrap {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .variant-chip-btn {
-  padding: 5px 12px;
+  padding: 7px 16px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   background: #ffffff;
   font-family: inherit;
-  font-size: 11.5px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
 }
 
 .variant-chip-btn.selected, .variant-chip-btn:hover {
@@ -1694,82 +1214,91 @@ img {
   background: #1b4332;
   color: #ffffff;
   border: none;
-  padding: 10px 20px;
+  padding: 13px 24px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14.5px;
+  font-weight: 800;
   font-family: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  transition: background 0.15s;
+  gap: 10px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
+  transition: all 0.2s ease;
 }
 
 .btn-wide-dark-green-cart:hover {
   background: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(27, 67, 50, 0.35);
 }
 
 .detail-guarantees-bar {
   display: flex;
   justify-content: space-around;
   border-top: 1px solid var(--border-light);
-  padding-top: 16px;
+  padding-top: 18px;
 }
 
 .guarantee-badge-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
-  color: #374151;
-  font-weight: 600;
+  gap: 8px;
+  font-size: 12px;
+  color: #334155;
+  font-weight: 700;
 }
 
 /* ==========================================================================
-   ۹. سبد خرید (Cart Page) - عین موکاپ
+   ۹. سبد خرید (Cart Page) - استانداردهای تمیز و خوش‌ساخت
    ========================================================================== */
 
 .cart-mockup-header-title h2 {
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 900;
   color: var(--primary-dark);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .cart-mockup-container {
   background: #ffffff;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .cart-items-card-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .cart-item-row-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: #f8fafc;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.cart-item-row-card:hover {
+  border-color: var(--primary-border);
+  background: #ffffff;
 }
 
 .cart-item-thumb-box {
-  width: 55px;
-  height: 55px;
+  width: 65px;
+  height: 65px;
   border-radius: var(--radius-sm);
   background: #ffffff;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -1785,50 +1314,58 @@ img {
 
 .cart-item-center-info {
   flex: 1;
-  margin: 0 14px;
+  margin: 0 16px;
 }
 
 .cart-item-title {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--text-dark);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .cart-stepper-and-price {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .cart-item-unit-price {
-  font-size: 12.5px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
   color: var(--primary-dark);
 }
 
 .stepper-box {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-xs);
   background: #ffffff;
   overflow: hidden;
 }
 
 .stepper-btn {
-  padding: 2px 8px;
+  padding: 4px 10px;
   color: var(--text-muted);
   cursor: pointer;
   user-select: none;
-  font-weight: bold;
+  font-weight: 800;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+
+.stepper-btn:hover {
+  background: #f1f5f9;
+  color: var(--primary-dark);
 }
 
 .stepper-val {
-  padding: 2px 8px;
-  font-size: 11.5px;
-  border-right: 1px solid var(--border);
-  border-left: 1px solid var(--border);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-right: 1.5px solid var(--border);
+  border-left: 1.5px solid var(--border);
 }
 
 .btn-trash-delete {
@@ -1839,21 +1376,27 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s;
+}
+
+.btn-trash-delete:hover svg {
+  stroke: #ef4444;
 }
 
 .cart-total-summary-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 0 6px 0;
+  padding: 16px 0 8px 0;
   border-top: 1.5px solid var(--border);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
 }
 
 .total-amount-digits {
   color: var(--primary-dark);
-  font-size: 17px;
+  font-size: 19px;
+  font-weight: 900;
 }
 
 .btn-wide-dark-green-checkout {
@@ -1861,21 +1404,24 @@ img {
   background: #1b4332;
   color: #ffffff;
   border: none;
-  padding: 11px 16px;
+  padding: 13px 20px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14.5px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: background 0.15s;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
+  transition: all 0.2s ease;
 }
 
 .btn-wide-dark-green-checkout:hover {
   background: var(--primary);
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(27, 67, 50, 0.35);
 }
 
 .cart-gift-wrap-section {
@@ -2111,33 +1657,75 @@ img {
 }
 
 /* ==========================================================================
-   ۱۱. فوتر سایت
+   ۱۱. فوتر سایت - مدرن، چشم‌نواز، هماهنگ با تم روشن و ارگانیک عطارخونه
    ========================================================================== */
 
 .site-footer {
-  background: var(--deep-green);
-  color: #e5e7eb;
-  padding: 38px 0 20px 0;
-  margin-top: 45px;
+  background: #ffffff;
+  color: #475569;
+  padding: 40px 0 20px 0;
+  margin-top: 50px;
   font-size: 12px;
-  border-top: 3px solid var(--forest-green);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.footer-trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding-bottom: 26px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.trust-item-icon {
+  font-size: 22px;
+}
+
+.trust-item-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.trust-item-desc {
+  font-size: 10.5px;
+  color: #64748b;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1.3fr 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1.6fr 1.1fr 1.1fr 1.3fr;
+  gap: 28px;
   margin-bottom: 28px;
 }
 
+.footer-brand-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  text-decoration: none;
+}
+
 .footer-col h4 {
-  color: #ffffff;
+  color: var(--primary-dark);
   font-size: 13.5px;
   font-weight: 800;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   position: relative;
-  display: inline-block;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
 }
 
 .footer-col h4::after {
@@ -2147,24 +1735,42 @@ img {
   right: 0;
   width: 24px;
   height: 2px;
-  background: var(--gold-accent);
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.footer-col p {
+  color: #64748b;
+  line-height: 1.8;
+  font-size: 12px;
 }
 
 .footer-col ul {
   list-style: none;
-}
-
-.footer-col ul li {
-  margin-bottom: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .footer-col ul li a {
-  color: #cbd5e1;
-  transition: color 0.15s;
+  color: #475569;
+  font-size: 12px;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-col ul li a::before {
+  content: '•';
+  color: var(--primary);
+  font-size: 14px;
 }
 
 .footer-col ul li a:hover {
-  color: #ffffff;
+  color: var(--primary-dark);
+  font-weight: 600;
+  transform: translateX(-3px);
 }
 
 .footer-contact-item {
@@ -2172,83 +1778,59 @@ img {
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
-  color: #cbd5e1;
+  font-size: 12px;
+  color: #475569;
 }
 
-.footer-bottom-row {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding-top: 18px;
+.footer-social-pills {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11.5px;
-  color: #94a3b8;
+  gap: 6px;
   flex-wrap: wrap;
-  gap: 14px;
+  margin-top: 12px;
 }
 
-.footer-social-icons {
-  display: flex;
-  gap: 8px;
-}
-
-.social-circle-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  display: flex;
+.social-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  transition: all 0.15s;
-  font-size: 13px;
-}
-
-.social-circle-btn:hover {
-  background: var(--forest-green);
-  border-color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.scroll-to-top-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
+  gap: 4px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: #334155;
   transition: all 0.15s;
 }
 
-.scroll-to-top-btn:hover {
-  background: var(--gold-accent);
-  color: var(--primary-text);
-  border-color: var(--gold-accent);
+.social-pill:hover {
+  background: #f0fdf4;
+  border-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--border-light);
+  padding-top: 18px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.6;
 }
 
 /* ==========================================================================
-   ۱۲. واکنش‌گرایی موبایل و تبلت (Responsive Design)
+   ۱۲. واکنش‌گرایی موبایل و تبلت (کارگاه ۲۵)
    ========================================================================== */
 
-@media (max-width: 1024px) {
-  .home-main-3col-layout {
-    grid-template-columns: 1fr;
-  }
-  .bestsellers-5grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (max-width: 992px) {
   .mockup-features-bar {
     grid-template-columns: 1fr 1fr;
   }
   .cat-cards-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .remedy-mockup-card, .shop-mockup-layout, .product-detail-mockup-card, .dashboard-mockup-layout {
+    grid-template-columns: 1fr;
   }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
@@ -2256,11 +1838,6 @@ img {
 }
 
 @media (max-width: 768px) {
-  .top-utility-inner {
-    flex-direction: column;
-    gap: 4px;
-    text-align: center;
-  }
   .header-main {
     flex-wrap: wrap;
   }
@@ -2275,34 +1852,6 @@ img {
   .site-nav {
     display: none;
   }
-  .site-nav.mobile-active {
-    display: block;
-  }
-  .nav-links-list {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px 14px;
-  }
-  .bestsellers-5grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .cat-cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .mockup-features-bar {
-    grid-template-columns: 1fr;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero-overlay {
-    padding: 24px;
-  }
-  .hero-brand-name {
-    font-size: 28px;
-  }
-}
-
   .site-nav.mobile-active {
     display: block;
   }

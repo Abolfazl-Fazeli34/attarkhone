@@ -149,17 +149,7 @@ class Product(models.Model):
         if self.image:
             return self.image.url
         slug = self.slug.lower()
-        if 'darchin' in slug or 'cinnamon' in slug:
-            return '/static/img/products/prod_cinnamon.jpg'
-        elif 'nana' in slug or 'mint' in slug:
-            return '/static/img/products/prod_mint.jpg'
-        elif 'zaferan' in slug or 'saffron' in slug:
-            return '/static/img/products/prod_saffron.jpg'
-        elif 'baboneh' in slug or 'chamomile' in slug:
-            return '/static/img/products/prod_chamomile.jpg'
-        elif 'mohammadi' in slug or 'rose' in slug:
-            return '/static/img/products/prod_rose.jpg'
-        elif 'damnoosh' in slug or 'aramesh' in slug:
+        if 'damnoosh' in slug or 'aramesh' in slug or 'relax' in slug:
             return '/static/img/products/real_jar.jpg'
         elif 'gavzaban' in slug:
             return '/static/img/products/real_herb.jpg'
@@ -169,9 +159,21 @@ class Product(models.Model):
             return '/static/img/products/real_box.jpg'
         elif 'oil' in slug or 'roghan' in slug or 'black-seed' in slug:
             return '/static/img/categories/cat_oils.jpg'
+        elif 'darchin' in slug or 'cinnamon' in slug or 'spice' in slug:
+            return '/static/img/categories/cat_spices.jpg'
+        elif 'ostokhoddos' in slug or 'lavender' in slug or 'wellness' in slug:
+            return '/static/img/categories/cat_wellness.jpg'
+        elif 'zaferan' in slug or 'saffron' in slug:
+            return '/static/img/products/prod_saffron.jpg'
+        elif 'gol-mohammadi' in slug or 'rose' in slug or 'damascena' in slug:
+            return '/static/img/products/prod_rose.jpg'
+        elif 'baboneh' in slug or 'chamomile' in slug:
+            return '/static/img/products/prod_chamomile.jpg'
+        elif 'nana' in slug or 'mint' in slug or 'peppermint' in slug:
+            return '/static/img/products/prod_mint.jpg'
         elif 'kasni' in slug or 'aragh' in slug:
-            return '/static/img/products/kasni.svg'
-        return '/static/img/products/default-herb.svg'
+            return '/static/img/categories/cat_tea.jpg'
+        return '/static/img/products/real_jar.jpg'
 
     @property
     def final_price(self):

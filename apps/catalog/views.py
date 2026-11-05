@@ -55,15 +55,30 @@ class ProductListView(View):
             queryset = queryset.filter(base_price__lte=int(max_price))
 
         # مرتب‌سازی
-        sort = request.GET.get('sort', 'newest')
+        sort = request.GET.get('sort', 'popular')
         if sort == 'price_asc':
             queryset = queryset.order_by('base_price')
         elif sort == 'price_desc':
             queryset = queryset.order_by('-base_price')
-        elif sort == 'popular':
-            queryset = queryset.order_by('-sales_count')
-        else:
+        elif sort == 'newest':
             queryset = queryset.order_by('-created_at')
+        else:
+            # پیش‌فرض و محبوب‌ترین: اولویت با اقلام اصلی موکاپ
+            from django.db.models import Case, When, Value, IntegerField
+            priority_slugs = [
+                'damnoosh-aramesh-bakhsh',
+                'gol-gavzaban-momtaz',
+                'green-tea-organic',
+                'health-gift-box',
+                'black-seed-oil-pure',
+                'darchin-asl',
+                'zaferan-asl-irani',
+                'gol-mohammadi-daraje-yek',
+            ]
+            whens = [When(slug=s, then=Value(i)) for i, s in enumerate(priority_slugs)]
+            queryset = queryset.annotate(
+                priority=Case(*whens, default=Value(99), output_field=IntegerField())
+            ).order_by('priority', '-sales_count', '-created_at')
 
         categories = Category.objects.filter(parent=None)
         brands = Brand.objects.all()
