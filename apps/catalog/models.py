@@ -149,7 +149,17 @@ class Product(models.Model):
         if self.image:
             return self.image.url
         slug = self.slug.lower()
-        if 'damnoosh' in slug or 'aramesh' in slug:
+        if 'darchin' in slug or 'cinnamon' in slug:
+            return '/static/img/products/prod_cinnamon.jpg'
+        elif 'nana' in slug or 'mint' in slug:
+            return '/static/img/products/prod_mint.jpg'
+        elif 'zaferan' in slug or 'saffron' in slug:
+            return '/static/img/products/prod_saffron.jpg'
+        elif 'baboneh' in slug or 'chamomile' in slug:
+            return '/static/img/products/prod_chamomile.jpg'
+        elif 'mohammadi' in slug or 'rose' in slug:
+            return '/static/img/products/prod_rose.jpg'
+        elif 'damnoosh' in slug or 'aramesh' in slug:
             return '/static/img/products/real_jar.jpg'
         elif 'gavzaban' in slug:
             return '/static/img/products/real_herb.jpg'

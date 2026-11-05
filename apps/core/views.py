@@ -18,6 +18,23 @@ class HomeView(View):
         top_banners = Banner.objects.filter(position='home_top', is_active=True)
         middle_banners = Banner.objects.filter(position='home_middle', is_active=True)[:2]
         
+        # ۵ محصول شاخص و پرفروش مطابق موکاپ ارائه‌شده
+        bestseller_slugs = [
+            'darchin-asl',
+            'nana-khoshk',
+            'zaferan-asl-irani',
+            'baboneh-aala',
+            'gol-mohammadi-daraje-yek',
+        ]
+        bestseller_qs = Product.objects.filter(slug__in=bestseller_slugs)
+        bestseller_map = {p.slug: p for p in bestseller_qs}
+        bestseller_products = [bestseller_map[slug] for slug in bestseller_slugs if slug in bestseller_map]
+        
+        # در صورت نبود این ۵ اسلاگ خاص، فال‌بک به سایر محصولات
+        if len(bestseller_products) < 5:
+            remaining = list(Product.objects.exclude(id__in=[p.id for p in bestseller_products])[:5 - len(bestseller_products)])
+            bestseller_products.extend(remaining)
+
         featured_products = Product.objects.filter(is_featured=True)[:6]
         latest_products = Product.objects.all().order_by('-created_at')[:8]
         categories = Category.objects.filter(parent=None)[:6]
@@ -27,6 +44,7 @@ class HomeView(View):
             'sliders': sliders,
             'top_banners': top_banners,
             'middle_banners': middle_banners,
+            'bestseller_products': bestseller_products,
             'featured_products': featured_products,
             'latest_products': latest_products,
             'categories': categories,
