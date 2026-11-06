@@ -25,7 +25,7 @@ class UserLoginView(View):
                 return redirect(next_url)
             if user.is_store_staff:
                 return redirect('accounts:staff_dashboard')
-            return redirect('core:home')
+            return redirect('accounts:profile')
         else:
             messages.error(request, 'نام کاربری یا گذرواژه نادرست است.')
             return render(request, 'accounts/login.html', {'form': form})
