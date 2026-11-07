@@ -15,9 +15,27 @@ class UserLoginView(View):
         return render(request, 'accounts/login.html', {'form': form})
 
     def post(self, request):
+        guest_session_key = request.session.session_key
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
+
+            # انتقال و ادغام اقلام سبد خرید مهمان به حساب کاربری
+            if guest_session_key:
+                from orders.models import Cart
+                guest_cart = Cart.objects.filter(session_key=guest_session_key).first()
+                if guest_cart and guest_cart.items.exists():
+                    user_cart, _ = Cart.objects.get_or_create(user=user)
+                    for g_item in guest_cart.items.all():
+                        existing = user_cart.items.filter(product=g_item.product, variant=g_item.variant).first()
+                        if existing:
+                            existing.quantity += g_item.quantity
+                            existing.save()
+                        else:
+                            g_item.cart = user_cart
+                            g_item.save()
+                    guest_cart.delete()
+
             login(request, user)
             messages.success(request, f'خوش آمدید، {user.get_full_name() or user.username}!')
             next_url = request.GET.get('next') or request.POST.get('next')

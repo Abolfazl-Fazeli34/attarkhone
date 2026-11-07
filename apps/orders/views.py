@@ -19,18 +19,6 @@ def get_or_create_cart(request):
         if not request.session.session_key:
             request.session.save()
         cart, _ = Cart.objects.get_or_create(session_key=request.session.session_key)
-
-    # همگام‌سازی با موکاپ در اولین بازدید (نمایش ۲ آیتم شاخص و ۱۷۸,۰۰۰ تومان جمع کل)
-    if not request.session.get('cart_seeded', False):
-        request.session['cart_seeded'] = True
-        if not cart.items.exists():
-            from catalog.models import Product
-            p1 = Product.objects.filter(slug='damnoosh-aramesh-bakhsh').first()
-            p2 = Product.objects.filter(slug='gol-gavzaban-momtaz').first()
-            if p1:
-                CartItem.objects.create(cart=cart, product=p1, quantity=1)
-            if p2:
-                CartItem.objects.create(cart=cart, product=p2, quantity=1)
     return cart
 
 
@@ -124,6 +112,102 @@ class AddToCartView(View):
         return redirect('orders:cart')
 
 
+class AddToCartAjaxView(View):
+    """
+    افزودن بلادرنگ کالا به سبد خرید با ایجکس (بدون بارگذاری مجدد صفحه)
+    """
+    def post(self, request, product_id):
+        cart = get_or_create_cart(request)
+        product = get_object_or_404(Product, id=product_id)
+        
+        variant_id = request.POST.get('variant_id')
+        variant = None
+        if variant_id and str(variant_id).isdigit():
+            variant = ProductVariant.objects.filter(id=int(variant_id), product=product).first()
+
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity < 1:
+            quantity = 1
+
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,
+            variant=variant,
+            defaults={'quantity': quantity}
+        )
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.save()
+
+        total_items = sum(item.quantity for item in cart.items.all())
+        return JsonResponse({
+            'success': True,
+            'message': f'«{product.name}» با موفقیت به سبد خرید افزوده شد.',
+            'cart_count': total_items,
+            'cart_subtotal': f"{cart.subtotal:,}",
+            'item_quantity': cart_item.quantity,
+        })
+
+
+class UpdateQuantityAjaxView(View):
+    """
+    افزایش یا کاهش استپر تعداد در سبد خرید به صورت ایجکس
+    """
+    def post(self, request, item_id):
+        cart = get_or_create_cart(request)
+        item = get_object_or_404(CartItem, id=item_id, cart=cart)
+        action = request.POST.get('action')
+
+        if action == 'increase':
+            item.quantity += 1
+            item.save()
+        elif action == 'decrease':
+            if item.quantity > 1:
+                item.quantity -= 1
+                item.save()
+            else:
+                item.delete()
+                total_items = sum(i.quantity for i in cart.items.all())
+                return JsonResponse({
+                    'success': True,
+                    'is_deleted': True,
+                    'item_id': item_id,
+                    'cart_count': total_items,
+                    'cart_subtotal': f"{cart.subtotal:,}",
+                    'message': 'کالا از سبد خرید حذف شد.'
+                })
+
+        total_items = sum(i.quantity for i in cart.items.all())
+        return JsonResponse({
+            'success': True,
+            'is_deleted': False,
+            'item_id': item_id,
+            'quantity': item.quantity,
+            'item_total': f"{item.total_price:,}",
+            'cart_count': total_items,
+            'cart_subtotal': f"{cart.subtotal:,}",
+        })
+
+
+class RemoveItemAjaxView(View):
+    """
+    حذف بلادرنگ کالا از سبد خرید با ایجکس
+    """
+    def post(self, request, item_id):
+        cart = get_or_create_cart(request)
+        item = get_object_or_404(CartItem, id=item_id, cart=cart)
+        name = item.product.name
+        item.delete()
+        total_items = sum(i.quantity for i in cart.items.all())
+        return JsonResponse({
+            'success': True,
+            'item_id': item_id,
+            'message': f'«{name}» از سبد خرید حذف شد.',
+            'cart_count': total_items,
+            'cart_subtotal': f"{cart.subtotal:,}",
+        })
+
+
 class RemoveFromCartView(View):
     def post(self, request, item_id):
         cart = get_or_create_cart(request)
@@ -177,6 +261,10 @@ class CheckoutView(View):
     کارگاه ۲۴ (ذخیره اطلاعات کادوپیچی و صدور فاکتور)
     """
     def get(self, request):
+        if not request.user.is_authenticated:
+            messages.info(request, 'برای تکمیل سفارش و پرداخت، لطفاً ابتدا وارد حساب کاربری خود شوید.')
+            return redirect(f'/accounts/login/?next={request.path}')
+
         cart = get_or_create_cart(request)
         if not cart.items.exists():
             messages.warning(request, 'سبد خرید شما خالی است.')
@@ -218,6 +306,10 @@ class CheckoutView(View):
         return render(request, 'orders/checkout.html', context)
 
     def post(self, request):
+        if not request.user.is_authenticated:
+            messages.info(request, 'برای تکمیل سفارش و پرداخت، لطفاً ابتدا وارد حساب کاربری خود شوید.')
+            return redirect(f'/accounts/login/?next={request.path}')
+
         cart = get_or_create_cart(request)
         if not cart.items.exists():
             messages.warning(request, 'سبد خرید شما خالی است.')
@@ -348,6 +440,14 @@ class MockPaymentGatewayView(View):
             order.status = 'paid'
             order.admin_notes = f"پرداخت آنلاین موفق از طریق شاپرک - شناسه مرجع بانکی: {random.randint(10000000, 99999999)}"
             order.save()
+
+            # کسر موجودی انبار و ثبت آمار فروش (کارگاه ۲۴)
+            for oi in order.items.all():
+                p = oi.product
+                p.stock = max(0, p.stock - oi.quantity)
+                p.sales_count += oi.quantity
+                p.save()
+
             messages.success(request, f'پرداخت با موفقیت انجام شد! شماره پیگیری سفارش شما: {order.tracking_code}')
             return redirect('orders:invoice', tracking_code=order.tracking_code)
         else:

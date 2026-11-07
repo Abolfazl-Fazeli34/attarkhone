@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}رزرو نوبت مشاوره سلامت رایگان | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 24px auto; max-width: 720px;">
+
+  <!-- بنر معرفی خدمت مشاوره رایگان -->
+  <div style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%); border-radius: var(--radius-md); padding: 24px; color: #ffffff; margin-bottom: 24px; box-shadow: var(--shadow-sm); text-align: center;">
+    <div style="font-size: 36px; margin-bottom: 8px;">🩺</div>
+    <h1 style="font-size: 18px; font-weight: 800; margin-bottom: 6px;">رزرو نوبت مشاوره تخصصی رایگان سلامت</h1>
+    <p style="font-size: 12.5px; opacity: 0.9; max-width: 520px; margin: 0 auto; line-height: 1.6;">
+      با همکاری پزشکان و متخصصان طب سنتی؛ بررسی طبع و مزاج، پیشنهاد گیاهان دارویی استاندارد و پایش تداخلات با داروهای شیمیایی مصرفی
+    </p>
+  </div>
+
+  <div style="background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow-xs);">
+    
+    <form action="{% url 'remedy:consultation' %}" method="post">
+      {% csrf_token %}
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 5px;">نام و نام خانوادگی *</label>
+          <input type="text" name="name" required value="{{ initial_name }}" placeholder="مثال: علی محمدی" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 5px;">شماره تماس همراه *</label>
+          <input type="tel" name="phone" required value="{{ initial_phone }}" placeholder="09123456789" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px;">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 5px;">موضوع و زمینه مشاوره</label>
+          <select name="symptom_category" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px; background: #fff;">
+            {% for cat in categories %}
+              <option value="{{ cat.name }}">{{ cat.name }}</option>
+            {% empty %}
+              <option value="استرس و اضطراب">استرس و بی‌خوابی</option>
+              <option value="گوارش و معده">تقویت معده و هضم غذا</option>
+              <option value="تقویت سیستم ایمنی">تقویت سیستم ایمنی</option>
+              <option value="پوست و مو">سلامت پوست و مو</option>
+              <option value="مشاوره عمومی تندرستی">مشاوره عمومی تندرستی</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 5px;">زمان پیشنهادی تماس کارشناس</label>
+          <select name="preferred_time" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px; background: #fff;">
+            <option value="صبح (۹ الی ۱۳)">صبح (۹ الی ۱۳)</option>
+            <option value="عصر (۱۴ الی ۱۸)">عصر (۱۴ الی ۱۸)</option>
+            <option value="غروب (۱۸ الی ۲۱)">غروب (۱۸ الی ۲۱)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 18px;">
+        <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 5px;">شرح علائم یا بیماری‌های زمینه‌ای و داروهای مصرفی (اختیاری)</label>
+        <textarea name="notes" rows="4" placeholder="اگر داروی شیمیایی خاصی مصرف می‌کنید یا حساسیت گیاهی دارید، در این بخش یادداشت فرمایید..." style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px; line-height: 1.6;"></textarea>
+      </div>
+
+      <!-- تضمین‌های محرمانگی -->
+      <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-xs); padding: 12px 14px; margin-bottom: 20px; font-size: 11.5px; color: #64748b; line-height: 1.6;">
+        🔒 تمامی اطلاعات پزشکی و شماره تماس شما نزد مرکز مشاوره سلامت عطارخونه کاملاً محرمانه محفوظ خواهد بود و صرفاً جهت تماس مشاور با شما استفاده می‌گردد.
+      </div>
+
+      <button type="submit" class="btn-wide-dark-green-checkout" style="width: 100%; border: none; cursor: pointer; padding: 10px; font-size: 13px;">
+        ثبت درخواست مشاوره رایگان
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

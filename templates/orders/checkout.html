@@ -75,7 +75,7 @@
             {% for c in carriers %}
               <label class="carrier-label">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <input type="radio" name="carrier" value="{{ c.id }}" {% if forloop.first %}checked{% endif %} required>
+                  <input type="radio" name="carrier" value="{{ c.id }}" {% if forloop.first %}checked{% endif %} required class="carrier-radio" data-cost="{% if subtotal >= c.free_shipping_min_order %}0{% else %}{{ c.cost }}{% endif %}" data-name="{{ c.name }}">
                   <div>
                     <div style="font-weight: 600; font-size: 12px;">{{ c.name }}</div>
                     <div style="font-size: 10.5px; color: #64748b;">مدت تحویل: {{ c.delivery_time }}</div>
@@ -147,6 +147,11 @@
             <span>{{ subtotal|toman }}</span>
           </div>
 
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; color: #475569;">
+            <span>هزینه حمل و ارسال:</span>
+            <span id="checkoutShippingCostDisplay">محاسبه...</span>
+          </div>
+
           {% if is_gift_wrapped %}
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; color: #b45309;">
               <span>🎁 کادوپیچی هدیه:</span>
@@ -160,6 +165,16 @@
               <span>- {{ discount_amount|toman }}</span>
             </div>
           {% endif %}
+
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1.5px dashed var(--border); display: flex; justify-content: space-between; font-weight: 700; font-size: 13.5px; color: var(--primary-dark);">
+            <span>مبلغ نهایی قابل پرداخت:</span>
+            <span id="checkoutGrandTotalDisplay">محاسبه...</span>
+          </div>
+
+          <!-- متغیرهای پنهان محاسباتی برای اسکریپت لایو -->
+          <input type="hidden" id="rawSubtotal" value="{{ subtotal }}">
+          <input type="hidden" id="rawGiftCost" value="{{ gift_cost }}">
+          <input type="hidden" id="rawDiscountAmount" value="{{ discount_amount }}">
 
           <div style="margin-top: 14px; border-top: 1.5px solid var(--primary); padding-top: 12px;">
             <button type="submit" class="btn-hero" style="width: 100%; font-size: 13px; border: none; cursor: pointer; padding: 9px;">

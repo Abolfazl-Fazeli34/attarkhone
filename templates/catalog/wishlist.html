@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static persian_tags %}
+
+{% block title %}لیست علاقه‌مندی‌ها | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 24px auto; max-width: 900px;">
+
+  <div class="shop-page-title-banner" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px;">
+    <div>
+      <h1 class="shop-title-main" style="font-size: 16px;">❤️ لیست علاقه‌مندی‌ها و نشان‌شده‌ها</h1>
+      <p class="shop-subtitle-text" style="font-size: 12px; margin-top: 4px;">کالاهایی که برای خرید در آینده ذخیره کرده‌اید</p>
+    </div>
+    <span class="badge" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-size: 12px; padding: 6px 12px;">
+      {{ wishlist_items.count|fa_digits }} مورد ذخیره‌شده
+    </span>
+  </div>
+
+  {% if wishlist_items %}
+    <div class="products-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px;">
+      {% for item in wishlist_items %}
+        <div class="product-card" id="wishlist-card-{{ item.product.id }}">
+          <div class="product-img-box">
+            <button type="button" class="btn-wishlist-toggle active" data-product-id="{{ item.product.id }}" title="حذف از لیست علاقه‌مندی‌ها">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+            <img src="{{ item.product.get_display_image }}" alt="{{ item.product.name }}" loading="lazy">
+          </div>
+
+          <div class="product-info">
+            <h3 class="product-title">
+              <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+            </h3>
+
+            <div class="product-rating-stars">
+              <span class="stars-gold">★★★★★</span>
+              <span class="rating-num">۴.۸</span>
+            </div>
+
+            <div class="product-price-box">
+              <div class="price-values">
+                {% if item.product.discount_percent > 0 %}
+                  <span class="old-price">{{ item.product.base_price|toman }}</span>
+                {% endif %}
+                <span class="current-price">{{ item.product.final_price|toman }}</span>
+              </div>
+
+              <form action="{% url 'orders:add_to_cart' product_id=item.product.id %}" method="post" class="ajax-add-cart-form" data-product-id="{{ item.product.id }}">
+                {% csrf_token %}
+                <button type="submit" class="btn-card-add-cart">
+                  <span>🛒</span>
+                  <span>افزودن به سبد</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="text-align: center; padding: 48px 20px; background: #ffffff; border-radius: var(--radius-md); border: 1px dashed var(--border); margin-top: 20px;">
+      <div style="font-size: 40px; margin-bottom: 12px;">🤍</div>
+      <h3 style="font-size: 15px; color: #1e293b; font-weight: 700; margin-bottom: 6px;">لیست علاقه‌مندی‌های شما خالی است</h3>
+      <p style="color: #64748b; font-size: 12.5px; margin-bottom: 16px;">با کلیک روی آیکون قلب روی هر کالا در فروشگاه، می‌توانید آن را به این بخش اضافه کنید.</p>
+      <a href="{% url 'catalog:product_list' %}" class="btn-wide-dark-green-checkout" style="max-width: 220px; margin: 0 auto; padding: 9px;">
+        مشاهده کاتالوگ فروشگاه
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

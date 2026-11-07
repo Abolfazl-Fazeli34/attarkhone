@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     CartView, AddToCartView, RemoveFromCartView,
+    AddToCartAjaxView, UpdateQuantityAjaxView, RemoveItemAjaxView,
     ApplyCouponView, RemoveCouponView,
     CheckoutView, MockPaymentGatewayView,
     BankReceiptView, OrderInvoiceView, OrderTrackingView
@@ -11,6 +12,9 @@ app_name = 'orders'
 urlpatterns = [
     path('cart/', CartView.as_view(), name='cart'),
     path('cart/add/<int:product_id>/', AddToCartView.as_view(), name='add_to_cart'),
+    path('cart/add-ajax/<int:product_id>/', AddToCartAjaxView.as_view(), name='add_to_cart_ajax'),
+    path('cart/update-ajax/<int:item_id>/', UpdateQuantityAjaxView.as_view(), name='update_quantity_ajax'),
+    path('cart/remove-ajax/<int:item_id>/', RemoveItemAjaxView.as_view(), name='remove_item_ajax'),
     path('cart/remove/<int:item_id>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
     path('cart/apply-coupon/', ApplyCouponView.as_view(), name='apply_coupon'),
     path('cart/remove-coupon/', RemoveCouponView.as_view(), name='remove_coupon'),

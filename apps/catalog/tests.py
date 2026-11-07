@@ -1,3 +1,54 @@
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+from catalog.models import Product, Category, Wishlist
 
-# Create your tests here.
+User = get_user_model()
+
+
+class WishlistTestCase(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name="دمنوش‌ها", slug="damnoosh")
+        self.product = Product.objects.create(
+            name="دمنوش آرامش‌بخش",
+            slug="damnoosh-aramesh",
+            category=self.category,
+            base_price=99000,
+        )
+        self.user = User.objects.create_user(
+            username="reza_health",
+            password="Password123!",
+            first_name="رضا"
+        )
+
+    def test_unauthenticated_wishlist_toggle_returns_401(self):
+        client = Client()
+        url = reverse('catalog:wishlist_toggle', kwargs={'product_id': self.product.id})
+        response = client.post(url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 401)
+        data = response.json()
+        self.assertTrue(data['require_login'])
+
+    def test_authenticated_wishlist_toggle_and_view(self):
+        client = Client()
+        client.login(username="reza_health", password="Password123!")
+
+        url = reverse('catalog:wishlist_toggle', kwargs={'product_id': self.product.id})
+        # افزودن به لیست
+        res_add = client.post(url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(res_add.status_code, 200)
+        self.assertTrue(res_add.json()['is_added'])
+        self.assertEqual(res_add.json()['wishlist_count'], 1)
+        self.assertEqual(Wishlist.objects.filter(user=self.user, product=self.product).count(), 1)
+
+        # مشاهده صفحه لیست علاقه‌مندی‌ها
+        res_view = client.get(reverse('catalog:wishlist'))
+        self.assertEqual(res_view.status_code, 200)
+        self.assertContains(res_view, "دمنوش آرامش‌بخش")
+
+        # حذف از لیست
+        res_remove = client.post(url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(res_remove.status_code, 200)
+        self.assertFalse(res_remove.json()['is_added'])
+        self.assertEqual(res_remove.json()['wishlist_count'], 0)
+        self.assertEqual(Wishlist.objects.filter(user=self.user, product=self.product).count(), 0)

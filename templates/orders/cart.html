@@ -15,9 +15,9 @@
     <div class="cart-mockup-container">
 
       <!-- لیست اقلام سبد خرید (عین ردیف‌های کارت موکاپ) -->
-      <div class="cart-items-card-list">
+      <div class="cart-items-card-list" id="cartItemsList">
         {% for item in cart.items.all %}
-          <div class="cart-item-row-card">
+          <div class="cart-item-row-card" id="cart-item-{{ item.id }}">
             
             <!-- تصویر محصول سمت راست (عین موکاپ) -->
             <div class="cart-item-thumb-box">
@@ -29,16 +29,16 @@
               <h4 class="cart-item-title">{{ item.product.name }}</h4>
               <div class="cart-stepper-and-price">
                 <div class="stepper-box">
-                  <span class="stepper-btn minus">-</span>
-                  <span class="stepper-val">{{ item.quantity|fa_digits }}</span>
-                  <span class="stepper-btn plus">+</span>
+                  <button type="button" class="stepper-btn minus ajax-cart-stepper" data-item-id="{{ item.id }}" data-action="decrease" aria-label="کاهش تعداد">-</button>
+                  <span class="stepper-val" id="stepper-val-{{ item.id }}">{{ item.quantity|fa_digits }}</span>
+                  <button type="button" class="stepper-btn plus ajax-cart-stepper" data-item-id="{{ item.id }}" data-action="increase" aria-label="افزایش تعداد">+</button>
                 </div>
-                <span class="cart-item-unit-price">{{ item.total_price|toman }}</span>
+                <span class="cart-item-unit-price" id="item-price-{{ item.id }}">{{ item.total_price|toman }}</span>
               </div>
             </div>
 
             <!-- سطل زباله حذف آیتم سمت چپ (عین موکاپ) -->
-            <form action="{% url 'orders:remove_from_cart' item_id=item.id %}" method="post">
+            <form action="{% url 'orders:remove_from_cart' item_id=item.id %}" method="post" class="ajax-remove-form" data-item-id="{{ item.id }}">
               {% csrf_token %}
               <button type="submit" class="btn-trash-delete" title="حذف کالا">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -84,7 +84,7 @@
       <!-- سطر جمع کل (عین موکاپ: جمع کل: ۱۷۸,۰۰۰ تومان) -->
       <div class="cart-total-summary-row">
         <span class="total-label-text">جمع کل:</span>
-        <span class="total-amount-digits">{{ total_payable|toman }}</span>
+        <span class="total-amount-digits" id="cartTotalPayable">{{ total_payable|toman }}</span>
       </div>
 
       <!-- دکمه پهن تکمیل خرید (عین موکاپ) -->

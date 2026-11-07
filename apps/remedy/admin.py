@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage
+from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage, ConsultationBooking
 
 
 @admin.register(SymptomCategory)
@@ -25,3 +25,10 @@ class DrugInteractionAdmin(admin.ModelAdmin):
 class HealthRemedyPackageAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'discounted_package_price')
     filter_horizontal = ('products',)
+
+
+@admin.register(ConsultationBooking)
+class ConsultationBookingAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone', 'symptom_category', 'preferred_time', 'status', 'created_at')
+    list_filter = ('status', 'symptom_category')
+    search_fields = ('name', 'phone', 'notes')

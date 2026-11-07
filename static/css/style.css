@@ -2188,3 +2188,314 @@ select:focus {
   box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.15);
 }
 
+/* ==========================================================================
+   تعاملات پویا: هدر کاربری، منوی کشویی، نشان‌های علاقه‌مندی و اعلان‌های توست
+   ========================================================================== */
+
+/* دکمه ورود / ثبت‌نام برای کاربران مهمان */
+.btn-header-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #f0fdf4;
+  color: #1b4332;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-header-login:hover {
+  background: #1b4332;
+  color: #ffffff;
+  border-color: #1b4332;
+  box-shadow: 0 2px 8px rgba(27, 67, 50, 0.25);
+}
+
+/* کپسول کاربر احراز هویت شده و منوی کشویی */
+.header-user-dropdown-wrap {
+  position: relative;
+}
+
+.btn-user-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px 4px 6px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11.5px;
+  color: #1e293b;
+  transition: all 0.15s ease;
+}
+
+.btn-user-capsule:hover {
+  border-color: var(--primary);
+  background: #f8fafc;
+}
+
+.user-capsule-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-capsule-name {
+  font-weight: 600;
+  max-width: 105px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-dropdown-arrow {
+  color: #64748b;
+  transition: transform 0.2s;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 195px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  padding: 8px 0;
+  z-index: 1000;
+  display: none;
+}
+
+.user-dropdown-menu.show {
+  display: block;
+  animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+  padding: 8px 14px 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-header strong {
+  font-size: 12px;
+  color: #0f172a;
+}
+
+.dropdown-phone {
+  font-size: 10.5px;
+  color: #94a3b8;
+  direction: ltr;
+  text-align: right;
+  margin-top: 2px;
+}
+
+.dropdown-divider {
+  margin: 6px 0;
+  border: none;
+  border-top: 1px solid var(--border-light);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 11.5px;
+  color: #334155;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.dropdown-item:hover {
+  background: #f1f5f9;
+  color: var(--primary-dark);
+}
+
+.dropdown-item.staff-link {
+  color: #15803d;
+  font-weight: 600;
+}
+
+.dropdown-item.text-danger:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+/* آیکون و بج علاقه‌مندی‌ها */
+.wishlist-floating-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+.btn-wishlist-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+}
+
+.btn-wishlist-toggle:hover {
+  background: #ffffff;
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.btn-wishlist-toggle.active {
+  color: #ef4444;
+}
+
+.btn-wishlist-toggle-round {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-wishlist-toggle-round:hover,
+.btn-wishlist-toggle-round.active {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+/* سامانه اعلان توست شناور (Toast Notification) */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast-item {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1e293b;
+  border-right: 4px solid #1b4332;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 360px;
+}
+
+.toast-item.toast-show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-item.toast-hide {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.toast-item.toast-success {
+  border-right-color: #10b981;
+}
+
+.toast-item.toast-error {
+  border-right-color: #ef4444;
+}
+
+.toast-item.toast-warning {
+  border-right-color: #f59e0b;
+}
+
+.toast-item.toast-info {
+  border-right-color: #3b82f6;
+}
+
+.toast-icon {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.toast-success .toast-icon { color: #10b981; }
+.toast-error .toast-icon { color: #ef4444; }
+.toast-warning .toast-icon { color: #f59e0b; }
+.toast-info .toast-icon { color: #3b82f6; }
+
+.toast-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: auto;
+  padding: 2px 4px;
+}
+
+.toast-close:hover {
+  color: #334155;
+}
+
+.badge-bump {
+  animation: badgeBump 0.35s ease;
+}
+
+@keyframes badgeBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); background: #2d6a4f; }
+  100% { transform: scale(1); }
+}
+
+

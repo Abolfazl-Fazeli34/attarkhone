@@ -75,3 +75,32 @@ class HealthRemedyPackage(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ConsultationBooking(models.Model):
+    """
+    سامانه رزرو نوبت مشاوره تخصصی رایگان با متخصصان و پزشکان طب سنتی
+    (پیاده‌سازی دکمه طلایی هیرو بنر صفحه اول و مدل درآمدی BMC گزارش پروژه)
+    """
+    STATUS_CHOICES = [
+        ('pending', 'در انتظار تماس کارشناس'),
+        ('contacted', 'تماس گرفته شد / در حال پیگیری'),
+        ('completed', 'مشاوره با موفقیت انجام شد'),
+        ('cancelled', 'لغو شده'),
+    ]
+
+    name = models.CharField(max_length=150, verbose_name="نام و نام خانوادگی متقاضی")
+    phone = models.CharField(max_length=20, verbose_name="شماره تماس جهت مشاوره")
+    symptom_category = models.CharField(max_length=100, default="مشاوره عمومی تندرستی", verbose_name="موضوع و زمینه مشاوره")
+    preferred_time = models.CharField(max_length=50, default="صبح (۹ الی ۱۳)", verbose_name="زمان پیشنهادی تماس")
+    notes = models.TextField(blank=True, verbose_name="شرح مشکل یا بیماری زمینه‌ای")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="وضعیت بررسی")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت درخواست")
+
+    class Meta:
+        verbose_name = "درخواست مشاوره تخصصی"
+        verbose_name_plural = "درخواست‌های مشاوره سلامت (کارگاه ۱ و ۲)"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} ({self.phone}) - {self.symptom_category}"

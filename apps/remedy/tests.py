@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from remedy.models import ChemicalDrug, DrugInteraction, SymptomCategory
+from remedy.models import ChemicalDrug, DrugInteraction, SymptomCategory, ConsultationBooking
 from catalog.models import Product, Category
 
 
@@ -35,3 +35,24 @@ class RemedyDrugInteractionTestCase(TestCase):
         self.assertEqual(data['interactions_count'], 1)
         self.assertEqual(data['interactions'][0]['severity'], 'danger')
         self.assertIn("خطر خونریزی", data['interactions'][0]['warning_text'])
+
+    def test_consultation_booking_submission(self):
+        url = reverse('remedy:consultation')
+        # دریافت فرم
+        res_get = self.client.get(url)
+        self.assertEqual(res_get.status_code, 200)
+
+        # ارسال فرم رزرو نوبت
+        res_post = self.client.post(url, {
+            'name': 'علی محمدی',
+            'phone': '09129876543',
+            'symptom_category': 'استرس و اضطراب',
+            'preferred_time': 'صبح (۹ الی ۱۳)',
+            'notes': 'نیاز به مشاوره دمنوش مناسب بی‌خوابی شبانه'
+        })
+        self.assertEqual(res_post.status_code, 302)
+
+        booking = ConsultationBooking.objects.filter(phone='09129876543').first()
+        self.assertIsNotNone(booking)
+        self.assertEqual(booking.name, 'علی محمدی')
+        self.assertEqual(booking.status, 'pending')

@@ -28,8 +28,18 @@ def store_context(request):
     except Exception:
         pass
 
+    # شمارش اقلام علاقه‌مندی کاربر
+    wishlist_count = 0
+    try:
+        if request.user.is_authenticated:
+            from catalog.models import Wishlist
+            wishlist_count = Wishlist.objects.filter(user=request.user).count()
+    except Exception:
+        wishlist_count = 0
+
     return {
         'store_setting': setting,
         'cart_count': cart_items_count,
+        'wishlist_count': wishlist_count,
         'nav_categories': categories,
     }

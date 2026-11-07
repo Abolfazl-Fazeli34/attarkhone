@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -231,3 +232,20 @@ class ProductFeature(models.Model):
 
     def __str__(self):
         return f"{self.product.name} | {self.name}: {self.value}"
+
+
+class Wishlist(models.Model):
+    """
+    لیست علاقه‌مندی‌ها و کالاهای نشان‌شده کاربر
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wishlists', verbose_name="کاربر")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlisted_by', verbose_name="محصول")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+
+    class Meta:
+        unique_together = ('user', 'product')
+        verbose_name = "علاقه‌مندی"
+        verbose_name_plural = "لیست علاقه‌مندی‌ها"
+
+    def __str__(self):
+        return f"{self.user} - {self.product.name}"

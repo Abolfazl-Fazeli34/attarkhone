@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.db.models import Q
-from .models import Product, Category, Brand, ProductVariant, ProductFeature
+from django.http import JsonResponse
+from django.contrib import messages
+from .models import Product, Category, Brand, ProductVariant, ProductFeature, Wishlist
 
 
 class ProductListView(View):
@@ -121,3 +123,57 @@ class ProductDetailView(View):
             'related_products': related_products,
         }
         return render(request, 'catalog/product_detail.html', context)
+
+
+class WishlistToggleView(View):
+    """
+    افزودن یا حذف محصول از لیست علاقه‌مندی‌ها با پاسخ ایجکس یا ریدایرکت
+    """
+    def post(self, request, product_id):
+        if not request.user.is_authenticated:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.content_type == 'application/json':
+                return JsonResponse({
+                    'success': False,
+                    'require_login': True,
+                    'message': 'برای نشان کردن کالاها، لطفاً ابتدا وارد حساب کاربری خود شوید.'
+                }, status=401)
+            messages.info(request, 'برای نشان کردن کالاها، لطفاً وارد حساب خود شوید.')
+            return redirect(f'/accounts/login/?next={request.META.get("HTTP_REFERER", "/")}')
+
+        product = get_object_or_404(Product, id=product_id)
+        wishlist_item = Wishlist.objects.filter(user=request.user, product=product).first()
+
+        if wishlist_item:
+            wishlist_item.delete()
+            is_added = False
+            msg = f'«{product.name}» از لیست علاقه‌مندی‌ها حذف شد.'
+        else:
+            Wishlist.objects.create(user=request.user, product=product)
+            is_added = True
+            msg = f'«{product.name}» به لیست علاقه‌مندی‌های شما اضافه شد.'
+
+        total_wishlist = Wishlist.objects.filter(user=request.user).count()
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({
+                'success': True,
+                'is_added': is_added,
+                'wishlist_count': total_wishlist,
+                'message': msg,
+            })
+
+        messages.success(request, msg)
+        return redirect(request.META.get('HTTP_REFERER', 'catalog:wishlist'))
+
+
+class WishlistView(View):
+    """
+    نمایش کالاهای نشان‌شده و لیست علاقه‌مندی‌های کاربر
+    """
+    def get(self, request):
+        if not request.user.is_authenticated:
+            messages.info(request, 'برای مشاهده لیست علاقه‌مندی‌ها، لطفاً وارد شوید.')
+            return redirect('/accounts/login/?next=/shop/wishlist/')
+
+        items = Wishlist.objects.filter(user=request.user).select_related('product__category')
+        return render(request, 'catalog/wishlist.html', {'wishlist_items': items})

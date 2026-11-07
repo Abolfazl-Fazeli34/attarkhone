@@ -23,36 +23,74 @@
       <!-- ۱. آیکون‌های سمت چپ (کاربری، علاقه‌مندی، سبد خرید) -->
       <div class="header-user-icons">
         {% if user.is_authenticated %}
-          <a href="{% url 'accounts:profile' %}" class="icon-btn" title="حساب کاربری: {{ user.get_full_name|default:user.username }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </a>
+          <!-- منوی حساب کاربری وارد شده با دراپ‌داون -->
+          <div class="header-user-dropdown-wrap">
+            <button class="btn-user-capsule" id="userMenuBtn" aria-expanded="false" aria-label="منوی کاربر">
+              <span class="user-capsule-avatar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span class="user-capsule-name">{{ user.get_full_name|default:user.username }}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="user-dropdown-arrow">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+              <div class="dropdown-header">
+                <strong>{{ user.get_full_name|default:user.username }}</strong>
+                <span class="dropdown-phone">{{ user.phone|default:user.email|default:"" }}</span>
+              </div>
+              <hr class="dropdown-divider">
+              <a href="{% url 'accounts:profile' %}" class="dropdown-item">
+                <span class="dropdown-icon">👤</span> داشبورد کاربری
+              </a>
+              <a href="{% url 'accounts:orders' %}" class="dropdown-item">
+                <span class="dropdown-icon">📦</span> سفارش‌های من
+              </a>
+              <a href="{% url 'catalog:wishlist' %}" class="dropdown-item">
+                <span class="dropdown-icon">❤️</span> لیست علاقه‌مندی‌ها
+              </a>
+              {% if user.is_store_staff %}
+                <a href="{% url 'accounts:staff_dashboard' %}" class="dropdown-item staff-link">
+                  <span class="dropdown-icon">⚙️</span> پنل مدیریت کارمند
+                </a>
+              {% endif %}
+              <hr class="dropdown-divider">
+              <a href="{% url 'accounts:logout' %}" class="dropdown-item text-danger">
+                <span class="dropdown-icon">🚪</span> خروج از حساب
+              </a>
+            </div>
+          </div>
         {% else %}
-          <a href="{% url 'accounts:login' %}" class="icon-btn" title="ورود / عضویت">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
+          <!-- دکمه ورود / عضویت برای کاربران مهمان -->
+          <a href="{% url 'accounts:login' %}" class="btn-header-login" title="ورود یا ثبت‌نام در عطارخونه">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
             </svg>
+            <span>ورود / ثبت‌نام</span>
           </a>
         {% endif %}
 
-        <!-- آیکون علاقه‌مندی‌ها -->
-        <a href="{% url 'accounts:profile' %}" class="icon-btn" title="علاقه‌مندی‌ها">
+        <!-- آیکون علاقه‌مندی‌ها با شمارنده پویا -->
+        <a href="{% url 'catalog:wishlist' %}" class="icon-btn wishlist-icon-btn" title="لیست علاقه‌مندی‌ها">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
           </svg>
+          <span class="wishlist-floating-badge" id="headerWishlistBadge" style="{% if not wishlist_count %}display: none;{% endif %}">{{ wishlist_count|fa_digits }}</span>
         </a>
 
-        <!-- آیکون سبد خرید با نشانگر عددی -->
+        <!-- آیکون سبد خرید با نشانگر عددی زنده -->
         <a href="{% url 'orders:cart' %}" class="icon-btn cart-icon-btn" title="سبد خرید">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="cart-floating-badge">{{ cart_count|fa_digits }}</span>
+          <span class="cart-floating-badge" id="headerCartBadge">{{ cart_count|fa_digits }}</span>
         </a>
 
         <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="منو">☰</button>
@@ -102,8 +140,8 @@
           <li class="nav-link-item {% if '/remedy/' in request.path %}active{% endif %}">
             <a href="{% url 'remedy:wizard' %}">دستیار سلامت</a>
           </li>
-          <li class="nav-link-item">
-            <a href="{% url 'pages:page_detail' slug='about-us' %}">مقالات و آموزش‌ها</a>
+          <li class="nav-link-item {% if '/pages/articles/' in request.path %}active{% endif %}">
+            <a href="{% url 'pages:article_list' %}">مقالات و آموزش‌ها</a>
           </li>
           <li class="nav-link-item {% if '/pages/about-us/' in request.path %}active{% endif %}">
             <a href="{% url 'pages:page_detail' slug='about-us' %}">درباره ما</a>
@@ -254,7 +292,11 @@
     </div>
   </footer>
 
+  <!-- کانتینر پیام‌های شناور لایو (Toast Notifications) -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
   <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/main_live.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

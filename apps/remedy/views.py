@@ -3,7 +3,7 @@ from django.views import View
 from django.http import JsonResponse
 from django.contrib import messages
 
-from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage
+from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage, ConsultationBooking
 from catalog.models import Product
 from orders.views import get_or_create_cart
 from orders.models import CartItem
@@ -89,3 +89,49 @@ class AddPackageToCartView(View):
             f'پکیج سلامت «{package.title}» شامل ({", ".join(added_names)}) با موفقیت به سبد خرید افزوده شد.'
         )
         return redirect('orders:cart')
+
+
+class ConsultationBookingView(View):
+    """
+    ثبت درخواست نوبت مشاوره تخصصی رایگان با متخصصان طب سنتی
+    (پیوند دکمه طلایی هیرو بنر صفحه اصلی و فرم اختصاصی)
+    """
+    def get(self, request):
+        categories = SymptomCategory.objects.all()
+        initial_name = ''
+        initial_phone = ''
+        if request.user.is_authenticated:
+            initial_name = request.user.get_full_name() or request.user.username
+            initial_phone = getattr(request.user, 'phone', '')
+
+        return render(request, 'remedy/consultation_form.html', {
+            'categories': categories,
+            'initial_name': initial_name,
+            'initial_phone': initial_phone,
+        })
+
+    def post(self, request):
+        name = request.POST.get('name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        symptom_category = request.POST.get('symptom_category', 'مشاوره عمومی تندرستی')
+        preferred_time = request.POST.get('preferred_time', 'صبح (۹ الی ۱۳)')
+        notes = request.POST.get('notes', '').strip()
+
+        if not name or not phone:
+            messages.error(request, 'لطفاً نام و نام خانوادگی و شماره تماس معتبر خود را وارد فرمایید.')
+            return redirect('remedy:consultation')
+
+        booking = ConsultationBooking.objects.create(
+            name=name,
+            phone=phone,
+            symptom_category=symptom_category,
+            preferred_time=preferred_time,
+            notes=notes,
+            status='pending',
+        )
+
+        messages.success(
+            request,
+            f'درخواست نوبت مشاوره شما با موفقیت ثبت گردید (کد پیگیری: #{booking.id}). متخصصان طب سنتی عطارخونه در بازه زمانی «{preferred_time}» با شما تماس خواهند گرفت.'
+        )
+        return redirect('remedy:consultation')
