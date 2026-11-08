@@ -18,9 +18,16 @@ class ProductListView(View):
         # فیلتر شاخه (دسته‌بندی)
         if category_slug:
             selected_category = get_object_or_404(Category, slug=category_slug)
-            # نمایش محصولات این شاخه و زیرشاخه‌های آن
             category_ids = [selected_category.id] + list(selected_category.children.values_list('id', flat=True))
             queryset = queryset.filter(category_id__in=category_ids)
+        else:
+            cat_param = request.GET.get('cat')
+            if cat_param:
+                matched_cat = Category.objects.filter(slug=cat_param).first()
+                if matched_cat:
+                    selected_category = matched_cat
+                    category_ids = [matched_cat.id] + list(matched_cat.children.values_list('id', flat=True))
+                    queryset = queryset.filter(category_id__in=category_ids)
 
         # جستجوی متنی (کارگاه ۱۸ و ۲۷)
         q = request.GET.get('q', '').strip()

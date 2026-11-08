@@ -81,47 +81,87 @@
 
     </main>
 
-    <!-- ستون سمت چپ: سایدبار فیلتر محصولات (عین موکاپ) -->
+    <!-- ستون سمت چپ: سایدبار فیلتر محصولات (کارگاه ۱۸: جستجوی لایه‌ای) -->
     <aside class="shop-filter-sidebar">
       <form action="{% url 'catalog:product_list' %}" method="get" id="filterForm">
         {% if search_query %}
           <input type="hidden" name="q" value="{{ search_query }}">
         {% endif %}
+        {% if current_sort and current_sort != 'popular' %}
+          <input type="hidden" name="sort" value="{{ current_sort }}">
+        {% endif %}
 
-        <h3 class="filter-sidebar-title">فیلتر محصولات</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1.5px solid var(--border); padding-bottom: 8px;">
+          <h3 class="filter-sidebar-title" style="margin-bottom: 0;">فیلتر محصولات</h3>
+          {% if current_temperament or current_brand or min_price or max_price or is_organic or request.GET.cat or selected_category %}
+            <a href="{% url 'catalog:product_list' %}" style="font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 600;">
+              ✕ پاکسازی
+            </a>
+          {% endif %}
+        </div>
 
-        <!-- فیلتر دسته‌بندی‌ها -->
+        <!-- فیلتر دسته‌بندی‌ها (کارگاه ۱۱) -->
         <div class="filter-group-block">
           <label class="filter-group-label">دسته‌بندی‌ها</label>
           <div class="checkboxes-list">
             <label class="custom-checkbox-row">
-              <input type="checkbox" name="cat" value="damnoosh" {% if 'damnoosh' in request.GET.cat or selected_category.slug == 'damnoosh' %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
-              <span>دمنوش‌ها</span>
+              <input type="radio" name="cat" value="" {% if not request.GET.cat and not selected_category %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
+              <span>همه دسته‌ها</span>
             </label>
-            <label class="custom-checkbox-row">
-              <input type="checkbox" name="cat" value="herbs" {% if 'herbs' in request.GET.cat or selected_category.slug == 'herbs' %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
-              <span>گیاهان دارویی</span>
-            </label>
-            <label class="custom-checkbox-row">
-              <input type="checkbox" name="cat" value="extracts-oils" {% if 'extracts-oils' in request.GET.cat or selected_category.slug == 'extracts-oils' %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
-              <span>عصاره‌ها</span>
-            </label>
+            {% for cat in categories %}
+              <label class="custom-checkbox-row">
+                <input type="radio" name="cat" value="{{ cat.slug }}" {% if selected_category.slug == cat.slug or request.GET.cat == cat.slug %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
+                <span>{{ cat.name }}</span>
+              </label>
+            {% endfor %}
           </div>
         </div>
 
-        <!-- فیلتر قیمت (عین موکاپ) -->
+        <!-- فیلتر طبع و مزاج گیاه (کارگاه ۱۴) -->
         <div class="filter-group-block">
-          <label class="filter-group-label">قیمت</label>
-          
-          <div class="range-slider-mockup">
-            <div class="slider-track-active"></div>
-            <div class="slider-thumb-dot right-dot"></div>
-            <div class="slider-thumb-dot left-dot"></div>
+          <label class="filter-group-label">طبع و مزاج (کارگاه ۱۴)</label>
+          <div class="checkboxes-list">
+            <label class="custom-checkbox-row">
+              <input type="radio" name="temperament" value="" {% if not current_temperament %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
+              <span>همه طبع‌ها</span>
+            </label>
+            {% for val, label in temperament_choices %}
+              <label class="custom-checkbox-row">
+                <input type="radio" name="temperament" value="{{ val }}" {% if current_temperament == val %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
+                <span>{{ label }}</span>
+              </label>
+            {% endfor %}
           </div>
+        </div>
 
-          <div class="price-range-labels">
-            <span>۰ تومان</span>
-            <span>۵۰۰,۰۰۰ تومان</span>
+        <!-- فیلتر برند تولیدکننده (کارگاه ۱۵) -->
+        {% if brands %}
+          <div class="filter-group-block">
+            <label class="filter-group-label">برند تولیدکننده (کارگاه ۱۵)</label>
+            <select name="brand" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 11.5px; background: #fff;" onchange="document.getElementById('filterForm').submit()">
+              <option value="">همه برندها</option>
+              {% for b in brands %}
+                <option value="{{ b.id }}" {% if current_brand == b.id %}selected{% endif %}>{{ b.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+
+        <!-- فیلتر گواهی ارگانیک -->
+        <div class="filter-group-block">
+          <label class="custom-checkbox-row" style="background: #f0fdf4; padding: 6px 8px; border-radius: var(--radius-xs); border: 1px solid #bbf7d0;">
+            <input type="checkbox" name="organic" value="1" {% if is_organic %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
+            <span style="font-size: 11.5px; font-weight: 600; color: #15803d;">🌿 فقط محصولات ارگانیک</span>
+          </label>
+        </div>
+
+        <!-- فیلتر محدوده قیمت (تومان) (کارگاه ۱۸) -->
+        <div class="filter-group-block">
+          <label class="filter-group-label">محدوده قیمت (تومان)</label>
+          
+          <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+            <input type="number" name="min_price" placeholder="از ۰" value="{{ min_price }}" min="0" step="10000" style="width: 50%; padding: 5px 8px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 11px;">
+            <input type="number" name="max_price" placeholder="تا ۵۰۰,۰۰۰" value="{{ max_price }}" min="0" step="10000" style="width: 50%; padding: 5px 8px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 11px;">
           </div>
 
           <button type="submit" class="btn-green-apply-filter">

@@ -52,3 +52,49 @@ class WishlistTestCase(TestCase):
         self.assertFalse(res_remove.json()['is_added'])
         self.assertEqual(res_remove.json()['wishlist_count'], 0)
         self.assertEqual(Wishlist.objects.filter(user=self.user, product=self.product).count(), 0)
+
+
+class FacetedSearchTestCase(TestCase):
+    """
+    کارگاه ۱۸ کتاب: آزمون جستجوی لایه‌ای و فیلترهای چندگانه کاتالوگ
+    """
+    def setUp(self):
+        self.client = Client()
+        self.cat_tea = Category.objects.create(name="دمنوش‌ها", slug="damnoosh")
+        self.cat_herb = Category.objects.create(name="گیاهان دارویی", slug="herbs")
+
+        self.p1 = Product.objects.create(
+            name="دمنوش بابونه آرام‌بخش",
+            slug="damnoosh-baboneh",
+            category=self.cat_tea,
+            base_price=60000,
+            temperament="warm",
+            is_organic=True
+        )
+        self.p2 = Product.objects.create(
+            name="عصاره کاسنی خنک",
+            slug="aragh-kasni",
+            category=self.cat_herb,
+            base_price=120000,
+            temperament="cold",
+            is_organic=False
+        )
+
+    def test_filter_by_category(self):
+        res = self.client.get(reverse('catalog:product_list') + '?cat=damnoosh')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "دمنوش بابونه")
+        self.assertNotContains(res, "عصاره کاسنی خنک")
+
+    def test_filter_by_temperament(self):
+        res = self.client.get(reverse('catalog:product_list') + '?temperament=cold')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "عصاره کاسنی خنک")
+        self.assertNotContains(res, "دمنوش بابونه")
+
+    def test_filter_by_price_range(self):
+        res = self.client.get(reverse('catalog:product_list') + '?min_price=100000&max_price=150000')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "عصاره کاسنی خنک")
+        self.assertNotContains(res, "دمنوش بابونه")
+

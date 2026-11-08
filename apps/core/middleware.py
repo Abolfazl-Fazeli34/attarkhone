@@ -21,19 +21,18 @@ class MaintenanceModeMiddleware:
             return self.get_response(request)
 
         if setting.is_maintenance_mode:
-            # بررسی احراز هویت کارمند یا سوپریوزر
+            # بررسی احراز هویت کارمند یا سوپریوزر (کارگاه ۱ و ۳: عبور کارمندان مجاز)
             if request.user.is_authenticated and (request.user.is_staff or getattr(request.user, 'is_store_staff', False)):
                 return self.get_response(request)
 
-            # بررسی آی‌پی کاربر
+            # بررسی آی‌پی‌های سفید تعیین‌شده در پنل مدیریت
             client_ip = self.get_client_ip(request)
             allowed_ips = [ip.strip() for ip in setting.maintenance_allowed_ips.split(',') if ip.strip()]
 
-            if client_ip in allowed_ips or client_ip in ['127.0.0.1', 'localhost', '::1']:
-                # اجازه عبور به کارمند محلی
+            if client_ip in allowed_ips:
                 return self.get_response(request)
 
-            # نمایش صفحه در دست تعمیر
+            # نمایش صفحه رسمی در دست تعمیر (کارگاه ۳ کتاب)
             return render(
                 request,
                 'core/maintenance.html',
