@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .models import User
+from django.utils import timezone
+from .models import User, EmailOTP
 from orders.models import Order, BankReceipt
-from core.emails import send_welcome_email
+from core.emails import send_welcome_email, send_otp_verification_email
 
 
 class UserLoginView(View):
@@ -59,7 +60,7 @@ class UserLoginView(View):
 
 class UserRegisterView(View):
     """
-    ثبت‌نام کاربر جدید با اعتبارسنجی ایمیل و ارسال رایانامه خوش‌آمدگویی و هدیه
+    ثبت‌نام کاربر جدید با اعتبارسنجی دو مرحله‌ای ایمیل (Email OTP)
     """
     def get(self, request):
         if request.user.is_authenticated:
@@ -68,7 +69,7 @@ class UserRegisterView(View):
 
     def post(self, request):
         username = request.POST.get('username', '').strip()
-        email = request.POST.get('email', '').strip()
+        email = request.POST.get('email', '').strip().lower()
         first_name = request.POST.get('first_name', '').strip()
         last_name = request.POST.get('last_name', '').strip()
         phone = request.POST.get('phone', '').strip()
@@ -123,22 +124,150 @@ class UserRegisterView(View):
                 'phone': phone,
             })
 
+        # ذخیره موقت اطلاعات در نشست و ارسال کد تایید ۵ رقمی به ایمیل
+        request.session['pending_register'] = {
+            'username': username,
+            'email': email,
+            'first_name': first_name,
+            'last_name': last_name,
+            'phone': phone,
+            'password': password
+        }
+
+        otp = EmailOTP.generate_code(email, purpose='register')
+        send_otp_verification_email(email, otp.code, purpose='register', request=request)
+
+        messages.info(request, f'کد تایید ۵ رقمی احراز هویت به نشانی {email} ارسال شد.')
+        return redirect('accounts:verify_email')
+
+
+class VerifyEmailOTPView(View):
+    """
+    تایید کد ۵ رقمی ارسال‌شده به ایمیل جهت نهایی‌سازی ثبت‌نام
+    """
+    def get(self, request):
+        pending = request.session.get('pending_register')
+        if not pending:
+            messages.warning(request, 'لطفاً ابتدا فرم ثبت‌نام را تکمیل فرمایید.')
+            return redirect('accounts:register')
+        return render(request, 'accounts/verify_otp.html', {'email': pending.get('email')})
+
+    def post(self, request):
+        pending = request.session.get('pending_register')
+        if not pending:
+            messages.warning(request, 'نشست ثبت‌نام منقضی شده است. لطفاً مجدداً اقدام فرمایید.')
+            return redirect('accounts:register')
+
+        email = pending.get('email')
+        code = request.POST.get('otp_code', '').strip()
+
+        otp = EmailOTP.objects.filter(
+            email__iexact=email,
+            code=code,
+            purpose='register',
+            is_used=False,
+            expires_at__gt=timezone.now()
+        ).first()
+
+        if not otp:
+            messages.error(request, 'کد وارد شده نادرست است یا مهلت ۵ دقیقه‌ای آن به پایان رسیده است.')
+            return render(request, 'accounts/verify_otp.html', {'email': email})
+
+        # تایید موفقیت‌آمیز و ساخت قطعی کاربر
         user = User.objects.create_user(
-            username=username,
-            email=email,
-            first_name=first_name,
-            last_name=last_name,
-            phone=phone,
-            password=password,
-            role='customer'
+            username=pending['username'],
+            email=pending['email'],
+            first_name=pending.get('first_name', ''),
+            last_name=pending.get('last_name', ''),
+            phone=pending.get('phone', ''),
+            password=pending['password'],
+            role='customer',
+            email_verified=True
         )
+        otp.is_used = True
+        otp.save()
 
-        # ارسال ایمیل خوش‌آمدگویی رسمی همراه با کد تخفیف
+        request.session.pop('pending_register', None)
         send_welcome_email(user, request)
-
         login(request, user, backend='accounts.backends.EmailOrUsernameModelBackend')
-        messages.success(request, 'حساب کاربری شما با موفقیت ایجاد شد و ایمیل خوش‌آمدگویی به همراه کد تخفیف اختصاصی برای شما ارسال گردید.')
+        messages.success(request, 'نشانی رایانامه شما با موفقیت تایید شد و حساب کاربری ایجاد گردید!')
         return redirect('core:home')
+
+
+class ResendOTPView(View):
+    """
+    ارسال مجدد کد تایید ایمیل
+    """
+    def post(self, request):
+        pending = request.session.get('pending_register')
+        if not pending:
+            messages.warning(request, 'درخواستی برای ارسال مجدد یافت نشد.')
+            return redirect('accounts:register')
+
+        email = pending.get('email')
+        otp = EmailOTP.generate_code(email, purpose='register')
+        send_otp_verification_email(email, otp.code, purpose='register', request=request)
+        messages.success(request, f'کد تایید ۵ رقمی جدید به نشانی {email} ارسال شد.')
+        return redirect('accounts:verify_email')
+
+
+class LoginWithOTPView(View):
+    """
+    ورود سریع بدون رمز عبور با کد یکبار مصرف ایمیل
+    """
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('core:home')
+        return render(request, 'accounts/login_otp.html', {'step': 'enter_email'})
+
+    def post(self, request):
+        step = request.POST.get('step', 'send_otp')
+        email = request.POST.get('email', '').strip().lower()
+
+        if step == 'send_otp':
+            if not email or '@' not in email:
+                messages.error(request, 'لطفاً یک نشانی ایمیل معتبر وارد کنید.')
+                return render(request, 'accounts/login_otp.html', {'step': 'enter_email'})
+
+            user = User.objects.filter(email__iexact=email).first()
+            if not user:
+                messages.error(request, 'کاربری با این نشانی ایمیل یافت نشد. لطفاً ثبت‌نام نمایید.')
+                return redirect('accounts:register')
+
+            otp = EmailOTP.generate_code(email, purpose='login')
+            send_otp_verification_email(email, otp.code, purpose='login', request=request)
+            messages.info(request, f'کد ورود یکبار مصرف به {email} ارسال گردید.')
+            return render(request, 'accounts/login_otp.html', {'step': 'enter_code', 'email': email})
+
+        elif step == 'verify_otp':
+            code = request.POST.get('otp_code', '').strip()
+            otp = EmailOTP.objects.filter(
+                email__iexact=email,
+                code=code,
+                purpose='login',
+                is_used=False,
+                expires_at__gt=timezone.now()
+            ).first()
+
+            if not otp:
+                messages.error(request, 'کد وارد شده نامعتبر یا منقضی است.')
+                return render(request, 'accounts/login_otp.html', {'step': 'enter_code', 'email': email})
+
+            otp.is_used = True
+            otp.save()
+
+            user = User.objects.filter(email__iexact=email).first()
+            if user:
+                login(request, user, backend='accounts.backends.EmailOrUsernameModelBackend')
+                messages.success(request, f'خوش آمدید، {user.get_full_name() or user.username}!')
+                if user.is_seller:
+                    return redirect('accounts:seller_dashboard')
+                if user.is_store_staff:
+                    return redirect('accounts:staff_dashboard')
+                return redirect('accounts:profile')
+            else:
+                messages.error(request, 'کاربر یافت نشد.')
+                return redirect('accounts:login')
 
 
 class PasswordResetRequestView(View):

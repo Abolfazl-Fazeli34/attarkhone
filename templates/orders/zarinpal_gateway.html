@@ -1,0 +1,302 @@
+{% load static persian_tags %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>درگاه پرداخت زرین‌پال | شاپرک</title>
+  <link rel="icon" type="image/png" href="https://www.zarinpal.com/favicon.ico">
+  <style>
+    :root {
+      --zp-yellow: #ffd600;
+      --zp-yellow-hover: #ffcc00;
+      --zp-dark: #1e1e1e;
+      --zp-gray: #f5f5f5;
+      --zp-border: #e0e0e0;
+      --zp-text: #2c2c2c;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Vazirmatn", Tahoma, sans-serif;
+    }
+    body {
+      background-color: #f7f9fa;
+      color: var(--zp-text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .zp-topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--zp-border);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .zp-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .zp-logo-badge {
+      background: var(--zp-yellow);
+      color: #000;
+      font-weight: 900;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .zp-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+    }
+    .zp-shaparak-logo {
+      font-size: 13px;
+      color: #0284c7;
+      font-weight: 700;
+      border: 1px solid #bae6fd;
+      background: #f0f9ff;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .zp-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .zp-card {
+      background: #ffffff;
+      border: 1px solid var(--zp-border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .zp-header {
+      background: #fafafa;
+      border-bottom: 1px solid var(--zp-border);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .zp-header-info div {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    .zp-header-info h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #111;
+    }
+    .zp-amount {
+      text-align: left;
+    }
+    .zp-amount-label {
+      font-size: 11px;
+      color: #777;
+    }
+    .zp-amount-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: #15803d;
+    }
+    .zp-form {
+      padding: 24px;
+    }
+    .zp-form-group {
+      margin-bottom: 16px;
+    }
+    .zp-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+    .zp-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--zp-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: monospace, inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .zp-input:focus {
+      border-color: #f59e0b;
+    }
+    .zp-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .zp-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 10px;
+    }
+    .zp-otp-btn {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+      height: 42px;
+    }
+    .zp-otp-btn:hover {
+      background: #e5e7eb;
+    }
+    .zp-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .zp-btn-pay {
+      flex: 1;
+      background: var(--zp-yellow);
+      color: #000;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .zp-btn-pay:hover {
+      background: var(--zp-yellow-hover);
+    }
+    .zp-btn-cancel {
+      background: #f3f4f6;
+      color: #ef4444;
+      border: 1px solid #e5e7eb;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .zp-btn-cancel:hover {
+      background: #fee2e2;
+    }
+    .zp-footer {
+      text-align: center;
+      padding: 14px;
+      font-size: 11.5px;
+      color: #888;
+      border-top: 1px solid var(--zp-border);
+      background: #fff;
+    }
+    .zp-sandbox-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="zp-topbar">
+    <div class="zp-brand">
+      <div class="zp-logo-badge">ZARINPAL</div>
+      <div class="zp-title">درگاه پرداخت اینترنتی زرین‌پال</div>
+    </div>
+    <div class="zp-shaparak-logo">
+      متصل به شاپرک بانکی
+    </div>
+  </div>
+
+  <div class="zp-main">
+    <div class="zp-card">
+      <div class="zp-header">
+        <div class="zp-header-info">
+          <div>پذیرنده: فروشگاه تخصصی عطارخونه</div>
+          <h2>سفارش {{ order.tracking_code }}</h2>
+        </div>
+        <div class="zp-amount">
+          <div class="zp-amount-label">مبلغ قابل پرداخت</div>
+          <div class="zp-amount-val">{{ order.total_amount|toman }}</div>
+        </div>
+      </div>
+
+      <div class="zp-form">
+        <div style="text-align: center;">
+          <span class="zp-sandbox-badge">محیط تست سندباکس زرین‌پال (Zarinpal Sandbox)</span>
+        </div>
+
+        <form method="get" action="{% url 'orders:zarinpal_callback' tracking_code=order.tracking_code %}" id="zpPayForm">
+          <input type="hidden" name="Authority" value="{{ order.zarinpal_authority }}">
+          <input type="hidden" name="Status" value="OK" id="zpStatusInput">
+
+          <div class="zp-form-group">
+            <label class="zp-label">شماره ۱۶ رقمی کارت بانکی</label>
+            <input type="text" class="zp-input" placeholder="۶۰۳۷-۹۹۷۵-۱۱۲۲-۳۳۴۴" value="۶۰۳۷-۹۹۷۵-۱۱۲۲-۳۳۴۴" maxlength="19" required style="direction: ltr; text-align: center;">
+          </div>
+
+          <div class="zp-grid-2 zp-form-group">
+            <div>
+              <label class="zp-label">کد شناسایی دوم (CVV2)</label>
+              <input type="password" class="zp-input" placeholder="۳ یا ۴ رقم" value="1234" maxlength="4" required style="direction: ltr; text-align: center;">
+            </div>
+            <div>
+              <label class="zp-label">تاریخ انقضای کارت</label>
+              <div style="display: flex; gap: 6px;">
+                <input type="text" class="zp-input" placeholder="ماه" value="08" maxlength="2" required style="direction: ltr; text-align: center;">
+                <input type="text" class="zp-input" placeholder="سال" value="06" maxlength="2" required style="direction: ltr; text-align: center;">
+              </div>
+            </div>
+          </div>
+
+          <div class="zp-grid-2 zp-form-group" style="align-items: flex-end;">
+            <div>
+              <label class="zp-label">رمز دوم پویا</label>
+              <input type="password" class="zp-input" placeholder="رمز پیامک‌شده" value="784912" required style="direction: ltr; text-align: center;">
+            </div>
+            <div>
+              <button type="button" class="zp-otp-btn" style="width: 100%;" onclick="this.textContent='ارسال شد: ۷۸۴۹۱۲'">دریافت رمز پویا</button>
+            </div>
+          </div>
+
+          <div class="zp-actions">
+            <button type="submit" class="zp-btn-pay">
+              تایید و پرداخت نهایی (سندباکس)
+            </button>
+            <a href="{% url 'orders:zarinpal_callback' tracking_code=order.tracking_code %}?Authority={{ order.zarinpal_authority }}&Status=NOK" class="zp-btn-cancel">
+              انصراف
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <div class="zp-footer">
+        امنیت این تراکنش توسط زیرساخت رسمی زرین‌پال و شاپرک تضمین شده است.
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

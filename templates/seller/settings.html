@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}تنظیمات حساب غرفه و شبای تسویه | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 30px auto; max-width: 850px;">
+
+  <!-- ناوبری بالای صفحه -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; margin-bottom: 4px;">
+        <a href="{% url 'accounts:seller_dashboard' %}" style="color: #64748b; text-decoration: none;">پنل تأمین‌کننده</a>
+        <span>/</span>
+        <span style="color: var(--primary); font-weight: 600;">تنظیمات و اطلاعات مالی</span>
+      </div>
+      <h1 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin: 0;">
+        مشخصات غرفه، مزرعه و شماره شبای تسویه
+      </h1>
+    </div>
+    <a href="{% url 'accounts:seller_dashboard' %}" class="btn-action" style="font-size: 13px; padding: 8px 14px; background: #f1f5f9; color: #475569; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+      {% razavi_icon 'arrow-right' size=14 %}
+      <span>بازگشت به پیشخوان</span>
+    </a>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" style="background: #ffffff; padding: 30px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
+    {% csrf_token %}
+
+    <!-- اطلاعات مالی و بانکی -->
+    <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 8px; color: var(--primary-dark); font-weight: 700; font-size: 15px; margin-bottom: 12px;">
+        <span style="color: var(--gold);">{% razavi_icon 'credit-card' size=18 %}</span>
+        <span>اطلاعات بانکی و تسویه حساب مالی</span>
+      </div>
+      <div style="font-size: 12.5px; color: #64748b; margin-bottom: 16px; line-height: 1.7;">
+        تسویه حساب فروشندگان به صورت خودکار هر هفته بر اساس مانده سفارش‌های تحویل‌شده به این شماره شبا انجام می‌پذیرد.
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">شماره شبا (IBAN) با IR <span style="color: #dc2626;">*</span></label>
+          <input type="text" name="shaba_number" value="{{ profile.shaba_number|default:'' }}" required placeholder="IR000000000000000000000000" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: monospace; box-sizing: border-box; direction: ltr; text-align: left;">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">کد ملی یا شناسه ثبت شرکت / تعاونی <span style="color: #dc2626;">*</span></label>
+          <input type="text" name="national_id_or_registration" value="{{ profile.national_id_or_registration|default:'' }}" required style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+        </div>
+      </div>
+    </div>
+
+    <!-- مشخصات عمومی مزرعه / غرفه -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px;">
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">نام رسمی غرفه یا مزرعه <span style="color: #dc2626;">*</span></label>
+        <input type="text" name="store_name" value="{{ profile.store_name|default:'' }}" required style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">تلفن هماهنگی و پشتیبانی تأمین</label>
+        <input type="text" name="phone_work" value="{{ profile.phone_work|default:'' }}" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div style="grid-column: 1 / -1;">
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">نشانی دقیق کشتگاه، گلخانه یا انبار سورتینگ</label>
+        <input type="text" name="address" value="{{ profile.address|default:'' }}" placeholder="استان، شهر، منطقه، روستا و نشانی دقیق محل بارگیری" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div style="grid-column: 1 / -1;">
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">معرفی مزرعه، استاندارد کشت ارگانیک و گواهی‌ها</label>
+        <textarea name="description" rows="4" placeholder="درباره سابقه کشت، ارتفاع مزرعه از سطح دریا، خاک ارگانیک و نحوه خشک‌کردن سنتی سایه‌خشک بنویسید..." style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">{{ profile.description|default:'' }}</textarea>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">نشان و لوگوی تجاری مزرعه</label>
+        <input type="file" name="logo" accept="image/*" style="width: 100%; padding: 8px 12px; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); font-size: 12px; box-sizing: border-box; background: #fafafa;">
+        {% if profile.logo %}
+          <div style="font-size: 11px; color: #64748b; margin-top: 4px;">لوگوی فعلی آپلود شده است.</div>
+        {% endif %}
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">کارمزد پلتفرم عطارخونه</label>
+        <div style="padding: 10px 14px; background: #f1f5f9; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; color: var(--primary-dark);">
+          {{ profile.commission_percent|fa_digits }} درصد (نرخ مصوب حمایتی از کشاورزان)
+        </div>
+      </div>
+    </div>
+
+    <!-- دکمه ذخیره -->
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
+      <button type="submit" class="btn-hero" style="padding: 11px 24px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;">
+        {% razavi_icon 'check-circle' size=16 %}
+        <span>ذخیره و به‌روزرسانی تنظیمات</span>
+      </button>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}

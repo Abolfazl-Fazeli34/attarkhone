@@ -4,6 +4,7 @@ from .views import (
     AddToCartAjaxView, UpdateQuantityAjaxView, RemoveItemAjaxView,
     ApplyCouponView, RemoveCouponView,
     CheckoutView, MockPaymentGatewayView,
+    ZarinpalGatewayView, ZarinpalCallbackView,
     BankReceiptView, OrderInvoiceView, OrderTrackingView
 )
 
@@ -19,6 +20,8 @@ urlpatterns = [
     path('cart/apply-coupon/', ApplyCouponView.as_view(), name='apply_coupon'),
     path('cart/remove-coupon/', RemoveCouponView.as_view(), name='remove_coupon'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('payment/zarinpal/gateway/<str:tracking_code>/', ZarinpalGatewayView.as_view(), name='zarinpal_gateway_view'),
+    path('payment/zarinpal/callback/<str:tracking_code>/', ZarinpalCallbackView.as_view(), name='zarinpal_callback'),
     path('payment/<str:tracking_code>/', MockPaymentGatewayView.as_view(), name='mock_gateway'),
     path('receipt/<str:tracking_code>/', BankReceiptView.as_view(), name='bank_receipt'),
     path('invoice/<str:tracking_code>/', OrderInvoiceView.as_view(), name='invoice'),

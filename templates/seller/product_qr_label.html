@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}شناسنامه و برچسب اصالت کالا | {{ product.name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  @media print {
+    header, footer, .no-print, .messages-container {
+      display: none !important;
+    }
+    body {
+      background: #ffffff !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .print-sheet {
+      box-shadow: none !important;
+      border: 2px solid #000 !important;
+      margin: 0 auto !important;
+      max-width: 100% !important;
+      page-break-inside: avoid;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 30px auto; max-width: 850px;">
+
+  <!-- نوار کنترل بالای برگه -->
+  <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: #ffffff; padding: 16px 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-xs);">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <a href="{% url 'accounts:seller_products' %}" style="color: #64748b; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
+        {% razavi_icon 'arrow-right' size=14 %}
+        <span>بازگشت به کاتالوگ اقلام</span>
+      </a>
+      <span style="color: #cbd5e1;">|</span>
+      <span style="font-size: 13px; font-weight: 700; color: var(--primary-dark);">
+        شناسنامه هوشمند و لیبل بسته‌بندی استاندارد (QR Code)
+      </span>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <button onclick="window.print();" class="btn-hero" style="font-size: 13px; padding: 8px 18px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        {% razavi_icon 'printer' size=16 %}
+        <span>چاپ برچسب بسته‌بندی</span>
+      </button>
+      <a href="{{ product.get_absolute_url }}" target="_blank" class="btn-action" style="font-size: 13px; padding: 8px 14px; background: #f8fafc; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--border);">
+        {% razavi_icon 'external-link' size=14 %}
+        <span>بررسی لینک مقصد بارکد</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- کارت لیبل چاپی استاندارد و فاخر -->
+  <div class="print-sheet" style="background: #ffffff; border: 3px double #143529; border-radius: 8px; padding: 28px; box-shadow: var(--shadow-md); position: relative; overflow: hidden;">
+    
+    <!-- نوار طلایی کلاسیک در حاشیه -->
+    <div style="position: absolute; top: 0; right: 0; left: 0; height: 6px; background: linear-gradient(90deg, #143529 0%, #D2AA65 50%, #143529 100%);"></div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px dashed #cbd5e1; padding-bottom: 20px; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+      
+      <!-- هویت برند و فروشگاه -->
+      <div style="flex: 1; min-width: 280px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+          <span style="color: #143529;">{% razavi_icon 'shield' size=28 %}</span>
+          <div>
+            <div style="font-size: 18px; font-weight: 800; color: #143529; letter-spacing: -0.5px;">
+              سامانه ملی اصالت گیاهان دارویی عطارخونه
+            </div>
+            <div style="font-size: 12px; color: #64748b;">
+              برچسب تایید سلامت، خلوص ژنتیکی و کنترل کیفی آزمایشگاهی
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; background: #fcfbf7; border: 1px solid #e7dfcb; border-radius: 6px; padding: 10px 14px;">
+          <div style="font-size: 12px; color: #78716c;">غرفه و مزرعه تولیدکننده:</div>
+          <div style="font-size: 14px; font-weight: 700; color: #143529; margin-top: 2px;">
+            {{ product.seller.seller_profile.store_name|default:'مزرعه ارگانیک احیاء گیاهان دارویی' }}
+          </div>
+          {% if product.harvest_region %}
+            <div style="font-size: 11.5px; color: #059669; margin-top: 2px;">
+              منطقه رویش و برداشت: {{ product.harvest_region }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- بلوک بارکد QR با کیفیت بالا -->
+      <div style="text-align: center; border: 2px solid #143529; border-radius: 8px; padding: 10px; background: #ffffff;">
+        <img src="{{ qr_data_uri }}" alt="QR Code" style="width: 140px; height: 140px; display: block; margin: 0 auto;">
+        <div style="font-size: 11px; font-weight: 700; color: #143529; margin-top: 6px;">
+          اسکن جهت راستی‌آزمایی COA
+        </div>
+        <div style="font-size: 10px; color: #64748b; font-family: monospace; direction: ltr;">
+          ID: #{{ product.id }} | ATK-VERIFIED
+        </div>
+      </div>
+
+    </div>
+
+    <!-- اطلاعات فنی و بالینی فرآورده -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px;">
+      
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">نام فارسی فرآورده:</div>
+        <div style="font-size: 15px; font-weight: 800; color: #143529; margin-top: 2px;">{{ product.name }}</div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">نام علمی (Scientific Name):</div>
+        <div style="font-size: 13px; font-weight: 700; color: #334155; font-style: italic; direction: ltr; text-align: right; margin-top: 2px;">
+          {{ product.scientific_name|default:'Echium amoenum Fisch. & C.A. Mey' }}
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">تیره گیاهی (Family):</div>
+        <div style="font-size: 13px; font-weight: 700; color: #334155; margin-top: 2px;">
+          {{ product.botanical_family|default:'Boraginaceae' }}
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">طبع و مزاج (طب ایرانی):</div>
+        <div style="font-size: 13px; font-weight: 700; color: #b45309; margin-top: 2px;">
+          {{ product.get_temperament_display|default:'گرم و تر' }}
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">شماره سری ساخت (Batch No):</div>
+        <div style="font-size: 13px; font-weight: 700; color: #143529; font-family: monospace; margin-top: 2px;">
+          {{ batch_no }}
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">تاریخ فرآوری / بسته‌بندی:</div>
+        <div style="font-size: 13px; font-weight: 700; color: #334155; margin-top: 2px;">
+          {{ pack_date|date:"Y/m/d"|fa_digits }}
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">تاریخ انقضای مصرف بهینه:</div>
+        <div style="font-size: 13px; font-weight: 700; color: #334155; margin-top: 2px;">
+          {{ expiry_date|date:"Y/m/d"|fa_digits }}
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+        <div style="font-size: 11px; color: #64748b;">پروانه بهداشتی و سلامت:</div>
+        <div style="font-size: 12px; font-weight: 700; color: #047857; margin-top: 2px;">
+          {{ product.health_license|default:'سیب سلامت ۱۴۰۳/۴۹۸۲۱' }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- مواد مؤثره و منع مصرف در لیبل -->
+    {% if product.active_compounds or product.contraindications %}
+      <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 12px; font-size: 12px; color: #92400e; margin-bottom: 20px; line-height: 1.8;">
+        {% if product.active_compounds %}
+          <div><b>ترکیبات زیست‌فعال:</b> {{ product.active_compounds }}</div>
+        {% endif %}
+        {% if product.contraindications %}
+          <div><b>هشدار منع مصرف:</b> {{ product.contraindications }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- فوتر لیبل با بارکد خطی و اصالت سنجی -->
+    <div style="border-top: 2px dashed #cbd5e1; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; flex-wrap: wrap; gap: 8px;">
+      <div>
+        تضمین اصالت و عدم تراریختگی با ضمانت بازگشت وجه عطارخونه | نگهداری در جای خشک، خنک و دور از تابش مستقیم خورشید.
+      </div>
+      <div style="font-weight: 700; color: #143529;">
+        www.attarkhone.ir/p/{{ product.slug }}
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

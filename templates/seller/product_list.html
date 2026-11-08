@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}کاتالوگ و مدیریت محصولات غرفه | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 30px auto; max-width: 1200px;">
+
+  <!-- ناوبری بالای صفحه -->
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 24px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; margin-bottom: 4px;">
+        <a href="{% url 'accounts:seller_dashboard' %}" style="color: #64748b; text-decoration: none;">پنل تأمین‌کننده</a>
+        <span>/</span>
+        <span style="color: var(--primary); font-weight: 600;">کاتالوگ اقلام</span>
+      </div>
+      <h1 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin: 0;">
+        مدیریت فرآورده‌های گیاهی و دارویی
+      </h1>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'accounts:seller_product_add' %}" class="btn-hero" style="font-size: 13px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700;">
+        {% razavi_icon 'plus-circle' size=16 %}
+        <span>افزودن فرآورده جدید</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- فیلتر جستجو -->
+  <div style="background: #ffffff; padding: 16px 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); margin-bottom: 20px; box-shadow: var(--shadow-xs);">
+    <form method="get" style="display: flex; gap: 12px; align-items: center;">
+      <div style="flex: 1; position: relative;">
+        <input type="text" name="q" value="{{ search_query }}" placeholder="جستجو بر اساس نام فرآورده گیاهی یا نام علمی..." style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+      <button type="submit" class="btn-hero" style="font-size: 13px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: none;">
+        {% razavi_icon 'search' size=14 %}
+        <span>جستجو</span>
+      </button>
+      {% if search_query %}
+        <a href="{% url 'accounts:seller_products' %}" class="btn-action" style="font-size: 13px; padding: 10px 14px; background: #f1f5f9; color: #475569; text-decoration: none;">
+          پاکسازی
+        </a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- جدول محصولات -->
+  <div style="background: #ffffff; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden;">
+    {% if products.exists %}
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="background: #f8fafc; color: #475569; text-align: right; border-bottom: 2px solid #e2e8f0;">
+              <th style="padding: 14px 16px; width: 64px;">تصویر</th>
+              <th style="padding: 14px 16px;">نام محصول و هویت گیاه‌شناسی</th>
+              <th style="padding: 14px 16px;">دسته‌بندی</th>
+              <th style="padding: 14px 16px;">قیمت پایه</th>
+              <th style="padding: 14px 16px;">موجودی انبار</th>
+              <th style="padding: 14px 16px;">وضعیت گواهی</th>
+              <th style="padding: 14px 16px; text-align: center;">عملیات و لیبل</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in products %}
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#fafaf9'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 12px 16px;">
+                  {% if p.image %}
+                    <img src="{{ p.image.url }}" alt="{{ p.name }}" style="width: 52px; height: 52px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0;">
+                  {% else %}
+                    <div style="width: 52px; height: 52px; border-radius: 6px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
+                      {% razavi_icon 'image' size=20 %}
+                    </div>
+                  {% endif %}
+                </td>
+                <td style="padding: 12px 16px;">
+                  <div style="font-weight: 700; color: var(--primary-dark); font-size: 14px; margin-bottom: 2px;">
+                    {{ p.name }}
+                  </div>
+                  {% if p.scientific_name %}
+                    <div style="font-size: 11.5px; color: #64748b; font-style: italic; direction: ltr; text-align: right;">
+                      {{ p.scientific_name }}
+                    </div>
+                  {% endif %}
+                  {% if p.harvest_region %}
+                    <div style="font-size: 11px; color: #059669; margin-top: 3px;">
+                      منطقه برداشت: {{ p.harvest_region }}
+                    </div>
+                  {% endif %}
+                </td>
+                <td style="padding: 12px 16px; color: #475569;">
+                  {{ p.category.name|default:'-' }}
+                </td>
+                <td style="padding: 12px 16px;">
+                  <div style="font-weight: 700; color: var(--primary-dark);">
+                    {{ p.final_price|intcomma|fa_digits }} تومان
+                  </div>
+                  {% if p.discount_percent > 0 %}
+                    <div style="font-size: 11px; color: #dc2626; text-decoration: line-through;">
+                      {{ p.base_price|intcomma|fa_digits }} تومان
+                    </div>
+                  {% endif %}
+                </td>
+                <td style="padding: 12px 16px;">
+                  {% if p.stock > 10 %}
+                    <span style="display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; background: #ecfdf5; color: #047857; font-weight: 700;">
+                      {{ p.stock|fa_digits }} در انبار
+                    </span>
+                  {% elif p.stock > 0 %}
+                    <span style="display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; background: #fefce8; color: #b45309; font-weight: 700;">
+                      {{ p.stock|fa_digits }} باقی‌مانده (کم)
+                    </span>
+                  {% else %}
+                    <span style="display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; background: #fef2f2; color: #dc2626; font-weight: 700;">
+                      ناموجود
+                    </span>
+                  {% endif %}
+                </td>
+                <td style="padding: 12px 16px;">
+                  {% if p.is_organic %}
+                    <span style="display: inline-flex; align-items: center; gap: 4px; color: #15803d; font-size: 11px; background: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                      {% razavi_icon 'check-circle' size=11 %}
+                      ارگانیک تاییدشده
+                    </span>
+                  {% else %}
+                    <span style="color: #64748b; font-size: 11px;">استاندارد</span>
+                  {% endif %}
+                </td>
+                <td style="padding: 12px 16px; text-align: center;">
+                  <div style="display: inline-flex; gap: 6px; align-items: center;">
+                    <!-- چاپ شناسنامه QR -->
+                    <a href="{% url 'accounts:seller_product_qr' p.id %}" target="_blank" title="چاپ برچسب شناسنامه و بارکد QR" style="padding: 6px 10px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; color: var(--primary-dark); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600;">
+                      {% razavi_icon 'external-link' size=14 %}
+                      <span>لیبل QR</span>
+                    </a>
+                    
+                    <!-- ویرایش -->
+                    <a href="{% url 'accounts:seller_product_edit' p.id %}" title="ویرایش محصول" style="padding: 6px 10px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 6px; color: #334155; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600;">
+                      {% razavi_icon 'settings' size=14 %}
+                      <span>ویرایش</span>
+                    </a>
+
+                    <!-- مشاهده در سایت -->
+                    <a href="{{ p.get_absolute_url }}" target="_blank" title="مشاهده در ویترین سایت" style="padding: 6px 8px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 6px; color: #64748b; text-decoration: none; display: inline-flex; align-items: center;">
+                      {% razavi_icon 'eye' size=14 %}
+                    </a>
+
+                    <!-- حذف با فرم امن -->
+                    <form method="post" action="{% url 'accounts:seller_product_delete' p.id %}" onsubmit="return confirm('آیا از حذف محصول «{{ p.name }}» اطمینان کامل دارید؟');" style="margin: 0; display: inline-block;">
+                      {% csrf_token %}
+                      <button type="submit" title="حذف محصول" style="padding: 6px 8px; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 6px; color: #e11d48; cursor: pointer; display: inline-flex; align-items: center;">
+                        {% razavi_icon 'x-circle' size=14 %}
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 60px 20px; color: #64748b;">
+        <div style="color: #cbd5e1; margin-bottom: 12px;">{% razavi_icon 'package' size=48 %}</div>
+        <div style="font-weight: 700; font-size: 16px; color: var(--primary-dark);">هیچ محصولی در کاتالوگ شما یافت نشد.</div>
+        <div style="font-size: 13px; color: #94a3b8; margin: 8px 0 20px;">شما می‌توانید نخستین فرآورده گیاهی یا دارویی ارگانیک خود را به کاتالوگ فروشگاه بیفزایید.</div>
+        <a href="{% url 'accounts:seller_product_add' %}" class="btn-hero" style="font-size: 13px; padding: 10px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+          {% razavi_icon 'plus-circle' size=16 %}
+          <span>ثبت اولین فرآورده گیاهی</span>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

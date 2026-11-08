@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}میز کار و داشبورد تأمین‌کننده | {{ profile.store_name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 30px auto; max-width: 1200px;">
+
+  <!-- هدر داشبورد فروشنده -->
+  <div style="background: linear-gradient(135deg, #143529 0%, #1d4d3c 100%); color: #ffffff; padding: 24px 28px; border-radius: var(--radius-md); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: var(--shadow-sm); border-right: 5px solid var(--gold);">
+    <div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <span style="color: var(--gold);">{% razavi_icon 'store' size=24 %}</span>
+        <h1 style="font-size: 20px; font-weight: 800; margin: 0; color: #fff;">
+          سامانه تأمین‌کنندگان و مزارع: {{ profile.store_name }}
+        </h1>
+      </div>
+      <div style="font-size: 13px; color: #cbd5e1; line-height: 1.8;">
+        مالک غرفه: <b style="color: #fff;">{{ request.user.get_full_name|default:request.user.username }}</b> | 
+        نرخ کارمزد پلتفرم: <b style="color: var(--gold);">{{ profile.commission_percent|fa_digits }}٪</b> | 
+        شناسه شبای تسویه: <b style="color: #fff; direction: ltr; display: inline-block;">{{ profile.shaba_number|default:'تکمیل‌نشده' }}</b>
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="{% url 'accounts:seller_product_add' %}" class="btn-hero" style="font-size: 13px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700;">
+        {% razavi_icon 'plus-circle' size=16 %}
+        <span>ثبت محصول گیاهی جدید</span>
+      </a>
+      <a href="{% url 'accounts:seller_products' %}" class="btn-action" style="font-size: 13px; padding: 10px 16px; background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.25);">
+        {% razavi_icon 'package' size=16 %}
+        <span>کاتالوگ اقلام</span>
+      </a>
+      <a href="{% url 'accounts:seller_settings' %}" class="btn-action" style="font-size: 13px; padding: 10px 16px; background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.25);">
+        {% razavi_icon 'settings' size=16 %}
+        <span>تنظیمات و شبا</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- کارت‌های آماری فروشنده -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
+    
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-xs); display: flex; align-items: center; gap: 16px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: #ecfdf5; color: #047857; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        {% razavi_icon 'package' size=24 %}
+      </div>
+      <div>
+        <div style="font-size: 12px; color: #64748b; font-weight: 600;">کل محصولات در حال عرضه</div>
+        <div style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin-top: 4px;">{{ total_products|fa_digits }} قلم</div>
+      </div>
+    </div>
+
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-xs); display: flex; align-items: center; gap: 16px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        {% razavi_icon 'shopping-bag' size=24 %}
+      </div>
+      <div>
+        <div style="font-size: 12px; color: #64748b; font-weight: 600;">تعداد بسته‌های فروخته‌شده</div>
+        <div style="font-size: 22px; font-weight: 800; color: #1d4ed8; margin-top: 4px;">{{ total_sales_count|fa_digits }} بسته</div>
+      </div>
+    </div>
+
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-xs); display: flex; align-items: center; gap: 16px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: #fefce8; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        {% razavi_icon 'credit-card' size=24 %}
+      </div>
+      <div>
+        <div style="font-size: 12px; color: #64748b; font-weight: 600;">ناخالص فروش ثبت‌شده</div>
+        <div style="font-size: 20px; font-weight: 800; color: #b45309; margin-top: 4px;">{{ gross_revenue|intcomma|fa_digits }} <span style="font-size: 12px;">تومان</span></div>
+      </div>
+    </div>
+
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-xs); display: flex; align-items: center; gap: 16px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: #f0fdf4; color: #15803d; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        {% razavi_icon 'check-circle' size=24 %}
+      </div>
+      <div>
+        <div style="font-size: 12px; color: #64748b; font-weight: 600;">سهم خالص فروشنده (تسویه)</div>
+        <div style="font-size: 20px; font-weight: 800; color: #15803d; margin-top: 4px;">{{ net_revenue|intcomma|fa_digits }} <span style="font-size: 12px;">تومان</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- هشدار موجودی کم -->
+  {% if low_stock_products.exists %}
+    <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 8px; color: #92400e; font-weight: 700; margin-bottom: 10px;">
+        {% razavi_icon 'alert-triangle' size=20 %}
+        <span>هشدار کسری موجودی کالا (نیاز به شارژ انبار)</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        {% for p in low_stock_products %}
+          <div style="background: #ffffff; border: 1px solid #fcd34d; border-radius: var(--radius-sm); padding: 8px 14px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 600; color: var(--primary-dark);">{{ p.name }}</span>
+            <span style="color: #b91c1c; font-weight: 700;">({{ p.stock|fa_digits }} عدد باقی‌مانده)</span>
+            <a href="{% url 'accounts:seller_product_edit' p.id %}" style="color: var(--primary); text-decoration: underline; font-size: 12px; margin-right: 6px;">افزایش موجودی</a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- جدول آخرین سفارشات اقلام فروشنده -->
+  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 28px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1.5px solid var(--border-light); padding-bottom: 12px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="color: var(--primary);">{% razavi_icon 'clock' size=20 %}</span>
+        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary-dark); margin: 0;">
+          آخرین سفارش‌های مشتریان (اقلام مزارع شما)
+        </h3>
+      </div>
+      <a href="{% url 'accounts:seller_orders' %}" style="font-size: 13px; color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+        <span>مشاهده همه سفارشات</span>
+        {% razavi_icon 'chevron-left' size=14 %}
+      </a>
+    </div>
+
+    {% if recent_orders.exists %}
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="background: #f8fafc; color: #475569; text-align: right; border-bottom: 2px solid #e2e8f0;">
+              <th style="padding: 12px;">شماره پیگیری</th>
+              <th style="padding: 12px;">خریدار</th>
+              <th style="padding: 12px;">تاریخ ثبت</th>
+              <th style="padding: 12px;">اقلام فروشنده</th>
+              <th style="padding: 12px;">وضعیت پرداخت</th>
+              <th style="padding: 12px;">وضعیت مرسوله</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in recent_orders %}
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 12px; font-weight: 700; color: var(--primary-dark);">{{ order.tracking_code|fa_digits }}</td>
+                <td style="padding: 12px; color: #334155;">{{ order.full_name }}</td>
+                <td style="padding: 12px; color: #64748b;">{{ order.created_at|date:"Y/m/d H:i"|fa_digits }}</td>
+                <td style="padding: 12px;">
+                  {% for item in order.items.all %}
+                    {% if item.product.seller == request.user %}
+                      <div style="font-size: 12px; color: #1e293b;">
+                        • {{ item.product.name }} ({{ item.quantity|fa_digits }} عدد)
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                <td style="padding: 12px;">
+                  {% if order.is_paid %}
+                    <span style="display: inline-flex; align-items: center; gap: 4px; color: #15803d; font-weight: 700; background: #ecfdf5; padding: 3px 8px; border-radius: 4px; font-size: 11.5px;">
+                      {% razavi_icon 'check-circle' size=12 %}
+                      پرداخت‌شده
+                    </span>
+                  {% else %}
+                    <span style="display: inline-flex; align-items: center; gap: 4px; color: #b45309; font-weight: 700; background: #fefce8; padding: 3px 8px; border-radius: 4px; font-size: 11.5px;">
+                      {% razavi_icon 'clock' size=12 %}
+                      در انتظار پرداخت
+                    </span>
+                  {% endif %}
+                </td>
+                <td style="padding: 12px;">
+                  <span style="display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; background: #f1f5f9; color: #475569; font-weight: 600;">
+                    {{ order.get_status_display }}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+        <div style="color: #cbd5e1; margin-bottom: 10px;">{% razavi_icon 'inbox' size=40 %}</div>
+        <div style="font-weight: 600; font-size: 14px;">هنوز سفارشی برای محصولات شما ثبت نشده است.</div>
+        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">با ثبت محصولات بیشتر و کیفیت بسته‌بندی عالی، فروش خود را افزایش دهید.</div>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

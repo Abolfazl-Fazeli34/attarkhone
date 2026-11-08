@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}پیوستن به زنجیره تأمین‌کنندگان و مزارع | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="margin: 30px auto; max-width: 900px;">
+
+  <!-- هدر معرفی بخش فروشندگان -->
+  <div style="background: linear-gradient(135deg, #143529 0%, #1e4d3a 100%); color: #ffffff; padding: 32px 36px; border-radius: var(--radius-md); margin-bottom: 28px; text-align: center; border-bottom: 4px solid var(--gold); box-shadow: var(--shadow-sm);">
+    <div style="color: var(--gold); margin-bottom: 12px;">{% razavi_icon 'store' size=44 %}</div>
+    <h1 style="font-size: 24px; font-weight: 800; margin: 0 0 10px 0; color: #fff;">
+      پیوستن به شبکه تولیدکنندگان و مزارع گیاهان دارویی
+    </h1>
+    <p style="font-size: 14px; color: #e2e8f0; max-width: 680px; margin: 0 auto; line-height: 1.8;">
+      فرآورده‌های گیاهی، عرقیات ارگانیک و دمنوش‌های دست‌چین مزارع خود را بدون واسطه و با تضمین کیفیت به هزاران خریدار در سراسر کشور عرضه نمایید.
+    </p>
+  </div>
+
+  <!-- ۳ ویژگی شاخص پنل تأمین‌کننده -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 28px;">
+    
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); text-align: center;">
+      <div style="color: #047857; margin-bottom: 10px;">{% razavi_icon 'shield' size=28 %}</div>
+      <div style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">صدور برچسب هوشمند QR</div>
+      <div style="font-size: 12.5px; color: #64748b; line-height: 1.7;">تولید آنی بارکد راستی‌آزمایی آزمایشگاهی و شناسنامه چاپ روی پاکت محصولات.</div>
+    </div>
+
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); text-align: center;">
+      <div style="color: #b45309; margin-bottom: 10px;">{% razavi_icon 'credit-card' size=28 %}</div>
+      <div style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">تسویه هفتگی شبا</div>
+      <div style="font-size: 12.5px; color: #64748b; line-height: 1.7;">واریز منظم و خودکار مبالغ فروش به شماره شبای بانکی با کارمزد منصفانه پلتفرم.</div>
+    </div>
+
+    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); text-align: center;">
+      <div style="color: #1d4ed8; margin-bottom: 10px;">{% razavi_icon 'package' size=28 %}</div>
+      <div style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">مدیریت انبار و تنوع وزنی</div>
+      <div style="font-size: 12.5px; color: #64748b; line-height: 1.7;">تنظیم خودکار بسته‌های ۵۰، ۱۰۰ و ۲۵۰ گرمی با کنترل دقیق موجودی انبار.</div>
+    </div>
+
+  </div>
+
+  <!-- فرم درخواست -->
+  <form method="post" style="background: #ffffff; padding: 32px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
+    {% csrf_token %}
+
+    <div style="font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 20px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+      <span style="color: var(--gold);">{% razavi_icon 'edit' size=18 %}</span>
+      <span>فرم مشخصات غرفه و اطلاعات هویتی</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px;">
+      
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">نام فروشگاه یا مزرعه <span style="color: #dc2626;">*</span></label>
+        <input type="text" name="store_name" required placeholder="مثال: مزرعه ارگانیک گیاهان کوهستانی احیاء" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">کد ملی صاحب امتیاز <span style="color: #dc2626;">*</span></label>
+        <input type="text" name="national_id" required placeholder="کد ۱۰ رقمی ملی" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">شماره شبا جهت تسویه (با IR) <span style="color: #dc2626;">*</span></label>
+        <input type="text" name="shaba_number" required placeholder="IR000000000000000000000000" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: monospace; box-sizing: border-box; direction: ltr; text-align: left;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">تلفن تماس کاری / مزرعه</label>
+        <input type="text" name="phone_work" placeholder="۰۲۱..." style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div style="grid-column: 1 / -1;">
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">نشانی محل کشتگاه یا انبار بسته بندی</label>
+        <input type="text" name="address" placeholder="استان، شهر و نشانی کامل" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div style="grid-column: 1 / -1;">
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">توضیحات و نوع گیاهان دارویی قابل تأمین</label>
+        <textarea name="description" rows="3" placeholder="چه گونه‌هایی را کشت یا جمع‌آوری می‌کنید؟ ظرفیت تأمین فصلی چقدر است؟" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; box-sizing: border-box;"></textarea>
+      </div>
+
+    </div>
+
+    <div style="display: flex; justify-content: flex-end;">
+      <button type="submit" class="btn-hero" style="padding: 12px 28px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;">
+        {% razavi_icon 'check-circle' size=18 %}
+        <span>فعال‌سازی آنی پنل غرفه فروشنده</span>
+      </button>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}

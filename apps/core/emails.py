@@ -106,3 +106,46 @@ def send_consultation_confirmation_email(booking, request=None):
     except Exception as e:
         logger.error(f"Failed to send consultation email: {e}")
         return False
+
+
+def send_otp_verification_email(email, code, purpose='register', request=None):
+    """
+    ارسال کد تایید ۵ رقمی احراز هویت (OTP) به نشانی رایانامه با سرور رسمی جیمیل
+    """
+    if not email:
+        return False
+
+    site_url = request.build_absolute_uri('/')[:-1] if request else 'http://127.0.0.1:8001'
+    purpose_titles = {
+        'register': 'کد تایید فعال‌سازی و تکمیل ثبت‌نام',
+        'login': 'کد یکبار مصرف ورود به سامانه',
+        'reset': 'کد تایید بازیابی گذرواژه',
+    }
+    purpose_title = purpose_titles.get(purpose, 'کد تایید احراز هویت')
+    subject = f'{code} : {purpose_title} | فروشگاه عطارخونه'
+
+    context = {
+        'email': email,
+        'code': code,
+        'purpose': purpose,
+        'purpose_title': purpose_title,
+        'site_url': site_url,
+    }
+
+    try:
+        html_content = render_to_string('emails/otp_email.html', context)
+        text_content = strip_tags(html_content)
+
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[email],
+        )
+        msg.attach_alternative(html_content, "text/html")
+        msg.send(fail_silently=False)
+        logger.info(f"OTP verification email successfully sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send OTP email to {email}: {e}")
+        return False

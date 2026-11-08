@@ -49,7 +49,9 @@ class EmailAuthenticationTests(TestCase):
         self.assertTrue('_auth_user_id' in self.client.session)
 
     def test_register_new_user_with_email(self):
-        """ثبت‌نام کاربر جدید با ایمیل معتبر و ارسال ایمیل خوش‌آمدگویی"""
+        """ثبت‌نام کاربر جدید با ایمیل معتبر، صدور کد ۵ رقمی OTP و تایید موفق"""
+        from accounts.models import EmailOTP
+
         response = self.client.post(reverse('accounts:register'), {
             'username': 'new_customer',
             'email': 'newcustomer@example.com',
@@ -60,7 +62,85 @@ class EmailAuthenticationTests(TestCase):
             'password_confirm': 'StrongPassword123!'
         })
         self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('accounts:verify_email'), response.url)
+
+        # بازیابی کد OTP ایجادشده
+        otp = EmailOTP.objects.filter(email='newcustomer@example.com', purpose='register').first()
+        self.assertIsNotNone(otp)
+        self.assertEqual(len(otp.code), 5)
+
+        # تایید با کد ۵ رقمی
+        verify_resp = self.client.post(reverse('accounts:verify_email'), {
+            'otp_code': otp.code
+        })
+        self.assertEqual(verify_resp.status_code, 302)
         self.assertTrue(User.objects.filter(email='newcustomer@example.com').exists())
+
+    def test_login_with_otp_flow(self):
+        """ورود بدون رمز عبور با کد یکبار مصرف ایمیل (OTP Login)"""
+        from accounts.models import EmailOTP
+
+        # مرحله اول: درخواست ارسال کد یکبار مصرف
+        req_resp = self.client.post(reverse('accounts:login_otp'), {
+            'step': 'send_otp',
+            'email': 'sara@example.com'
+        })
+        self.assertEqual(req_resp.status_code, 200)
+
+        otp = EmailOTP.objects.filter(email='sara@example.com', purpose='login').first()
+        self.assertIsNotNone(otp)
+
+        # مرحله دوم: ورود با کد دریافتی
+        verify_resp = self.client.post(reverse('accounts:login_otp'), {
+            'step': 'verify_otp',
+            'email': 'sara@example.com',
+            'otp_code': otp.code
+        })
+        self.assertEqual(verify_resp.status_code, 302)
+        self.assertTrue('_auth_user_id' in self.client.session)
+
+    def test_seller_panel_and_qr_label(self):
+        """تست پنل اختصاصی فروشنده، کاتالوگ و صدور بارکد QR"""
+        from accounts.models import SellerProfile
+        from catalog.models import Category, Product
+
+        seller = User.objects.create_user(
+            username='herb_farm',
+            email='farm@example.com',
+            password='Password123!',
+            role='seller'
+        )
+        SellerProfile.objects.create(
+            user=seller,
+            store_name='مزرعه گل‌های کوهستان',
+            shaba_number='IR112233445566778899001122',
+            national_id_or_registration='1234567890'
+        )
+        cat = Category.objects.create(name='گیاهان دارویی خالص', slug='herbs-test')
+        prod = Product.objects.create(
+            seller=seller,
+            name='اسطوخودوس فرانسوی',
+            slug='french-lavender',
+            category=cat,
+            base_price=120000,
+            stock=25
+        )
+
+        # ورود فروشنده
+        self.client.force_login(seller)
+
+        # پیشخوان فروشنده
+        dash_res = self.client.get(reverse('accounts:seller_dashboard'))
+        self.assertEqual(dash_res.status_code, 200)
+
+        # کاتالوگ فروشنده
+        prod_res = self.client.get(reverse('accounts:seller_products'))
+        self.assertEqual(prod_res.status_code, 200)
+
+        # صدور شناسنامه و بارکد QR
+        qr_res = self.client.get(reverse('accounts:seller_product_qr', kwargs={'product_id': prod.id}))
+        self.assertEqual(qr_res.status_code, 200)
+        self.assertContains(qr_res, 'data:image/png;base64,')
 
     def test_password_reset_flow(self):
         """درخواست بازیابی گذرواژه و ارسال ایمیل حاوی توکن معتبر"""

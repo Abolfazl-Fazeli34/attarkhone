@@ -1,0 +1,66 @@
+{% load persian_tags %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ purpose_title }}</title>
+</head>
+<body style="margin: 0; padding: 25px 10px; background-color: #f9f5ec; font-family: Tahoma, 'Segoe UI', Arial, sans-serif; direction: rtl; text-align: right; color: #26423b;">
+
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 560px; background-color: #ffffff; border-radius: 12px; overflow: hidden; border: 1.5px solid #e8e2d2; box-shadow: 0 4px 15px rgba(20,53,41,0.06);">
+    
+    <!-- سربرگ رسمی با رنگ سبز سازمانی عطارخونه -->
+    <tr>
+      <td style="background: linear-gradient(135deg, #143529 0%, #1b4133 100%); padding: 24px; text-align: center; color: #ffffff;">
+        <div style="font-size: 20px; font-weight: 800; color: #ffffff; letter-spacing: 0.5px;">فروشگاه تخصصی گیاهان دارویی عطارخونه</div>
+        <div style="font-size: 11.5px; color: #d2aa65; margin-top: 4px; font-weight: 600;">سامانه احراز هویت امن و طب سنتی</div>
+      </td>
+    </tr>
+
+    <!-- متن اصلی ایمیل و کد تایید -->
+    <tr>
+      <td style="padding: 30px 24px;">
+        <h2 style="font-size: 16px; font-weight: 800; color: #143529; margin-top: 0; margin-bottom: 12px;">
+          {{ purpose_title }}
+        </h2>
+
+        <p style="font-size: 13px; line-height: 1.8; color: #475569; margin: 0 0 20px 0;">
+          کاربر گرامی؛ درخواست اعتبارسنجی برای نشانی <b>{{ email }}</b> دریافت گردید. لطفاً کد تایید ۵ رقمی زیر را در سامانه وارد نمایید:
+        </p>
+
+        <!-- باکس نمایش کد تایید ۵ رقمی -->
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 24px 0;">
+          <tr>
+            <td align="center">
+              <div style="display: inline-block; background-color: #faf6ed; border: 2px dashed #d2aa65; border-radius: 10px; padding: 16px 36px; text-align: center;">
+                <div style="font-size: 11px; color: #64748b; margin-bottom: 6px; font-weight: 600;">کد تایید ۵ رقمی یکبار مصرف:</div>
+                <div style="font-size: 32px; font-weight: 900; color: #143529; letter-spacing: 10px; font-family: monospace, Tahoma; direction: ltr;">
+                  {{ code }}
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- نکات امنیتی -->
+        <div style="background-color: #f8fafc; border-right: 3px solid #d2aa65; padding: 12px 14px; border-radius: 4px; font-size: 11.5px; line-height: 1.8; color: #64748b; margin-top: 20px;">
+          <strong>نکات مهم امنیتی:</strong><br>
+          • این کد صرفاً به مدت <b>۵ دقیقه</b> معتبر است.<br>
+          • کارکنان یا پشتیبانی عطارخونه هرگز این کد را از شما درخواست نخواهند کرد.<br>
+          • چنانچه شما این درخواست را ثبت نکرده‌اید، این پیام را نادیده بگیرید.
+        </div>
+
+      </td>
+    </tr>
+
+    <!-- پاورقی ایمیل -->
+    <tr>
+      <td style="background-color: #f1ede3; padding: 16px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e8e2d2;">
+        © عطارخونه — دانش کهن، سلامت مدرن | پشتیبانی: {{ store_setting.phone|default:"۰۲۱-۸۸۲۲۳۳۴۴" }}
+      </td>
+    </tr>
+
+  </table>
+
+</body>
+</html>

@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+import io
+import base64
 
 
 class Category(models.Model):
@@ -133,6 +135,14 @@ class Product(models.Model):
         related_name='products',
         verbose_name="تأمین‌کننده (کارگاه ۱۶)"
     )
+    seller = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='seller_products',
+        verbose_name="فروشنده / کشاورز طرف قرارداد"
+    )
     temperament = models.CharField(
         max_length=20,
         choices=TEMPERAMENT_CHOICES,
@@ -218,6 +228,30 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('catalog:product_detail', kwargs={'slug': self.slug})
+
+    def get_qr_code_data_uri(self, request=None):
+        """
+        تولید بارکد دوبعدی (QR Code) اختصاصی کالا جهت الصاق روی بسته‌بندی و استعلام آنلاین شناسنامه و COA
+        """
+        try:
+            import qrcode
+            url = f"http://127.0.0.1:8001{self.get_absolute_url()}"
+            if request:
+                url = request.build_absolute_uri(self.get_absolute_url())
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_M,
+                box_size=6,
+                border=2,
+            )
+            qr.add_data(url)
+            qr.make(fit=True)
+            img = qr.make_image(fill_color="#143529", back_color="#ffffff")
+            buf = io.BytesIO()
+            img.save(buf, format="PNG")
+            return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
+        except Exception:
+            return ""
 
 
 class ProductVariant(models.Model):

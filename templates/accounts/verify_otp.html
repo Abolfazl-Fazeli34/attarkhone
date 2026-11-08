@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}تایید نشانی ایمیل | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 440px; margin: 40px auto;">
+
+  <div style="background: #ffffff; padding: 32px 28px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); text-align: center;">
+    
+    <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--border-light); color: var(--primary); margin-bottom: 12px;">
+      {% razavi_icon 'email' size=28 %}
+    </div>
+
+    <h1 style="font-size: 19px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px 0;">تایید نشانی ایمیل</h1>
+    <p style="font-size: 12.5px; color: #64748b; margin: 0 0 20px 0; line-height: 1.7;">
+      کد تایید ۵ رقمی به نشانی <b style="color: var(--primary); direction: ltr; display: inline-block;">{{ email }}</b> ارسال گردید. لطفاً کد را وارد فرمایید:
+    </p>
+
+    <form method="post" id="otpForm">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 20px;">
+        <input type="text" name="otp_code" maxlength="5" required autofocus placeholder="• • • • •" style="width: 220px; margin: 0 auto; padding: 12px; font-size: 26px; font-family: monospace; letter-spacing: 12px; text-align: center; border: 2px solid var(--border); border-radius: var(--radius-sm); outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+
+      <button type="submit" class="btn-hero" style="width: 100%; border: none; cursor: pointer; font-size: 13.5px; padding: 11px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>تایید کد و ورود به سامانه</span>
+        {% razavi_icon 'arrow-left' size=16 %}
+      </button>
+    </form>
+
+    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); font-size: 12px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+      <span>کد را دریافت نکردید؟</span>
+      <form method="post" action="{% url 'accounts:resend_otp' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; font-size: 12px; font-family: inherit;">
+          ارسال مجدد کد تایید
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

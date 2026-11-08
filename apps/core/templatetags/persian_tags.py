@@ -19,6 +19,18 @@ def to_persian_digits(value):
     return val_str
 
 
+@register.filter(name='intcomma')
+def intcomma_format(value):
+    """جداکننده سه‌رقمی ارقام"""
+    if value is None or value == '':
+        return ''
+    try:
+        val_int = int(value)
+        return f"{val_int:,}"
+    except (ValueError, TypeError):
+        return str(value)
+
+
 @register.filter(name='toman')
 def toman_format(value):
     """قالب‌بندی قیمت با جداکننده سه‌رقمی و پسوند تومان"""

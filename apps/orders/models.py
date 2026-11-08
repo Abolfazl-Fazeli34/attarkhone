@@ -64,7 +64,7 @@ class Order(models.Model):
     ]
 
     PAYMENT_METHOD_CHOICES = [
-        ('online', 'درگاه امن پرداخت اینترنتی شاپرک'),
+        ('online', 'درگاه اینترنتی زرین‌پال (شاپرک / سندباکس رسمی)'),
         ('bank_receipt', 'پرداخت از طریق فیش بانکی و کارت‌به‌کارت'),
     ]
 
@@ -114,6 +114,8 @@ class Order(models.Model):
 
     # شیوه پرداخت و وضعیت
     payment_method = models.CharField(max_length=30, choices=PAYMENT_METHOD_CHOICES, default='online', verbose_name="روش پرداخت")
+    zarinpal_authority = models.CharField(max_length=64, blank=True, verbose_name="کد ارجاع زرین‌پال (Authority)")
+    zarinpal_ref_id = models.CharField(max_length=64, blank=True, verbose_name="شناسه پیگیری پرداخت زرین‌پال (RefID)")
     is_paid = models.BooleanField(default=False, verbose_name="وضعیت تسویه مالی")
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='pending_payment', verbose_name="وضعیت سفارش (کارگاه ۲۴)")
     

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.views import View
 from django.contrib import messages
 from django.http import JsonResponse
@@ -6,6 +7,7 @@ from django.utils import timezone
 import random
 
 from .models import Cart, CartItem, Order, OrderItem, BankReceipt
+from .zarinpal import request_zarinpal_payment, verify_zarinpal_payment
 from catalog.models import Product, ProductVariant
 from shipping.models import Province, Carrier
 from marketing.models import Coupon
@@ -412,39 +414,39 @@ class CheckoutView(View):
             messages.info(request, f'سفارش شما با شماره رهگیری {order.tracking_code} ثبت گردید. لطفاً اطلاعات فیش واریزی را تکمیل کنید.')
             return redirect('orders:bank_receipt', tracking_code=order.tracking_code)
         else:
-            # هدایت به درگاه پرداخت آنلاین شبیه‌ساز
-            return redirect('orders:mock_gateway', tracking_code=order.tracking_code)
+            # ارسال به درگاه رسمی اینترنتی زرین‌پال شاپرک
+            callback_url = request.build_absolute_uri(
+                reverse('orders:zarinpal_callback', kwargs={'tracking_code': order.tracking_code})
+            )
+            zp_res = request_zarinpal_payment(order, callback_url, request=request)
+            return redirect(zp_res['redirect_url'])
 
 
-class MockPaymentGatewayView(View):
+class ZarinpalGatewayView(View):
     """
-    درگاه پرداخت آنلاین شبیه‌ساز شاپرک / زرین‌پال
-    امکان تست تراکنش موفق و ناموفق
+    درگاه پرداخت اینترنتی زرین‌پال (شاپرک / سندباکس رسمی)
     """
     def get(self, request, tracking_code):
         order = get_object_or_404(Order, tracking_code=tracking_code)
         if order.is_paid:
             return redirect('orders:invoice', tracking_code=order.tracking_code)
+        return render(request, 'orders/zarinpal_gateway.html', {'order': order})
 
-        context = {
-            'order': order,
-            'card_sample': '۶۰۳۷-۹۹۷۵-۱۱۲۲-۳۳۴۴',
-        }
-        return render(request, 'orders/mock_gateway.html', context)
 
-    def post(self, request, tracking_code):
+class ZarinpalCallbackView(View):
+    """
+    دریافت بازگشت تراکنش از درگاه زرین‌پال و تایید نهایی پرداخت
+    """
+    def get(self, request, tracking_code):
         order = get_object_or_404(Order, tracking_code=tracking_code)
-        action = request.POST.get('action')
+        authority = request.GET.get('Authority', order.zarinpal_authority)
+        status = request.GET.get('Status', 'NOK')
 
-        if action == 'pay_success':
-            receipt_email = request.POST.get('receipt_email', '').strip()
-            if receipt_email:
-                order.email = receipt_email
-
+        is_verified, msg, ref_id = verify_zarinpal_payment(order, authority, status)
+        if is_verified:
             order.is_paid = True
             order.status = 'paid'
-            ref_id = random.randint(10000000, 99999999)
-            order.admin_notes = f"پرداخت آنلاین موفق از طریق درگاه شاپرک - شناسه مرجع بانکی: {ref_id}"
+            order.admin_notes = f"پرداخت آنلاین موفق از طریق درگاه زرین‌پال شاپرک - شناسه مرجع بانکی: {ref_id}"
             order.save()
 
             # کسر موجودی انبار و ثبت آمار فروش (کارگاه ۲۴)
@@ -457,11 +459,40 @@ class MockPaymentGatewayView(View):
             # ارسال خودکار رایانامه فاکتور و رسید سفارش به خریدار
             send_order_confirmation_email(order, request)
 
-            messages.success(request, f'پرداخت با موفقیت انجام شد! شماره پیگیری سفارش شما: {order.tracking_code}')
+            messages.success(request, f'پرداخت با موفقیت در درگاه زرین‌پال تایید شد! شناسه پیگیری بانکی: {ref_id}')
             return redirect('orders:invoice', tracking_code=order.tracking_code)
         else:
-            messages.error(request, 'تراکنش پرداخت توسط خریدار لغو گردید.')
+            messages.error(request, f'تراکنش پرداخت زرین‌پال لغو یا ناموفق بود: {msg}')
             return redirect('orders:invoice', tracking_code=order.tracking_code)
+
+
+class MockPaymentGatewayView(View):
+    """
+    جهت سازگاری با درخواست‌های قبلی و تست‌های شبیه‌ساز پرداخت شاپرک
+    """
+    def get(self, request, tracking_code):
+        return redirect('orders:zarinpal_gateway_view', tracking_code=tracking_code)
+
+    def post(self, request, tracking_code):
+        order = get_object_or_404(Order, tracking_code=tracking_code)
+        action = request.POST.get('action')
+        if action == 'pay_success':
+            order.is_paid = True
+            order.status = 'paid'
+            order.admin_notes = "پرداخت موفق از طریق شبیه‌ساز بانکی شاپرک / زرین‌پال"
+            order.save()
+            for oi in order.items.all():
+                p = oi.product
+                p.stock = max(0, p.stock - oi.quantity)
+                p.sales_count += oi.quantity
+                p.save()
+            send_order_confirmation_email(order, request)
+            messages.success(request, 'پرداخت موفق ثبت گردید.')
+            return redirect('orders:invoice', tracking_code=order.tracking_code)
+        elif action == 'pay_fail':
+            messages.error(request, 'پرداخت لغو شد.')
+            return redirect('orders:invoice', tracking_code=order.tracking_code)
+        return redirect('orders:zarinpal_gateway_view', tracking_code=tracking_code)
 
 
 class BankReceiptView(View):
