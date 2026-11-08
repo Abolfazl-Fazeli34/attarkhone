@@ -1,65 +1,74 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
 {% block title %}{{ article.title }} | مقالات عطارخونه{% endblock %}
 {% block meta_description %}{{ article.summary }}{% endblock %}
 
 {% block content %}
-<div class="container" style="margin: 24px auto; max-width: 960px;">
+<div class="container" style="margin: 30px auto; max-width: 1040px;">
 
   <!-- ناوبری نان‌ریزه‌ای (Breadcrumb) -->
-  <div style="font-size: 11.5px; color: #64748b; margin-bottom: 16px; display: flex; align-items: center; gap: 6px;">
+  <div style="font-size: 12px; color: #64748b; margin-bottom: 20px; display: flex; align-items: center; gap: 6px;">
     <a href="{% url 'core:home' %}" style="color: inherit; text-decoration: none;">خانه</a>
     <span>/</span>
-    <a href="{% url 'pages:article_list' %}" style="color: inherit; text-decoration: none;">مقالات و آموزش‌ها</a>
+    <a href="{% url 'pages:article_list' %}" style="color: inherit; text-decoration: none;">دانشنامه و مقالات</a>
     <span>/</span>
     <span style="color: var(--primary); font-weight: 600;">{{ article.title|truncatechars:40 }}</span>
   </div>
 
-  <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; align-items: start;">
+  <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 26px; align-items: start;">
 
     <!-- متن مقاله -->
-    <article style="background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow-xs);">
+    <article style="background: #ffffff; border-radius: var(--radius-md); border: 1.5px solid var(--border); padding: 28px; box-shadow: var(--shadow-sm);">
       
       <div style="margin-bottom: 14px;">
-        <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 11px; padding: 4px 10px;">
+        <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 12px; padding: 4px 12px; font-weight: 600;">
           {{ article.category }}
         </span>
       </div>
 
-      <h1 style="font-size: 19px; font-weight: 800; color: #0f172a; line-height: 1.45; margin-bottom: 12px;">
+      <h1 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); line-height: 1.5; margin: 0 0 16px 0;">
         {{ article.title }}
       </h1>
 
-      <div style="display: flex; gap: 16px; font-size: 11.5px; color: #64748b; margin-bottom: 18px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
-        <span>📅 تاریخ انتشار: {{ article.created_at|date:"Y/m/d"|fa_digits }}</span>
-        <span>⏱️ زمان مطالعه: {{ article.reading_time|fa_digits }} دقیقه</span>
-        <span>👁️ {{ article.views_count|fa_digits }} بازدید</span>
+      <div style="display: flex; gap: 18px; font-size: 12px; color: #64748b; margin-bottom: 22px; border-bottom: 1.5px solid var(--border-light); padding-bottom: 14px; flex-wrap: wrap;">
+        <span style="display: inline-flex; align-items: center; gap: 4px;">
+          {% razavi_icon 'calendar' size=14 class='text-primary' %}
+          <span>تاریخ انتشار: {{ article.created_at|date:"Y/m/d"|fa_digits }}</span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 4px;">
+          {% razavi_icon 'calendar' size=14 class='text-primary' %}
+          <span>زمان مطالعه: {{ article.reading_time|fa_digits }} دقیقه</span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 4px;">
+          {% razavi_icon 'search' size=14 class='text-primary' %}
+          <span>{{ article.views_count|fa_digits }} بازدید</span>
+        </span>
       </div>
 
       <!-- تصویر شاخص مقاله -->
-      <div style="border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 20px; max-height: 340px;">
+      <div style="border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 22px; max-height: 380px; border: 1px solid var(--border);">
         <img src="{{ article.image }}" alt="{{ article.title }}" style="width: 100%; height: 100%; object-fit: cover;">
       </div>
 
       <!-- خلاصه و لید مقاله -->
-      <div style="background: #f8fafc; border-right: 4px solid var(--primary); padding: 14px 16px; border-radius: var(--radius-xs); font-size: 13px; line-height: 1.7; color: #334155; margin-bottom: 20px; font-weight: 500;">
+      <div style="background: #f7faf8; border-right: 4px solid var(--primary); padding: 16px 18px; border-radius: var(--radius-xs); font-size: 13.5px; line-height: 1.8; color: var(--text-dark); margin-bottom: 24px; font-weight: 500;">
         {{ article.summary }}
       </div>
 
       <!-- محتوای کامل مقاله -->
-      <div style="font-size: 13px; line-height: 1.85; color: #1e293b; text-align: justify;">
+      <div style="font-size: 13.5px; line-height: 2; color: #334155; text-align: justify;">
         {{ article.content|linebreaks }}
       </div>
 
       <!-- باکس ارجاع و مشاوره رایگان انتهای مقاله -->
-      <div style="margin-top: 30px; background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%); border-radius: var(--radius-sm); padding: 20px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+      <div style="margin-top: 36px; background: linear-gradient(135deg, #143529 0%, #1b4133 100%); border-radius: var(--radius-sm); padding: 22px 24px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap;">
         <div>
-          <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">نیاز به راهنمایی در مورد مزاج و مصرف گیاهان دارید؟</h4>
-          <p style="font-size: 11.5px; opacity: 0.9; line-height: 1.5;">متخصصان طب سنتی عطارخونه آماده ارائه مشاوره رایگان متناسب با شرایط سلامتی شما هستند.</p>
+          <h4 style="font-size: 15px; font-weight: 800; margin: 0 0 6px 0; color: #fff;">نیاز به راهنمایی پیرامون مزاج، تدابیر و مصرف گیاهان دارویی دارید؟</h4>
+          <p style="font-size: 12px; opacity: 0.92; line-height: 1.6; margin: 0; color: #e2e8f0;">کارشناسان و درمانگران طب سنتی عطارخونه آماده ارائه مشاوره رایگان متناسب با پرونده سلامت شما هستند.</p>
         </div>
-        <a href="{% url 'remedy:consultation' %}" class="btn-amber-remedy" style="white-space: nowrap; font-size: 11.5px; padding: 8px 14px;">
-          درخواست مشاوره رایگان
+        <a href="{% url 'remedy:consultation' %}" class="btn-hero" style="white-space: nowrap; font-size: 12.5px; padding: 10px 18px; background: var(--gold); color: #143529; text-decoration: none; font-weight: 700; border: none;">
+          درخواست نوبت مشاوره رایگان
         </a>
       </div>
 
@@ -67,22 +76,25 @@
 
     <!-- سایدبار مقالات مرتبط -->
     <aside>
-      <div style="background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border); padding: 18px; box-shadow: var(--shadow-xs); margin-bottom: 20px;">
-        <h3 style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
-          مقالات مرتبط و پیشنهادی
-        </h3>
+      <div style="background: #ffffff; border-radius: var(--radius-md); border: 1.5px solid var(--border); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1.5px solid var(--border-light); padding-bottom: 10px;">
+          <span style="color: var(--primary);">{% razavi_icon 'sparkles' size=16 %}</span>
+          <h3 style="font-size: 14.5px; font-weight: 700; color: var(--primary-dark); margin: 0;">
+            مقالات مرتبط و پیشنهادی
+          </h3>
+        </div>
 
-        <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
           {% for r in related_articles %}
-            <div style="display: flex; gap: 10px; align-items: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 8px;">
-              <div style="width: 54px; height: 54px; border-radius: var(--radius-xs); overflow: hidden; flex-shrink: 0;">
+            <div style="display: flex; gap: 12px; align-items: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px;">
+              <div style="width: 58px; height: 58px; border-radius: var(--radius-xs); overflow: hidden; flex-shrink: 0; border: 1px solid var(--border);">
                 <img src="{{ r.image }}" alt="{{ r.title }}" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
               <div>
-                <h4 style="font-size: 11.5px; font-weight: 600; line-height: 1.4; margin-bottom: 3px;">
-                  <a href="{{ r.get_absolute_url }}" style="color: #1e293b; text-decoration: none;">{{ r.title }}</a>
+                <h4 style="font-size: 12px; font-weight: 700; line-height: 1.45; margin: 0 0 4px 0;">
+                  <a href="{{ r.get_absolute_url }}" style="color: var(--text-dark); text-decoration: none;">{{ r.title }}</a>
                 </h4>
-                <span style="font-size: 10px; color: #94a3b8;">{{ r.reading_time|fa_digits }} دقیقه مطالعه</span>
+                <span style="font-size: 10.5px; color: #94a3b8;">{{ r.reading_time|fa_digits }} دقیقه مطالعه</span>
               </div>
             </div>
           {% endfor %}
@@ -90,12 +102,14 @@
       </div>
 
       <!-- باکس دستیار سلامت هوشمند -->
-      <div style="background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border); padding: 18px; text-align: center; box-shadow: var(--shadow-xs);">
-        <div style="font-size: 32px; margin-bottom: 8px;">🌿</div>
-        <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">دستیار هوشمند سلامت</h4>
-        <p style="font-size: 11px; color: #64748b; line-height: 1.5; margin-bottom: 14px;">پیشنهاد گیاهان دارویی مناسب عارضه شما و سنجش تداخل با داروهای شیمیایی</p>
-        <a href="{% url 'remedy:wizard' %}" class="btn-wide-dark-green-checkout" style="padding: 7px 12px; font-size: 11.5px;">
-          ورود به عارضه‌یاب
+      <div style="background: #ffffff; border-radius: var(--radius-md); border: 1.5px solid var(--border); padding: 22px; text-align: center; box-shadow: var(--shadow-sm);">
+        <div style="color: var(--gold); margin-bottom: 8px;">
+          {% razavi_icon 'sparkles' size=32 %}
+        </div>
+        <h4 style="font-size: 14.5px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px 0;">دستیار هوشمند سلامت</h4>
+        <p style="font-size: 11.5px; color: #64748b; line-height: 1.6; margin: 0 0 16px 0;">پیشنهاد تخصصی گیاهان دارویی مناسب عارضه شما و سنجش تداخل با داروهای مصرفی</p>
+        <a href="{% url 'remedy:wizard' %}" class="btn-hero" style="display: block; width: 100%; padding: 10px 14px; font-size: 12.5px; text-decoration: none;">
+          ورود به عارضه‌یاب هوشمند »
         </a>
       </div>
     </aside>

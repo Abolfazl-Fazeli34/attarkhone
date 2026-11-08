@@ -124,6 +124,18 @@ class Product(models.Model):
     short_description = models.CharField(max_length=350, verbose_name="توضیح کوتاه")
     description = models.TextField(verbose_name="توضیحات کامل خواص و راهنما")
     
+    # مشخصات تکمیلی گیاه‌شناسی و درمانی (High-Detail Clinical & Botanical Specs)
+    scientific_name = models.CharField(max_length=150, blank=True, verbose_name="نام علمی گیاه‌شناسی (لاتین)")
+    botanical_family = models.CharField(max_length=100, blank=True, verbose_name="خانواده و تیره گیاهی")
+    harvest_region = models.CharField(max_length=150, blank=True, verbose_name="خاستگاه و منطقه برداشت اقلیمی")
+    active_compounds = models.CharField(max_length=255, blank=True, verbose_name="ترکیبات موثره دارویی و فیتوشیمیایی")
+    traditional_temperament_degree = models.CharField(max_length=120, blank=True, verbose_name="طبع و مصلح سنتی تخصصی")
+    organ_benefits = models.TextField(blank=True, verbose_name="خواص درمانی تفکیکی اندام‌ها")
+    brewing_guide = models.TextField(blank=True, verbose_name="پروتکل دم‌آوری و نحوه مصرف اصولی")
+    contraindications = models.TextField(blank=True, verbose_name="تداخلات دارویی و هشدارهای بالینی")
+    health_license = models.CharField(max_length=100, blank=True, default="سیب سلامت و گواهی ارگانیک ۱۴۰۳/۴۹۸۲۱", verbose_name="شماره پروانه بهداشت و سیب سلامت")
+    storage_conditions = models.CharField(max_length=200, blank=True, default="در جای خشک، خنک و دور از تابش مستقیم آفتاب نگهداری شود", verbose_name="شرایط نگهداری و انبارش")
+
     is_organic = models.BooleanField(default=True, verbose_name="دارای گواهی ارگانیک و بهداشت")
     is_featured = models.BooleanField(default=False, verbose_name="نمایش در محصولات منتخب صفحه اول")
     is_eco_packaging = models.BooleanField(default=True, verbose_name="بسته‌بندی پاکت زیپ‌کیپ قابل بازیافت")

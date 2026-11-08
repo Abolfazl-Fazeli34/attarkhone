@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
 {% block title %}سبد خرید | عطارخونه{% endblock %}
 
@@ -14,7 +14,7 @@
   {% if cart.items.exists %}
     <div class="cart-mockup-container">
 
-      <!-- لیست اقلام سبد خرید (عین ردیف‌های کارت موکاپ) -->
+      <!-- لیست اقلام سبد خرید (عین ردیف‌های کارت موکاپ با آیکون‌های وکتور رضوی) -->
       <div class="cart-items-card-list" id="cartItemsList">
         {% for item in cart.items.all %}
           <div class="cart-item-row-card" id="cart-item-{{ item.id }}">
@@ -27,6 +27,11 @@
             <!-- اطلاعات محصول و دکمه‌های تعداد در وسط (عین موکاپ) -->
             <div class="cart-item-center-info">
               <h4 class="cart-item-title">{{ item.product.name }}</h4>
+              {% if item.variant %}
+                <span style="font-size: 11px; color: #5a7367; display: block; margin-top: -2px; margin-bottom: 3px;">
+                  {{ item.variant.weight_label }}
+                </span>
+              {% endif %}
               <div class="cart-stepper-and-price">
                 <div class="stepper-box">
                   <button type="button" class="stepper-btn minus ajax-cart-stepper" data-item-id="{{ item.id }}" data-action="decrease" aria-label="کاهش تعداد">-</button>
@@ -37,14 +42,11 @@
               </div>
             </div>
 
-            <!-- سطل زباله حذف آیتم سمت چپ (عین موکاپ) -->
+            <!-- سطل زباله حذف آیتم سمت چپ با آیکون رضوی -->
             <form action="{% url 'orders:remove_from_cart' item_id=item.id %}" method="post" class="ajax-remove-form" data-item-id="{{ item.id }}">
               {% csrf_token %}
               <button type="submit" class="btn-trash-delete" title="حذف کالا">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
+                {% razavi_icon 'trash' size=18 %}
               </button>
             </form>
 
@@ -52,7 +54,7 @@
         {% endfor %}
       </div>
 
-      <!-- کادوپیچی ویژه هدیه (کارگاه ۲۴ و شاخص ص ۱۱۲ کتاب) -->
+      <!-- کادوپیچی ویژه هدیه -->
       <div class="cart-gift-wrap-section">
         <form action="{% url 'orders:cart' %}" method="post" id="giftForm">
           {% csrf_token %}
@@ -60,7 +62,10 @@
 
           <label class="gift-checkbox-row">
             <input type="checkbox" name="is_gift_wrapped" {% if is_gift_wrapped %}checked{% endif %} onchange="document.getElementById('giftForm').submit()">
-            <span style="font-weight: 600;">🎁 پیشنهاد کادوپیچی هدیه (+{{ setting_gift_cost|toman }})</span>
+            <span style="font-weight: 600; display: flex; align-items: center; gap: 6px;">
+              {% razavi_icon 'gift' size=18 class='text-gold' %}
+              <span>پیشنهاد کادوپیچی نفیس گیاهی (+{{ setting_gift_cost|toman }})</span>
+            </span>
           </label>
 
           {% if is_gift_wrapped %}
@@ -72,7 +77,7 @@
         </form>
       </div>
 
-      <!-- کد تخفیف (کارگاه ۲۳) -->
+      <!-- کد تخفیف -->
       <div class="cart-coupon-row">
         <form action="{% url 'orders:apply_coupon' %}" method="post" style="display: flex; gap: 6px; width: 100%;">
           {% csrf_token %}
@@ -90,18 +95,18 @@
       <!-- دکمه پهن تکمیل خرید (عین موکاپ) -->
       <div style="margin-top: 14px;">
         <a href="{% url 'orders:checkout' %}" class="btn-wide-dark-green-checkout">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          <span>تکمیل خرید</span>
+          {% razavi_icon 'credit-card' size=20 %}
+          <span>تکمیل خرید و پرداخت</span>
         </a>
       </div>
 
     </div>
   {% else %}
     <div style="text-align: center; padding: 40px; background: #fff; border-radius: var(--radius-md); border: 1px dashed var(--border);">
-      <p style="color: #64748b; font-size: 13px; margin-bottom: 12px;">سبد خرید شما در حال حاضر خالی است.</p>
+      <div style="font-size: 32px; margin-bottom: 8px; color: var(--gold);">
+        {% razavi_icon 'shopping-cart-trolley' size=44 %}
+      </div>
+      <p style="color: #5a7367; font-size: 13px; margin-bottom: 12px;">سبد خرید شما در حال حاضر خالی است.</p>
       <a href="{% url 'catalog:product_list' %}" class="btn-wide-dark-green-checkout" style="max-width: 200px; margin: 0 auto; padding: 8px;">
         مشاهده فروشگاه
       </a>

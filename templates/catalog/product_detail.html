@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
 {% block title %}{{ product.name }} | عطارخونه{% endblock %}
 {% block meta_description %}{{ product.short_description }}{% endblock %}
@@ -10,9 +10,9 @@
   <!-- ۱. مسیر پیمایش (عین موکاپ: خانه > فروشگاه > دمنوش آرامش‌بخش) -->
   <nav class="mockup-breadcrumbs">
     <a href="{% url 'core:home' %}">خانه</a>
-    <span class="breadcrumb-separator">&gt;</span>
+    <span class="breadcrumb-separator">{% razavi_icon 'chevron-left' size=10 %}</span>
     <a href="{% url 'catalog:product_list' %}">فروشگاه</a>
-    <span class="breadcrumb-separator">&gt;</span>
+    <span class="breadcrumb-separator">{% razavi_icon 'chevron-left' size=10 %}</span>
     <span class="breadcrumb-current">{{ product.name }}</span>
   </nav>
 
@@ -23,10 +23,22 @@
     <div class="product-info-side">
       <h1 class="detail-product-title">{{ product.name }}</h1>
 
+      {% if product.scientific_name %}
+        <div style="font-size: 11px; color: #5a7367; font-style: italic; direction: ltr; text-align: right; margin-top: -6px; margin-bottom: 8px;">
+          {{ product.scientific_name }}
+        </div>
+      {% endif %}
+
       <!-- امتیاز ستاره‌ای و تعداد نظرات (عین موکاپ: ۴.۸ ★★★★★ ۱۲۸ نظر) -->
       <div class="detail-rating-row">
-        <span class="rating-badge-score">۴.۸</span>
-        <span class="stars-gold">★★★★★</span>
+        <span class="rating-badge-score">۴.۹</span>
+        <span style="color: var(--gold); display: flex; gap: 2px;">
+          {% razavi_icon 'star' size=14 fill='var(--gold)' %}
+          {% razavi_icon 'star' size=14 fill='var(--gold)' %}
+          {% razavi_icon 'star' size=14 fill='var(--gold)' %}
+          {% razavi_icon 'star' size=14 fill='var(--gold)' %}
+          {% razavi_icon 'star' size=14 fill='var(--gold)' %}
+        </span>
         <span class="review-count-text">(۱۲۸ نظر)</span>
       </div>
 
@@ -68,20 +80,14 @@
           </div>
         {% endif %}
 
-        <!-- دکمه پهن افزودن به سبد خرید (عین موکاپ) -->
+        <!-- دکمه پهن افزودن به سبد خرید (عین موکاپ با آیکون رضوی) -->
         <div style="display: flex; gap: 8px; align-items: center;">
           <button type="submit" class="btn-wide-dark-green-cart" style="flex: 1;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
+            {% razavi_icon 'shopping-cart-trolley' size=20 %}
             <span>افزودن به سبد خرید</span>
           </button>
           <button type="button" class="btn-wishlist-toggle-round" data-product-id="{{ product.id }}" title="نشان کردن محصول">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
+            {% razavi_icon 'heart' size=20 %}
           </button>
         </div>
       </form>
@@ -110,30 +116,92 @@
     <!-- سه نماد اطمینان در پایین صفحه که در کل عرض کارت کشیده شده (عین موکاپ: راست: ارسال سریع | وسط: تضمین کیفیت | چپ: بازگشت وجه) -->
     <div class="detail-guarantees-bar">
       <div class="guarantee-badge-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="1" y="3" width="15" height="13"></rect>
-          <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
-          <circle cx="5.5" cy="18.5" r="2.5"></circle>
-          <circle cx="18.5" cy="18.5" r="2.5"></circle>
-        </svg>
+        {% razavi_icon 'truck' size=18 class='text-primary' %}
         <span>ارسال سریع</span>
       </div>
 
       <div class="guarantee-badge-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          <path d="m9 12 2 2 4-4"></path>
-        </svg>
+        {% razavi_icon 'shield' size=18 class='text-primary' %}
         <span>تضمین کیفیت</span>
       </div>
 
       <div class="guarantee-badge-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1 4 1 10 7 10"></polyline>
-          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-        </svg>
+        {% razavi_icon 'refresh' size=18 class='text-primary' %}
         <span>بازگشت وجه</span>
       </div>
+    </div>
+
+  </div>
+
+  <!-- ۳. بخش جزییات خیلی بالا و شناسنامه جامع بالینی و گیاه‌شناسی (High-Detail Botanical & Clinical Dossier) -->
+  <div style="margin-top: 24px; background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border); padding: 22px 24px; box-shadow: var(--shadow-sm);">
+    
+    <div style="border-bottom: 2px solid var(--border-light); padding-bottom: 12px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;">
+        {% razavi_icon 'award' size=20 class='text-gold' %}
+        <span>شناسنامه علمی، آنالیز ترکیبات و خواص درمانی {{ product.name }}</span>
+      </h3>
+      <span style="font-size: 11px; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 4px 10px; border-radius: 20px; font-weight: 700;">
+        ✓ تاییدیه آزمایشگاه کنترل کیفیت
+      </span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      
+      <!-- کارت ۱: مشخصات گیاه‌شناسی و خاستگاه -->
+      <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px;">
+        <h4 style="font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          {% razavi_icon 'sparkles' size=16 class='text-gold' %}
+          <span>مشخصات گیاه‌شناسی و خاستگاه</span>
+        </h4>
+        <ul style="font-size: 12px; line-height: 1.9; color: var(--text-dark);">
+          <li><b>نام علمی لاتین:</b> <i style="direction: ltr; display: inline-block;">{{ product.scientific_name }}</i></li>
+          <li><b>خانواده گیاهی:</b> {{ product.botanical_family }}</li>
+          <li><b>منطقه برداشت:</b> {{ product.harvest_region }}</li>
+          <li><b>مواد موثره دارویی:</b> {{ product.active_compounds }}</li>
+        </ul>
+      </div>
+
+      <!-- کارت ۲: طبع، مزاج و خواص اندام‌ها -->
+      <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px;">
+        <h4 style="font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          {% razavi_icon 'profile' size=16 class='text-gold' %}
+          <span>طبع سنتی و اثرات فیزیولوژیک اندام‌ها</span>
+        </h4>
+        <ul style="font-size: 12px; line-height: 1.9; color: var(--text-dark);">
+          <li><b>طبع و درجه مزاج:</b> {{ product.traditional_temperament_degree }}</li>
+          <li><b>خواص تفکیکی:</b> {{ product.organ_benefits }}</li>
+        </ul>
+      </div>
+
+      <!-- کارت ۳: دستور مصرف و دم‌آوری -->
+      <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px;">
+        <h4 style="font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          {% razavi_icon 'time' size=16 class='text-gold' %}
+          <span>پروتکل دم‌آوری و طریقه مصرف بهینه</span>
+        </h4>
+        <p style="font-size: 12px; line-height: 1.8; color: var(--text-dark); margin-bottom: 6px;">
+          {{ product.brewing_guide }}
+        </p>
+        <div style="font-size: 11.5px; color: #64748b; margin-top: 6px;">
+          <b>شرایط نگهداری:</b> {{ product.storage_conditions }}
+        </div>
+      </div>
+
+      <!-- کارت ۴: هشدارهای بالینی و تداخلات -->
+      <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px;">
+        <h4 style="font-size: 13px; font-weight: 700; color: #b45309; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          {% razavi_icon 'shield' size=16 class='text-gold' %}
+          <span>تداخلات دارویی و موارد احتیاط بالینی</span>
+        </h4>
+        <p style="font-size: 12px; line-height: 1.8; color: var(--text-dark); margin-bottom: 6px;">
+          {{ product.contraindications }}
+        </p>
+        <div style="font-size: 11.5px; color: #15803d; margin-top: 6px; font-weight: 600;">
+          🛡️ {{ product.health_license }}
+        </div>
+      </div>
+
     </div>
 
   </div>

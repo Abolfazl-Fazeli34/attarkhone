@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
 {% block title %}فروشگاه عطارخونه | محصولات باکیفیت از دل طبیعت{% endblock %}
 
@@ -9,8 +9,8 @@
   <!-- ۱. بنر بالای فروشگاه (عین موکاپ) -->
   <section class="shop-mockup-header-banner">
     <div class="shop-header-content">
-      <h1 class="shop-title">فروشگاه عطارخونه</h1>
-      <p class="shop-subtitle">محصولات باکیفیت، از دل طبیعت</p>
+      <h1 class="shop-title">فروشگاه تخصصی عطارخونه</h1>
+      <p class="shop-subtitle">گیاهان دارویی، دمنوش‌های طبیعی و عصاره‌های ناب از دل طبیعت ایران</p>
     </div>
   </section>
 
@@ -31,15 +31,13 @@
         </select>
       </div>
 
-      <!-- گرید محصولات (عین ۳ کارت ردیف موکاپ: چای سبز، گل‌گاوزبان، دمنوش/پک هدیه) -->
+      <!-- گرید محصولات (عین موکاپ با آیکون‌های وکتور رضوی و اطلاعات علمی) -->
       <div class="products-grid">
         {% for product in products %}
           <div class="product-card">
             <div class="product-img-box">
               <button type="button" class="btn-wishlist-toggle" data-product-id="{{ product.id }}" title="افزودن به علاقه‌مندی‌ها">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
+                {% razavi_icon 'heart' size=17 %}
               </button>
               <img src="{{ product.get_display_image }}" alt="{{ product.name }}" loading="lazy">
             </div>
@@ -49,9 +47,21 @@
                 <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
               </h3>
 
+              {% if product.scientific_name %}
+                <div style="font-size: 10px; color: #5a7367; font-style: italic; direction: ltr; text-align: right; margin-top: -3px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                  {{ product.scientific_name }}
+                </div>
+              {% endif %}
+
               <div class="product-rating-stars">
-                <span class="stars-gold">★★★★★</span>
-                <span class="rating-num">۴.۸</span>
+                <span style="color: var(--gold); display: flex; gap: 2px;">
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                </span>
+                <span class="rating-num">۴.۹</span>
               </div>
 
               <div class="product-price-box">
@@ -65,7 +75,7 @@
                 <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post" class="ajax-add-cart-form" data-product-id="{{ product.id }}">
                   {% csrf_token %}
                   <button type="submit" class="btn-card-add-cart">
-                    <span>🛒</span>
+                    {% razavi_icon 'shopping-cart-trolley' size=15 %}
                     <span>افزودن به سبد</span>
                   </button>
                 </form>
@@ -81,7 +91,7 @@
 
     </main>
 
-    <!-- ستون سمت چپ: سایدبار فیلتر محصولات (کارگاه ۱۸: جستجوی لایه‌ای) -->
+    <!-- ستون سمت چپ: سایدبار فیلتر محصولات -->
     <aside class="shop-filter-sidebar">
       <form action="{% url 'catalog:product_list' %}" method="get" id="filterForm">
         {% if search_query %}
@@ -92,7 +102,10 @@
         {% endif %}
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1.5px solid var(--border); padding-bottom: 8px;">
-          <h3 class="filter-sidebar-title" style="margin-bottom: 0;">فیلتر محصولات</h3>
+          <h3 class="filter-sidebar-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            {% razavi_icon 'filter' size=16 class='text-primary' %}
+            <span>فیلتر محصولات</span>
+          </h3>
           {% if current_temperament or current_brand or min_price or max_price or is_organic or request.GET.cat or selected_category %}
             <a href="{% url 'catalog:product_list' %}" style="font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 600;">
               ✕ پاکسازی
@@ -100,7 +113,7 @@
           {% endif %}
         </div>
 
-        <!-- فیلتر دسته‌بندی‌ها (کارگاه ۱۱) -->
+        <!-- فیلتر دسته‌بندی‌ها -->
         <div class="filter-group-block">
           <label class="filter-group-label">دسته‌بندی‌ها</label>
           <div class="checkboxes-list">
@@ -117,9 +130,9 @@
           </div>
         </div>
 
-        <!-- فیلتر طبع و مزاج گیاه (کارگاه ۱۴) -->
+        <!-- فیلتر طبع و مزاج گیاه -->
         <div class="filter-group-block">
-          <label class="filter-group-label">طبع و مزاج (کارگاه ۱۴)</label>
+          <label class="filter-group-label">طبع و مزاج در طب سنتی</label>
           <div class="checkboxes-list">
             <label class="custom-checkbox-row">
               <input type="radio" name="temperament" value="" {% if not current_temperament %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
@@ -134,10 +147,10 @@
           </div>
         </div>
 
-        <!-- فیلتر برند تولیدکننده (کارگاه ۱۵) -->
+        <!-- فیلتر برند تولیدکننده -->
         {% if brands %}
           <div class="filter-group-block">
-            <label class="filter-group-label">برند تولیدکننده (کارگاه ۱۵)</label>
+            <label class="filter-group-label">برند و تولیدکننده</label>
             <select name="brand" style="width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 11.5px; background: #fff;" onchange="document.getElementById('filterForm').submit()">
               <option value="">همه برندها</option>
               {% for b in brands %}
@@ -151,11 +164,14 @@
         <div class="filter-group-block">
           <label class="custom-checkbox-row" style="background: #f0fdf4; padding: 6px 8px; border-radius: var(--radius-xs); border: 1px solid #bbf7d0;">
             <input type="checkbox" name="organic" value="1" {% if is_organic %}checked{% endif %} onchange="document.getElementById('filterForm').submit()">
-            <span style="font-size: 11.5px; font-weight: 600; color: #15803d;">🌿 فقط محصولات ارگانیک</span>
+            <span style="font-size: 11.5px; font-weight: 600; color: #15803d; display: flex; align-items: center; gap: 4px;">
+              {% razavi_icon 'award' size=14 class='text-primary' %}
+              <span>فقط محصولات دارای نشان ارگانیک</span>
+            </span>
           </label>
         </div>
 
-        <!-- فیلتر محدوده قیمت (تومان) (کارگاه ۱۸) -->
+        <!-- فیلتر محدوده قیمت (تومان) -->
         <div class="filter-group-block">
           <label class="filter-group-label">محدوده قیمت (تومان)</label>
           

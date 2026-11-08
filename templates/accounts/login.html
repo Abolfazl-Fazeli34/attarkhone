@@ -1,41 +1,46 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
 {% block title %}ورود به حساب کاربری | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 380px; margin: 30px auto;">
+<div class="container" style="max-width: 420px; margin: 40px auto;">
 
-  <div style="background: #ffffff; padding: 22px 24px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+  <div style="background: #ffffff; padding: 30px 28px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
     
-    <div style="text-align: center; margin-bottom: 18px;">
-      <div style="font-size: 28px; margin-bottom: 4px;">🔑</div>
-      <h1 style="font-size: 15px; font-weight: 700; color: var(--primary-dark);">ورود به سامانه عطارخونه</h1>
-      <p style="font-size: 11px; color: #64748b; margin-top: 2px;">جهت پیگیری سفارش‌ها یا دسترسی کارمندان</p>
+    <div style="text-align: center; margin-bottom: 22px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--border-light); color: var(--primary); margin-bottom: 10px;">
+        {% razavi_icon 'profile' size=26 %}
+      </div>
+      <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px 0;">ورود به حساب کاربری</h1>
+      <p style="font-size: 12px; color: #64748b; margin: 0;">جهت ثبت سفارش، دسترسی به سبد خرید و پیگیری مرسولات</p>
     </div>
 
-    <form method="post">
+    <form method="post" id="loginForm">
       {% csrf_token %}
 
-      <div style="margin-bottom: 12px;">
-        <label style="display: block; font-size: 11px; color: #475569; margin-bottom: 3px;">نام کاربری یا نشانی ایمیل</label>
-        <input type="text" name="username" required autofocus placeholder="نام کاربری یا email@example.com" value="{{ identifier|default:'' }}" style="width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
-      </div>
-
       <div style="margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
-          <label style="font-size: 11px; color: #475569;">گذرواژه</label>
-          <a href="{% url 'accounts:password_reset' %}" style="font-size: 10.5px; color: var(--primary);">فراموشی رمز عبور؟</a>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 5px;">نام کاربری یا نشانی ایمیل</label>
+        <div style="position: relative;">
+          <input type="text" name="username" required autofocus placeholder="نام کاربری یا email@domain.com" value="{{ identifier|default:'' }}" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px;">
         </div>
-        <input type="password" name="password" required style="width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
       </div>
 
-      <button type="submit" class="btn-hero" style="width: 100%; border: none; cursor: pointer; font-size: 12.5px; padding: 9px;">
-        ورود به حساب کاربری »
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+          <label style="font-size: 12px; font-weight: 600; color: #475569;">رمز عبور</label>
+          <a href="{% url 'accounts:password_reset' %}" style="font-size: 11.5px; color: var(--primary); text-decoration: none;">فراموشی رمز عبور؟</a>
+        </div>
+        <input type="password" name="password" required style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px;">
+      </div>
+
+      <button type="submit" class="btn-hero" style="width: 100%; border: none; cursor: pointer; font-size: 13.5px; padding: 11px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>ورود به سامانه</span>
+        {% razavi_icon 'arrow-left' size=16 %}
       </button>
 
-      <div style="margin-top: 14px; text-align: center; font-size: 11.5px;">
-        حساب کاربری ندارید؟ <a href="{% url 'accounts:register' %}" style="font-weight: 600;">ثبت‌نام سریع</a>
+      <div style="margin-top: 18px; text-align: center; font-size: 12.5px; color: #475569; border-top: 1px solid var(--border-light); padding-top: 14px;">
+        حساب کاربری ندارید؟ <a href="{% url 'accounts:register' %}" style="font-weight: 700; color: var(--primary); text-decoration: none;">ثبت‌نام سریع در باشگاه مشتریان</a>
       </div>
     </form>
 

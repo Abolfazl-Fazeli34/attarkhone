@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ۲. مدیریت انتخاب مشخصه‌های وزنی در صفحه محصول (کارگاه ۱۳)
-  const variantButtons = document.querySelectorAll('.variant-btn');
+  const variantButtons = document.querySelectorAll('.variant-btn, .variant-chip-btn');
   const selectedVariantInput = document.getElementById('selectedVariantId');
   const dynamicPriceDisplay = document.getElementById('dynamicProductPrice');
 

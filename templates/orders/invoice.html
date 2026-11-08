@@ -1,150 +1,171 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
-{% block title %}فاکتور سفارش {{ order.tracking_code }} | عطارخونه{% endblock %}
+{% block title %}فاکتور رسمی سفارش {{ order.tracking_code }} | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container" style="max-width: 900px; margin: 30px auto;">
 
   <!-- دکمه‌های اقدام بالای فاکتور -->
-  <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;" class="btn-print-hide">
-    <a href="{% url 'core:home' %}" class="btn-action">← بازگشت به فروشگاه</a>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;" class="btn-print-hide">
+    <a href="{% url 'core:home' %}" class="btn-action" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 13px; font-weight: 600; color: var(--primary);">
+      {% razavi_icon 'arrow-right' size=15 %}
+      <span>بازگشت به فروشگاه</span>
+    </a>
     <div style="display: flex; gap: 10px;">
-      <a href="{% url 'orders:tracking' %}?code={{ order.tracking_code }}" class="btn-action" style="background:#e8f5e9; border-color:#81c784;">
-        🔍 پیگیری وضعیت این سفارش
+      <a href="{% url 'orders:tracking' %}?code={{ order.tracking_code }}" class="btn-action" style="background:#e8f5e9; border-color:#81c784; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 12.5px; font-weight: 600; color: #166534;">
+        {% razavi_icon 'search' size=15 %}
+        <span>پیگیری وضعیت سفارش</span>
       </a>
-      <button onclick="window.print()" class="btn-action" style="background: var(--primary); color: #fff;">
-        🖨️ چاپ فاکتور رسمی
+      <button onclick="window.print()" class="btn-hero" style="border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 8px 16px;">
+        {% razavi_icon 'printer' size=15 %}
+        <span>چاپ فاکتور رسمی</span>
       </button>
     </div>
   </div>
 
-  <!-- برگه فاکتور چاپی (کارگاه ۲۴) -->
-  <div class="invoice-container">
+  <!-- برگه فاکتور چاپی -->
+  <div class="invoice-container" style="background: #fff; padding: 32px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
     
     <!-- سربرگ فاکتور -->
-    <div class="invoice-header">
+    <div class="invoice-header" style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border); padding-bottom: 18px; margin-bottom: 20px;">
       <div>
-        <h2 style="font-size: 20px; color: var(--primary-dark); margin-bottom: 4px;">فروشگاه اینترنتی عطارخونه</h2>
-        <div style="font-size: 11px; color: #666;">صورت‌حساب رسمی فروش کالا و خدمات سلامت</div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+          <span style="color: var(--gold);">{% razavi_icon 'sparkles' size=22 %}</span>
+          <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin: 0;">فروشگاه تخصصی عطارخونه</h2>
+        </div>
+        <div style="font-size: 12px; color: #64748b;">صورت‌حساب رسمی فروش کالا و خدمات دارویی گیاهی و طب سنتی</div>
       </div>
-      <div style="text-align: left; font-size: 12px; color: #444; line-height: 1.7;">
-        <div>شماره فاکتور: <b>{{ order.tracking_code }}</b></div>
-        <div>تاریخ ثبت: <b>{{ order.created_at|date:"Y/m/d - H:i" }}</b></div>
+      <div style="text-align: left; font-size: 12.5px; color: #475569; line-height: 1.8;">
+        <div>شماره فاکتور: <b style="color: var(--primary-dark);">{{ order.tracking_code }}</b></div>
+        <div>تاریخ صدور: <b>{{ order.created_at|date:"Y/m/d - H:i" }}</b></div>
         <div>وضعیت پرداخت: 
           {% if order.is_paid %}
-            <span style="color: #2e7d32; font-weight: bold;">پرداخت شده ✓</span>
+            <span style="color: #15803d; font-weight: bold;">پرداخت شده ✓</span>
           {% else %}
-            <span style="color: #c62828; font-weight: bold;">در انتظار پرداخت</span>
+            <span style="color: #b91c1c; font-weight: bold;">در انتظار پرداخت</span>
           {% endif %}
         </div>
-        <div>مرحله سفارش (کارگاه ۲۴): <b>{{ order.get_status_display }}</b></div>
+        <div>مرحله پردازش: <b style="color: var(--primary);">{{ order.get_status_display }}</b></div>
       </div>
     </div>
 
     <!-- اطلاعات فروشنده و خریدار -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 11.5px; background: #f8fafc; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; font-size: 12px; background: #f8fafc; padding: 16px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
       <div>
-        <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">مشخصات فروشنده:</div>
-        <div>فروشگاه: <b>{{ setting.store_name }}</b></div>
-        <div>نشانی: {{ setting.address }}</div>
-        <div>تلفن تماس: {{ setting.phone|fa_digits }}</div>
+        <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+          {% razavi_icon 'shield' size=15 class='text-primary' %}
+          <span>مشخصات فروشنده:</span>
+        </div>
+        <div style="line-height: 1.8; color: #475569;">
+          <div>فروشگاه: <b style="color: var(--text-dark);">{{ setting.store_name }}</b></div>
+          <div>نشانی: {{ setting.address }}</div>
+          <div>تلفن تماس: {{ setting.phone|fa_digits }}</div>
+        </div>
       </div>
       <div>
-        <div style="font-weight: bold; color: var(--primary); margin-bottom: 6px;">مشخصات تحویل‌گیرنده:</div>
-        <div>نام: <b>{{ order.full_name }}</b></div>
-        <div>تلفن: {{ order.phone|fa_digits }}</div>
-        <div>نشانی: استان {{ order.province.name }}، شهر {{ order.city }}، {{ order.address }}</div>
-        <div>کد پستی: {{ order.postal_code|fa_digits }}</div>
+        <div style="font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+          {% razavi_icon 'profile' size=15 class='text-primary' %}
+          <span>مشخصات تحویل‌گیرنده:</span>
+        </div>
+        <div style="line-height: 1.8; color: #475569;">
+          <div>نام: <b style="color: var(--text-dark);">{{ order.full_name }}</b></div>
+          <div>تلفن همراه: {{ order.phone|fa_digits }}</div>
+          <div>نشانی: استان {{ order.province.name }}، شهر {{ order.city }}، {{ order.address }}</div>
+          <div>کد پستی: {{ order.postal_code|fa_digits }}</div>
+        </div>
       </div>
     </div>
 
     <!-- جدول اقلام سفارش -->
-    <table class="invoice-table">
+    <table class="invoice-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12.5px;">
       <thead>
-        <tr>
-          <th style="width: 5%;">ردیف</th>
-          <th style="width: 45%;">شرح کالا و مشخصات</th>
-          <th style="width: 15%;">تعداد</th>
-          <th style="width: 15%;">قیمت واحد</th>
-          <th style="width: 20%;">جمع کل</th>
+        <tr style="background: #f1f5f9; border-bottom: 1.5px solid var(--border); text-align: center;">
+          <th style="padding: 10px 8px; width: 6%;">ردیف</th>
+          <th style="padding: 10px 12px; text-align: right; width: 44%;">شرح فرآورده یا کالا</th>
+          <th style="padding: 10px 8px; width: 14%;">تعداد</th>
+          <th style="padding: 10px 8px; width: 18%;">قیمت واحد</th>
+          <th style="padding: 10px 8px; width: 18%;">جمع کل</th>
         </tr>
       </thead>
       <tbody>
         {% for item in order.items.all %}
-          <tr>
-            <td>{{ forloop.counter|fa_digits }}</td>
-            <td style="text-align: right;">
-              <b>{{ item.product_name }}</b>
+          <tr style="border-bottom: 1px solid var(--border-light); text-align: center;">
+            <td style="padding: 10px 8px;">{{ forloop.counter|fa_digits }}</td>
+            <td style="padding: 10px 12px; text-align: right;">
+              <b style="color: var(--text-dark);">{{ item.product_name }}</b>
               {% if item.variant_label %}
-                <span style="font-size: 11px; color: #555;">({{ item.variant_label }})</span>
+                <span style="font-size: 11px; color: #64748b;">({{ item.variant_label }})</span>
               {% endif %}
             </td>
-            <td>{{ item.quantity|fa_digits }}</td>
-            <td>{{ item.price|toman }}</td>
-            <td>{{ item.total_price|toman }}</td>
+            <td style="padding: 10px 8px;">{{ item.quantity|fa_digits }}</td>
+            <td style="padding: 10px 8px;">{{ item.price|toman }}</td>
+            <td style="padding: 10px 8px; font-weight: 700; color: var(--primary);">{{ item.total_price|toman }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
 
     <!-- جدول جمع کل و محاسبات -->
-    <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
-      <div style="width: 320px; font-size: 13px; line-height: 2;">
-        <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc;">
-          <span>جمع کل اقلام:</span>
-          <span>{{ order.subtotal|toman }}</span>
+    <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+      <div style="width: 340px; font-size: 13px; line-height: 2.2;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted var(--border);">
+          <span style="color: #64748b;">جمع کل اقلام:</span>
+          <span style="font-weight: 600;">{{ order.subtotal|toman }}</span>
         </div>
 
         {% if order.discount_amount > 0 %}
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; color: var(--primary);">
-            <span>تخفیف کوپن (کارگاه ۲۳):</span>
-            <span>- {{ order.discount_amount|toman }}</span>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted var(--border); color: var(--primary);">
+            <span>تخفیف ویژه:</span>
+            <span style="font-weight: 600;">- {{ order.discount_amount|toman }}</span>
           </div>
         {% endif %}
 
-        <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc;">
-          <span>هزینه حمل و ارسال ({{ order.carrier.name }}):</span>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted var(--border);">
+          <span style="color: #64748b;">هزینه حمل و ارسال ({{ order.carrier.name }}):</span>
           <span>
             {% if order.shipping_cost == 0 %}
-              <b style="color: #2e7d32;">رایگان</b>
+              <b style="color: #15803d;">ارسال رایگان</b>
             {% else %}
-              {{ order.shipping_cost|toman }}
+              <span style="font-weight: 600;">{{ order.shipping_cost|toman }}</span>
             {% endif %}
           </span>
         </div>
 
         {% if order.is_gift_wrapped %}
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; color: #e65100;">
-            <span>🎁 هزینه کادوپیچی ویژه (کارگاه ۲۴):</span>
-            <span>{{ order.gift_cost|toman }}</span>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dotted var(--border); color: #b45309;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;">
+              {% razavi_icon 'sparkles' size=13 %}
+              <span>بسته‌بندی هدیه:</span>
+            </span>
+            <span style="font-weight: 600;">{{ order.gift_cost|toman }}</span>
           </div>
         {% endif %}
 
-        <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: bold; border-top: 2px solid var(--primary); margin-top: 6px; padding-top: 6px; color: var(--primary-dark);">
-          <span>مبلغ نهایی فاکتور:</span>
+        <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; border-top: 2px solid var(--primary); margin-top: 8px; padding-top: 8px; color: var(--primary-dark);">
+          <span>مبلغ نهایی قابل پرداخت:</span>
           <span>{{ order.total_amount|toman }}</span>
         </div>
       </div>
     </div>
 
-    <!-- پیام کادوپیچی در صورت وجود (شاخص ص ۱۱۲) -->
+    <!-- پیام کادوپیچی -->
     {% if order.is_gift_wrapped and order.gift_message %}
-      <div style="margin: 20px 0; background: #fffde7; border: 1px dashed #fbc02d; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 12px;">
-        <b>💌 متن چاپ‌شده روی کارت تبریک هدیه:</b>
-        <p style="margin-top: 4px; color: #5d4037; font-style: italic;">«{{ order.gift_message }}»</p>
+      <div style="margin: 24px 0; background: #fefce8; border: 1.5px dashed #fde047; padding: 14px 20px; border-radius: var(--radius-sm); font-size: 12.5px;">
+        <b style="color: #854d0e;">💌 یادداشت اختصاصی کارت هدیه:</b>
+        <p style="margin-top: 6px; color: #713f12; font-style: italic; margin-bottom: 0;">«{{ order.gift_message }}»</p>
       </div>
     {% endif %}
 
     <!-- مهر و امضا -->
-    <div class="invoice-stamp-box">
-      <div style="text-align: center; width: 200px;">
-        <div style="font-size: 12px; color: #666; margin-bottom: 40px;">مهر و امضای امور مالی و حسابداری</div>
-        <div style="border-bottom: 1px solid #aaa;"></div>
+    <div class="invoice-stamp-box" style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px dashed var(--border);">
+      <div style="text-align: center; width: 220px;">
+        <div style="font-size: 12px; color: #64748b; margin-bottom: 50px;">مهر و امضای امور مالی و حسابداری</div>
+        <div style="border-bottom: 1.5px solid #cbd5e1;"></div>
       </div>
-      <div style="text-align: center; width: 200px;">
-        <div style="font-size: 12px; color: #666; margin-bottom: 40px;">امضای تحویل‌گیرنده سفارش</div>
-        <div style="border-bottom: 1px solid #aaa;"></div>
+      <div style="text-align: center; width: 220px;">
+        <div style="font-size: 12px; color: #64748b; margin-bottom: 50px;">امضای تحویل‌گیرنده سفارش</div>
+        <div style="border-bottom: 1.5px solid #cbd5e1;"></div>
       </div>
     </div>
 

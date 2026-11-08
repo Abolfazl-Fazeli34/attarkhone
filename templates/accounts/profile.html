@@ -1,154 +1,174 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
-{% block title %}پنل کاربری | عطارخونه{% endblock %}
+{% block title %}میز کاربری من | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 960px; margin: 20px auto;">
+<div class="container" style="max-width: 1000px; margin: 30px auto;">
 
-  <!-- ساختار دو ستونه داشبورد کاربری (عین موکاپ) -->
-  <div class="dashboard-mockup-layout">
+  <!-- ساختار دو ستونه داشبورد کاربری -->
+  <div class="dashboard-mockup-layout" style="display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start;">
 
-    <!-- ستون منو و پروفایل کاربر سمت راست (عین موکاپ) -->
-    <aside class="dashboard-user-sidebar">
+    <!-- ستون منو و پروفایل کاربر سمت راست -->
+    <aside class="dashboard-user-sidebar" style="background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-sm);">
       <!-- کارت مشخصات کاربر -->
-      <div class="dashboard-user-card">
-        <div class="user-avatar-circle">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+      <div class="dashboard-user-card" style="text-align: center; border-bottom: 1.5px solid var(--border-light); padding-bottom: 18px; margin-bottom: 18px;">
+        <div class="user-avatar-circle" style="width: 68px; height: 68px; border-radius: 50%; background: var(--border-light); display: inline-flex; align-items: center; justify-content: center; color: var(--primary); margin-bottom: 10px; border: 2px solid var(--gold);">
+          {% razavi_icon 'profile' size=34 %}
         </div>
-        <h3 class="user-card-fullname">{{ user.get_full_name|default:"علی محمدی" }}</h3>
-        <p class="user-card-phone">{{ user.phone|default:"۰۹۱۲۳۴۵۶۷۸۹"|fa_digits }}</p>
+        <h3 class="user-card-fullname" style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 0 0 4px 0;">{{ user.get_full_name|default:"کاربر محترم عطارخونه" }}</h3>
+        <p class="user-card-phone" style="font-size: 12px; color: #64748b; margin: 0;">{{ user.email|default:user.phone|default:"عضو رسمی باشگاه تندرستی" }}</p>
       </div>
 
-      <!-- منوی گزینه‌های داشبورد (عین موکاپ) -->
-      <nav class="dashboard-menu-nav">
-        <a href="{% url 'accounts:profile' %}" class="dashboard-menu-item active">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-          </svg>
-          <span>داشبورد کاربری</span>
+      <!-- منوی گزینه‌های داشبورد -->
+      <nav class="dashboard-menu-nav" style="display: flex; flex-direction: column; gap: 6px;">
+        <a href="{% url 'accounts:profile' %}" class="dashboard-menu-item active" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-xs); text-decoration: none; font-size: 13px; font-weight: 700; background: var(--primary); color: #fff;">
+          {% razavi_icon 'sparkles' size=17 %}
+          <span>پیشخوان کاربری</span>
         </a>
 
         {% if user.is_store_staff %}
-          <a href="{% url 'accounts:staff_dashboard' %}" class="dashboard-menu-item" style="color: #15803d; font-weight: 700; background: #f0fdf4;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span>میز کار کارمندی (کارگاه ۲)</span>
+          <a href="{% url 'accounts:staff_dashboard' %}" class="dashboard-menu-item" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-xs); text-decoration: none; font-size: 13px; font-weight: 700; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0;">
+            {% razavi_icon 'shield' size=17 %}
+            <span>پنل مدیریت فروشگاه</span>
           </a>
         {% endif %}
 
-        <a href="{% url 'orders:tracking' %}" class="dashboard-menu-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
+        <a href="{% url 'orders:tracking' %}" class="dashboard-menu-item" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-xs); text-decoration: none; font-size: 13px; color: #475569; transition: all 0.2s;">
+          <span style="color: var(--primary);">{% razavi_icon 'package' size=17 %}</span>
           <span>سفارش‌های من</span>
         </a>
 
-        <a href="{% url 'catalog:wishlist' %}" class="dashboard-menu-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
-          <span>علاقه‌مندی‌ها</span>
+        <a href="{% url 'catalog:wishlist' %}" class="dashboard-menu-item" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-xs); text-decoration: none; font-size: 13px; color: #475569; transition: all 0.2s;">
+          <span style="color: #ef4444;">{% razavi_icon 'heart' size=17 %}</span>
+          <span>علاقه‌مندی‌های گیاهی</span>
         </a>
 
-        <a href="{% url 'accounts:profile' %}" class="dashboard-menu-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-          <span>تنظیمات حساب</span>
-        </a>
-
-        <a href="{% url 'accounts:logout' %}" class="dashboard-menu-item" style="color: #ef4444;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
+        <a href="{% url 'accounts:logout' %}" class="dashboard-menu-item" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-xs); text-decoration: none; font-size: 13px; color: #b91c1c; transition: all 0.2s; margin-top: 10px; border-top: 1px solid var(--border-light);">
+          {% razavi_icon 'arrow-right' size=17 %}
           <span>خروج از حساب</span>
         </a>
       </nav>
     </aside>
 
-    <!-- ستون محتوای داشبورد سمت چپ (عین موکاپ) -->
+    <!-- ستون محتوای داشبورد سمت چپ -->
     <main class="dashboard-main-content">
       
-      <!-- جعبه خوش‌آمدگویی (عین موکاپ) -->
-      <div class="dashboard-welcome-banner">
-        <h2 class="welcome-heading">سلام {{ user.first_name|default:"علی" }} {{ user.last_name|default:"محمدی" }} عزیز!</h2>
-        <p class="welcome-subtext">به پنل کاربری عطارخونه خوش آمدید</p>
+      <!-- جعبه خوش‌آمدگویی -->
+      <div class="dashboard-welcome-banner" style="background: linear-gradient(135deg, #143529 0%, #1b4133 100%); color: #fff; border-radius: var(--radius-md); padding: 22px 26px; margin-bottom: 20px; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <h2 class="welcome-heading" style="font-size: 20px; font-weight: 800; margin: 0 0 6px 0; color: #fff;">سلام {{ user.first_name|default:user.username }} عزیز!</h2>
+          <p class="welcome-subtext" style="font-size: 13px; margin: 0; opacity: 0.9; color: #f1f5f9;">به باشگاه تندرستی و حساب کاربری عطارخونه خوش آمدید</p>
+        </div>
+        <span style="color: var(--gold);">{% razavi_icon 'sparkles' size=32 %}</span>
       </div>
 
-      <!-- دو کارت آماری امتیاز و سفارش‌ها (عین موکاپ: امتیاز وفاداری ۵۲۰ / سفارش‌های شما ۵۲۰) -->
-      <div class="dashboard-stat-cards-grid">
-        <div class="user-stat-card">
-          <div class="stat-card-title">امتیاز وفاداری</div>
-          <div class="stat-card-number">
-            <span>۵۲۰</span>
-            <span class="stat-star-icon">★</span>
+      <!-- دو کارت آماری امتیاز و سفارش‌ها -->
+      <div class="dashboard-stat-cards-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div class="user-stat-card" style="background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div class="stat-card-title" style="font-size: 12.5px; color: #64748b; margin-bottom: 6px;">امتیاز وفاداری و باشگاه تندرستی</div>
+            <div class="stat-card-number" style="font-size: 22px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 6px;">
+              <span>{{ user.loyalty_points|default:"۵۲۰"|fa_digits }}</span>
+              <span style="font-size: 12px; color: #64748b; font-weight: normal;">امتیاز</span>
+            </div>
           </div>
+          <span style="color: var(--gold);">{% razavi_icon 'star' size=28 %}</span>
         </div>
 
-        <div class="user-stat-card">
-          <div class="stat-card-title">سفارش‌های شما</div>
-          <div class="stat-card-number">
-            <span>{{ orders.count|default:"۲"|fa_digits }}</span>
-            <span class="stat-bag-icon">🛍️</span>
+        <div class="user-stat-card" style="background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div class="stat-card-title" style="font-size: 12.5px; color: #64748b; margin-bottom: 6px;">تعداد کل سفارش‌های ثبت‌شده</div>
+            <div class="stat-card-number" style="font-size: 22px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 6px;">
+              <span>{{ orders.count|fa_digits }}</span>
+              <span style="font-size: 12px; color: #64748b; font-weight: normal;">سفارش</span>
+            </div>
           </div>
+          <span style="color: var(--primary);">{% razavi_icon 'package' size=28 %}</span>
         </div>
       </div>
 
-      <!-- بنر سبز تشویقی پایین داشبورد (عین موکاپ با هدیه) -->
-      <div class="dashboard-green-promo-banner">
+      <!-- بنر تشویقی هدیه باشگاه مشتریان -->
+      <div class="dashboard-green-promo-banner" style="background: #f7faf8; border: 1.5px solid #d1fae5; border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px;">
         <div class="promo-text-side">
-          <h3>با هر خرید، امتیاز بیشتری کسب کنید</h3>
-          <p>و از تخفیف‌های ویژه و هدایای اختصاصی عطارخونه بهره‌مند شوید.</p>
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px 0;">با هر سفارش، گام‌های سلامتی خود را ارتقا دهید</h3>
+          <p style="font-size: 12.5px; color: #475569; margin: 0; line-height: 1.6;">
+            امتیازات وفاداری شما در خریدهای آتی به عنوان تخفیف نقدی و هدیه بسته‌بندی ارگانیک قابل تبدیل است.
+          </p>
         </div>
-        <div class="promo-gift-side">
-          <img src="{% static 'img/products/real_box.jpg' %}" alt="هدیه">
+        <div class="promo-gift-side" style="width: 80px; height: 80px; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; border: 1px solid var(--border);">
+          <img src="{% static 'img/products/real_box.jpg' %}" alt="هدیه عطارخونه" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
       </div>
 
       <!-- تاریخچه سفارش‌های کاربر -->
-      {% if orders.exists %}
-        <div style="background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-top: 18px;">
-          <h4 style="font-size: 13.5px; font-weight: 700; color: #1e3a2f; margin-bottom: 10px;">سفارش‌های اخیر شما:</h4>
-          <table class="cart-table">
-            <thead>
-              <tr>
-                <th>کد رهگیری</th>
-                <th>تاریخ</th>
-                <th>مبلغ</th>
-                <th>کادوپیچی</th>
-                <th>وضعیت</th>
-                <th>فاکتور</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for o in orders %}
-                <tr>
-                  <td><b>{{ o.tracking_code }}</b></td>
-                  <td>{{ o.created_at|date:"Y/m/d" }}</td>
-                  <td>{{ o.total_amount|toman }}</td>
-                  <td>{% if o.is_gift_wrapped %}🎁 بله{% else %}خیر{% endif %}</td>
-                  <td><span class="badge" style="background:#f0fdf4; color:#15803d;">{{ o.get_status_display }}</span></td>
-                  <td><a href="{% url 'orders:invoice' tracking_code=o.tracking_code %}" class="btn-action" style="font-size: 10.5px; padding: 2px 6px;">چاپ</a></td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+      <div style="background: #ffffff; padding: 22px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1.5px solid var(--border-light); padding-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--primary);">{% razavi_icon 'package' size=18 %}</span>
+            <h4 style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin: 0;">سفارش‌های اخیر شما</h4>
+          </div>
+          <a href="{% url 'orders:tracking' %}" style="font-size: 12px; color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            <span>رهگیری با شناسه</span>
+            {% razavi_icon 'arrow-left' size=13 %}
+          </a>
         </div>
-      {% endif %}
+
+        {% if orders.exists %}
+          <div style="overflow-x: auto;">
+            <table class="cart-table" style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+              <thead>
+                <tr style="background: #f8fafc; border-bottom: 1.5px solid var(--border); text-align: center;">
+                  <th style="padding: 10px 8px;">کد رهگیری</th>
+                  <th style="padding: 10px 8px;">تاریخ ثبت</th>
+                  <th style="padding: 10px 8px;">مبلغ فاکتور</th>
+                  <th style="padding: 10px 8px;">بسته‌بندی هدیه</th>
+                  <th style="padding: 10px 8px;">وضعیت</th>
+                  <th style="padding: 10px 8px;">فاکتور رسمی</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for o in orders %}
+                  <tr style="border-bottom: 1px solid var(--border-light); text-align: center;">
+                    <td style="padding: 10px 8px; font-weight: 700; color: var(--primary-dark);">{{ o.tracking_code }}</td>
+                    <td style="padding: 10px 8px; color: #64748b;">{{ o.created_at|date:"Y/m/d" }}</td>
+                    <td style="padding: 10px 8px; font-weight: 700; color: var(--primary);">{{ o.total_amount|toman }}</td>
+                    <td style="padding: 10px 8px;">
+                      {% if o.is_gift_wrapped %}
+                        <span style="display: inline-flex; align-items: center; gap: 4px; color: #b45309; font-size: 11.5px; font-weight: 600;">
+                          {% razavi_icon 'sparkles' size=12 %}
+                          <span>دارد</span>
+                        </span>
+                      {% else %}
+                        <span style="color: #94a3b8; font-size: 11.5px;">ندارد</span>
+                      {% endif %}
+                    </td>
+                    <td style="padding: 10px 8px;">
+                      <span class="badge" style="background:#f0fdf4; color:#15803d; border: 1px solid #bbf7d0; font-size: 11px; padding: 4px 8px;">
+                        {{ o.get_status_display }}
+                      </span>
+                    </td>
+                    <td style="padding: 10px 8px;">
+                      <a href="{% url 'orders:invoice' tracking_code=o.tracking_code %}" class="btn-action" style="font-size: 11px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--primary); font-weight: 600;">
+                        {% razavi_icon 'receipt' size=13 %}
+                        <span>مشاهده</span>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div style="text-align: center; padding: 30px 10px; color: #64748b;">
+            <div style="color: #94a3b8; margin-bottom: 8px;">{% razavi_icon 'package' size=36 %}</div>
+            <p style="font-size: 13px; margin: 0 0 12px 0;">تاکنون سفارشی در سامانه ثبت نکرده‌اید.</p>
+            <a href="{% url 'catalog:product_list' %}" class="btn-hero" style="font-size: 12.5px; padding: 8px 18px; text-decoration: none;">
+              مشاهده محصولات گیاهی و سفارش »
+            </a>
+          </div>
+        {% endif %}
+      </div>
 
     </main>
 

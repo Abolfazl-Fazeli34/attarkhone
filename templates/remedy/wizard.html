@@ -1,34 +1,42 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
-{% block title %}دستیار هوشمند سلامت | عطارخونه{% endblock %}
+{% block title %}دستیار هوشمند سلامت و مشاور طب سنتی | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 960px; margin: 18px auto;">
+<div class="container" style="max-width: 960px; margin: 28px auto;">
 
-  <!-- سربرگ دستیار هوشمند سلامت (عین موکاپ ارائه‌شده) -->
-  <section class="remedy-mockup-header">
-    <div class="remedy-header-img-wrap">
-      <img src="{% static 'img/ui/remedy_header_real.jpg' %}" alt="دستیار هوشمند سلامت" class="remedy-banner-img">
+  <!-- سربرگ دستیار هوشمند سلامت -->
+  <section class="remedy-mockup-header" style="text-align: center; margin-bottom: 24px;">
+    <div class="remedy-header-img-wrap" style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 16px; max-height: 220px;">
+      <img src="{% static 'img/ui/remedy_header_real.jpg' %}" alt="دستیار هوشمند سلامت" class="remedy-banner-img" style="width: 100%; height: 220px; object-fit: cover;">
     </div>
     <div class="remedy-title-group">
-      <h1 class="remedy-main-title">دستیار هوشمند سلامت</h1>
-      <p class="remedy-sub-title">مشکل خود را وارد کنید تا بهترین راهکار را دریافت کنید</p>
+      <div style="display: inline-flex; align-items: center; gap: 8px; justify-content: center;">
+        <span style="color: var(--gold);">{% razavi_icon 'sparkles' size=24 %}</span>
+        <h1 class="remedy-main-title" style="font-size: 24px; font-weight: 800; color: var(--primary-dark); margin: 0;">سامانه هوشمند سلامت و مشاور دارویی</h1>
+      </div>
+      <p class="remedy-sub-title" style="font-size: 13.5px; color: #64748b; margin-top: 6px;">
+        علائم یا زمینه سلامتی مدنظر را انتخاب کنید تا بهترین گیاهان دارویی استاندارد و بررسی تداخلات بالینی ارائه گردد
+      </p>
     </div>
   </section>
 
-  <!-- کارت اصلی دو ستونه دستیار سلامت (عین موکاپ) -->
-  <div class="remedy-mockup-card">
+  <!-- کارت اصلی دو ستونه دستیار سلامت -->
+  <div class="remedy-mockup-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 26px; box-shadow: var(--shadow-sm); margin-bottom: 20px;">
 
     <!-- ستون سمت راست: فرم ورود مشخصات و علائم -->
-    <div class="remedy-form-column">
-      <h3 class="column-card-title">مشخصات و علائم خود را وارد کنید:</h3>
+    <div class="remedy-form-column" style="border-left: 1.5px solid var(--border-light); padding-left: 20px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+        <span style="color: var(--primary);">{% razavi_icon 'filter' size=18 %}</span>
+        <h3 class="column-card-title" style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin: 0;">مشخصات و علائم مدنظر:</h3>
+      </div>
 
       <form action="{% url 'remedy:wizard' %}" method="get" id="remedyForm">
-        <div class="remedy-field-group">
-          <label for="categorySelect">نوع مشکل:</label>
+        <div class="remedy-field-group" style="margin-bottom: 16px;">
+          <label for="categorySelect" style="display: block; font-size: 12.5px; font-weight: 600; color: #475569; margin-bottom: 6px;">موضوع یا عارضه سلامتی:</label>
           <div class="custom-select-wrap">
-            <select name="category" id="categorySelect" onchange="document.getElementById('remedyForm').submit()">
+            <select name="category" id="categorySelect" onchange="document.getElementById('remedyForm').submit()" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px; background: #fff;">
               {% for cat in categories %}
                 <option value="{{ cat.id }}" {% if selected_category.id == cat.id %}selected{% endif %}>
                   {{ cat.title }}
@@ -38,10 +46,10 @@
           </div>
         </div>
 
-        <div class="remedy-field-group">
-          <label for="chemicalDrugSelect">داروهای مصرفی فعلی:</label>
+        <div class="remedy-field-group" style="margin-bottom: 20px;">
+          <label for="chemicalDrugSelect" style="display: block; font-size: 12.5px; font-weight: 600; color: #475569; margin-bottom: 6px;">داروهای شیمیایی مصرفی فعلی (بررسی تداخل):</label>
           <div class="custom-select-wrap">
-            <select id="chemicalDrugSelect">
+            <select id="chemicalDrugSelect" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px; background: #fff;">
               {% for drug in drugs %}
                 <option value="{{ drug.id }}">{{ drug.name }}</option>
               {% endfor %}
@@ -49,77 +57,77 @@
           </div>
         </div>
 
-        <!-- دکمه بررسی و مشاوره (عین موکاپ) -->
-        <button type="submit" class="btn-green-submit-remedy">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <span>بررسی و مشاوره</span>
+        <!-- دکمه بررسی و مشاوره -->
+        <button type="submit" class="btn-hero" style="width: 100%; border: none; cursor: pointer; padding: 11px; font-size: 13.5px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+          {% razavi_icon 'sparkles' size=18 %}
+          <span>بررسی هوشمند و ارائه نسخه گیاهی</span>
         </button>
       </form>
 
       <!-- اعلان تداخل دارویی در صورت نیاز -->
-      <div id="interactionResultsBox" style="display: none; margin-top: 14px;"></div>
+      <div id="interactionResultsBox" style="display: none; margin-top: 16px;"></div>
     </div>
 
-    <!-- ستون سمت چپ: نتیجه بررسی بالینی و پیشنهاد (عین موکاپ) -->
-    <div class="remedy-result-column">
-      <div class="result-card-header">
-        <span class="result-check-badge">✓</span>
-        <h3 class="result-title">نتیجه بررسی</h3>
-      </div>
+    <!-- ستون سمت چپ: نتیجه بررسی بالینی و پیشنهاد -->
+    <div class="remedy-result-column" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div class="result-card-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <span style="color: #15803d;">{% razavi_icon 'check-circle' size=20 %}</span>
+          <h3 class="result-title" style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin: 0;">نتیجه تحلیل گیاه‌درمانی:</h3>
+        </div>
 
-      <div class="result-recommendation-text">
-        {% if selected_category %}
-          مصرف «{{ packages.first.title|default:"گل‌گاوزبان ممتاز و دمنوش آرامش‌بخش" }}» برای شما مناسب است.
-        {% else %}
-          مصرف گل‌گاوزبان برای شما مناسب است.
-        {% endif %}
-      </div>
+        <div class="result-recommendation-text" style="font-size: 13.5px; line-height: 1.8; color: var(--text-dark); background: #f7faf8; padding: 14px; border-radius: var(--radius-xs); border: 1px solid #d1fae5; margin-bottom: 16px;">
+          {% if selected_category %}
+            پیشنهاد بالینی: مصرف فرآورده‌های ارگانیک مرتبط با <strong>«{{ selected_category.title }}»</strong> نظیر <strong>«{{ packages.first.title|default:"دمنوش آرامش‌بخش گل‌گاوزبان و به‌لیمو" }}»</strong> برای ساختار بدنی شما مناسب‌ترین گزینه ارزیابی شده است.
+          {% else %}
+            مصرف عصاره و گل خشک استاندارد <strong>گل‌گاوزبان ممتاز ایرانی</strong> بر مبنای طب اخلاطی برای شما توصیه می‌شود.
+          {% endif %}
+        </div>
 
-      <!-- ۳ بولت‌پوینت با تیک سبز (عین موکاپ) -->
-      <ul class="result-checklist">
-        <li>
-          <span class="green-circle-check">✓</span>
-          <span>کمک به کاهش استرس و اضطراب</span>
-        </li>
-        <li>
-          <span class="green-circle-check">✓</span>
-          <span>بهبود کیفیت خواب</span>
-        </li>
-        <li>
-          <span class="green-circle-check">✓</span>
-          <span>فاقد تداخل جدی با داروهای فعلی شما</span>
-        </li>
-      </ul>
+        <!-- ۳ بولت‌پوینت با تیک سبز Razavi -->
+        <ul class="result-checklist" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+          <li style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #334155;">
+            <span style="color: #15803d;">{% razavi_icon 'check-circle' size=16 %}</span>
+            <span>کمک موثر به تسکین تنش عصبی و بهبود کیفیت خواب فیزیولوژیک</span>
+          </li>
+          <li style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #334155;">
+            <span style="color: #15803d;">{% razavi_icon 'check-circle' size=16 %}</span>
+            <span>تقویت عملکرد ایمنی عمومی و نشاط‌آوری طبعی (مفرح قلب و اعصاب)</span>
+          </li>
+          <li style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #334155;">
+            <span style="color: #15803d;">{% razavi_icon 'shield' size=16 %}</span>
+            <span>فاقد هرگونه تداخل دارویی با رژیم‌های رایج دارویی پس از پایش بالینی</span>
+          </li>
+        </ul>
+      </div>
 
       <!-- دکمه مشاهده جزئیات و خرید پکیج -->
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px;">
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border-light);">
         {% if packages %}
           <form action="{% url 'remedy:add_package_to_cart' package_id=packages.first.id %}" method="post" style="flex: 1;">
             {% csrf_token %}
-            <button type="submit" class="btn-card-add-cart" style="width: 100%; justify-content: center; padding: 9px 14px; font-size: 12px; background: #1b4332; color: #fff;">
-              🛒 افزودن پکیج به سبد ({{ packages.first.discounted_package_price|toman }})
+            <button type="submit" class="btn-hero" style="width: 100%; justify-content: center; padding: 10px 16px; font-size: 12.5px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              {% razavi_icon 'cart' size=16 %}
+              <span>افزودن پکیج به سبد ({{ packages.first.discounted_package_price|toman }})</span>
             </button>
           </form>
         {% endif %}
 
-        <a href="/shop/product/gol-gavzaban-momtaz/" class="btn-outline-details">
-          <span>مشاهده جزئیات بیشتر</span>
-          <span>↗</span>
+        <a href="/shop/product/gol-gavzaban-momtaz/" class="btn-action" style="padding: 10px 16px; font-size: 12.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-weight: 600;">
+          <span>مشاهده شناسنامه گیاه</span>
+          {% razavi_icon 'arrow-left' size=14 %}
         </a>
       </div>
     </div>
 
   </div>
 
-  <!-- سلب مسئولیت حقوقی و پزشکی (چالش ۲ گزارش پروژه و اخلاق حرفه‌ای کارگاه ۶) -->
-  <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: var(--radius-sm); padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 11.5px; color: #92400e;">
-    <span style="font-size: 18px;">⚖️</span>
+  <!-- سلب مسئولیت حقوقی و پزشکی -->
+  <div style="background: #fffbeb; border: 1.5px solid #fef3c7; border-radius: var(--radius-sm); padding: 14px 18px; display: flex; align-items: center; gap: 12px; font-size: 12px; color: #92400e; line-height: 1.7;">
+    <span style="color: #d97706; flex-shrink: 0;">{% razavi_icon 'shield' size=22 %}</span>
     <div>
-      <b>سلب مسئولیت پزشکی (Medical Disclaimer):</b>
-      توصیه‌های دستیار سلامت عطارخونه صرفاً جنبه آگاهی‌بخشی و خودمراقبتی تکمیلی بر پایه منابع طب سنتی دارد و جایگزین تشخیص، دستور و نسخه پزشک معالج نیست. در صورت بیماری‌های بحرانی یا مصرف داروهای خاص، همواره با پزشک خود مشورت نمایید.
+      <strong style="color: #78350f;">سلب مسئولیت پزشکی (Medical Disclaimer):</strong>
+      توصیه‌ها و نسخه‌های ارائه‌شده در سامانه سلامت عطارخونه با استناد به مبانی معتبر گیاه‌درمانی و طب سنتی تدوین شده است؛ لیکن به‌هیچ‌وجه جایگزین تشخیص قطعی و تجویزهای تخصصی پزشک معالج نخواهد بود. در موارد بارداری، بیماری‌های حاد کلیوی و قلبی یا مصرف داروهای حیاتی، مشورت با پزشک ضروری است.
     </div>
   </div>
 

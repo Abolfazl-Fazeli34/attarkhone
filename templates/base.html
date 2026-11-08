@@ -1,4 +1,4 @@
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -27,15 +27,12 @@
           <div class="header-user-dropdown-wrap">
             <button class="btn-user-capsule" id="userMenuBtn" aria-expanded="false" aria-label="منوی کاربر">
               <span class="user-capsule-avatar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+                {% razavi_icon 'profile' size=16 %}
               </span>
               <span class="user-capsule-name">{{ user.get_full_name|default:user.username }}</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="user-dropdown-arrow">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <span class="user-dropdown-arrow">
+                {% razavi_icon 'chevron-down' size=12 %}
+              </span>
             </button>
             <div class="user-dropdown-menu" id="userDropdownMenu">
               <div class="dropdown-header">
@@ -44,52 +41,42 @@
               </div>
               <hr class="dropdown-divider">
               <a href="{% url 'accounts:profile' %}" class="dropdown-item">
-                <span class="dropdown-icon">👤</span> داشبورد کاربری
+                <span class="dropdown-icon">{% razavi_icon 'profile' size=16 %}</span> داشبورد کاربری
               </a>
               <a href="{% url 'accounts:orders' %}" class="dropdown-item">
-                <span class="dropdown-icon">📦</span> سفارش‌های من
+                <span class="dropdown-icon">{% razavi_icon 'package' size=16 %}</span> سفارش‌های من
               </a>
               <a href="{% url 'catalog:wishlist' %}" class="dropdown-item">
-                <span class="dropdown-icon">❤️</span> لیست علاقه‌مندی‌ها
+                <span class="dropdown-icon">{% razavi_icon 'heart' size=16 %}</span> لیست علاقه‌مندی‌ها
               </a>
               {% if user.is_store_staff %}
                 <a href="{% url 'accounts:staff_dashboard' %}" class="dropdown-item staff-link">
-                  <span class="dropdown-icon">⚙️</span> پنل مدیریت کارمند
+                  <span class="dropdown-icon">{% razavi_icon 'settings-cog' size=16 %}</span> پنل مدیریت کارمند
                 </a>
               {% endif %}
               <hr class="dropdown-divider">
               <a href="{% url 'accounts:logout' %}" class="dropdown-item text-danger">
-                <span class="dropdown-icon">🚪</span> خروج از حساب
+                <span class="dropdown-icon">{% razavi_icon 'logout' size=16 %}</span> خروج از حساب
               </a>
             </div>
           </div>
         {% else %}
           <!-- دکمه ورود / عضویت برای کاربران مهمان -->
           <a href="{% url 'accounts:login' %}" class="btn-header-login" title="ورود یا ثبت‌نام در عطارخونه">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10 17 15 12 10 7"></polyline>
-              <line x1="15" y1="12" x2="3" y2="12"></line>
-            </svg>
+            {% razavi_icon 'profile' size=16 %}
             <span>ورود / ثبت‌نام</span>
           </a>
         {% endif %}
 
         <!-- آیکون علاقه‌مندی‌ها با شمارنده پویا -->
         <a href="{% url 'catalog:wishlist' %}" class="icon-btn wishlist-icon-btn" title="لیست علاقه‌مندی‌ها">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
+          {% razavi_icon 'heart' size=20 %}
           <span class="wishlist-floating-badge" id="headerWishlistBadge" style="{% if not wishlist_count %}display: none;{% endif %}">{{ wishlist_count|fa_digits }}</span>
         </a>
 
         <!-- آیکون سبد خرید با نشانگر عددی زنده -->
         <a href="{% url 'orders:cart' %}" class="icon-btn cart-icon-btn" title="سبد خرید">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
+          {% razavi_icon 'shopping-cart-trolley' size=21 %}
           <span class="cart-floating-badge" id="headerCartBadge">{{ cart_count|fa_digits }}</span>
         </a>
 
@@ -98,12 +85,9 @@
 
       <!-- ۲. فیلد جستجوی کپسولی وسط -->
       <form class="header-search-wrap" action="{% url 'catalog:product_list' %}" method="get">
-        <input type="text" name="q" placeholder="جستجو در میان محصولات..." value="{{ request.GET.q }}">
+        <input type="text" name="q" placeholder="جستجو در میان محصولات اصیل و گیاهان دارویی..." value="{{ request.GET.q }}">
         <button type="submit" aria-label="جستجو">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
+          {% razavi_icon 'search' size=16 %}
         </button>
       </form>
 
@@ -230,7 +214,7 @@
             مرجع تخصصی گیاهان دارویی دست‌چین، دمنوش‌های طبیعی و دستیار هوشمند سلامت با سنجش تداخلات دارویی.
           </p>
           <div style="font-size: 11px; color: var(--primary); font-weight: 600; background: #f0fdf4; padding: 6px 10px; border-radius: var(--radius-xs); border: 1px solid var(--primary-border); display: inline-block;">
-            🌱 پروژه پودمان دوم «تجارت الکترونیک و امنیت شبکه» (کد ۲۱۲۲۹۰)
+            🌱 تضمین اصالت و ۱۰۰٪ ارگانیک با نشان سیب سلامت
           </div>
         </div>
 
@@ -240,13 +224,12 @@
             <li><a href="{% url 'catalog:product_list' %}">فروشگاه و کاتالوگ محصولات</a></li>
             <li><a href="{% url 'remedy:wizard' %}">دستیار هوشمند سلامت</a></li>
             <li><a href="{% url 'orders:tracking' %}">پیگیری آنلاین وضعیت سفارش</a></li>
-            <li><a href="{% url 'core:workshops_guide' %}">شناسنامه ۲۷ کارگاه کتاب</a></li>
-            <li><a href="{% url 'core:health_check' %}">تست سلامت و ارتقای سامانه</a></li>
+            <li><a href="{% url 'pages:contact_us' %}">مشاوره تخصصی و پشتیبانی</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
-          <h4>راهنمای مشتریان (کارگاه ۶)</h4>
+          <h4>راهنمای مشتریان</h4>
           <ul>
             <li><a href="{% url 'pages:page_detail' slug='terms' %}">قوانین، مقررات و سلب مسئولیت</a></li>
             <li><a href="{% url 'pages:page_detail' slug='shipping-policy' %}">شیوه‌های ارسال و کادوپیچی هدیه</a></li>
@@ -259,7 +242,7 @@
         </div>
 
         <div class="footer-col">
-          <h4>اطلاعات تماس و پشتیبانی (کارگاه ۴)</h4>
+          <h4>اطلاعات تماس و پشتیبانی</h4>
           <div class="footer-contact-item">
             <span>📍</span>
             <span>{{ store_setting.address }}</span>
@@ -287,7 +270,7 @@
       </div>
 
       <div class="footer-bottom">
-        تمامی حقوق مادی و معنوی برای فروشگاه اینترنتی عطارخونه محفوظ است. طراحی و پیاده‌سازی طبق استانداردهای پودمان ۲ شاخه فنی و حرفه‌ای.
+        تمامی حقوق مادی و معنوی برای فروشگاه اینترنتی عطارخونه محفوظ است. همراه شما در مسیر تندرستی و سلامت طبیعی.
       </div>
     </div>
   </footer>

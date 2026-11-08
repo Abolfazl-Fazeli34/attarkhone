@@ -1,27 +1,32 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
-{% block title %}مقالات و آموزش‌های تخصصی طب سنتی | عطارخونه{% endblock %}
+{% block title %}دانشنامه سلامت و مقالات تخصصی گیاهان دارویی | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="margin: 24px auto;">
+<div class="container" style="margin: 30px auto; max-width: 1100px;">
 
-  <!-- بنر بالای صفحه وبلاگ و آموزش -->
-  <div class="shop-page-title-banner" style="padding: 20px 24px; margin-bottom: 24px;">
-    <h1 class="shop-title-main" style="font-size: 17px;">📚 دانشنامه سلامت و آموزش‌های طب ایرانی</h1>
-    <p class="shop-subtitle-text" style="font-size: 12.5px; margin-top: 6px;">
-      راهنماهای معتبر خواص گیاهان، طرز تهیه دمنوش‌ها و پیشگیری از تداخلات دارویی بر پایه منابع اصیل و مقالات علمی
-    </p>
+  <!-- بنر بالای دانشنامه -->
+  <div class="shop-page-title-banner" style="padding: 24px 28px; margin-bottom: 24px; background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <span style="color: var(--gold);">{% razavi_icon 'sparkles' size=22 %}</span>
+        <h1 class="shop-title-main" style="font-size: 20px; font-weight: 800; color: var(--primary-dark); margin: 0;">دانشنامه تخصصی گیاهان دارویی و طب سنتی</h1>
+      </div>
+      <p class="shop-subtitle-text" style="font-size: 13px; margin: 0; color: #64748b;">
+        دستورنامه‌های اصیل خواص درمانی گیاهان، پروتکل‌های دم‌آوری دمنوش‌ها و پایش علمی تداخلات دارویی
+      </p>
+    </div>
   </div>
 
   <!-- فیلتر دسته‌بندی مقالات -->
   {% if categories %}
-    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
-      <a href="{% url 'pages:article_list' %}" class="badge" style="padding: 6px 14px; font-size: 12px; text-decoration: none; border-radius: var(--radius-full); {% if not selected_category %}background: var(--primary); color: #fff;{% else %}background: #fff; color: #4b5563; border: 1px solid var(--border);{% endif %}">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="{% url 'pages:article_list' %}" class="badge" style="padding: 7px 16px; font-size: 12.5px; text-decoration: none; border-radius: var(--radius-full); transition: all 0.2s; {% if not selected_category %}background: var(--primary); color: #fff; border: 1px solid var(--primary);{% else %}background: #fff; color: #4b5563; border: 1.5px solid var(--border);{% endif %}">
         همه مقالات
       </a>
       {% for cat in categories %}
-        <a href="?category={{ cat }}" class="badge" style="padding: 6px 14px; font-size: 12px; text-decoration: none; border-radius: var(--radius-full); {% if selected_category == cat %}background: var(--primary); color: #fff;{% else %}background: #fff; color: #4b5563; border: 1px solid var(--border);{% endif %}">
+        <a href="?category={{ cat }}" class="badge" style="padding: 7px 16px; font-size: 12.5px; text-decoration: none; border-radius: var(--radius-full); transition: all 0.2s; {% if selected_category == cat %}background: var(--primary); color: #fff; border: 1px solid var(--primary);{% else %}background: #fff; color: #4b5563; border: 1.5px solid var(--border);{% endif %}">
           {{ cat }}
         </a>
       {% endfor %}
@@ -29,41 +34,48 @@
   {% endif %}
 
   <!-- گرید مقالات -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
     {% for article in articles %}
-      <article style="background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow-xs); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;">
-        <div style="height: 170px; overflow: hidden; position: relative;">
+      <article style="background: #ffffff; border-radius: var(--radius-md); border: 1.5px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: all 0.25s;">
+        <div style="height: 180px; overflow: hidden; position: relative;">
           <img src="{{ article.image }}" alt="{{ article.title }}" style="width: 100%; height: 100%; object-fit: cover;">
-          <span style="position: absolute; bottom: 8px; right: 8px; background: rgba(27, 67, 50, 0.85); color: #fff; font-size: 10.5px; padding: 3px 8px; border-radius: var(--radius-xs); backdrop-filter: blur(4px);">
+          <span style="position: absolute; bottom: 10px; right: 10px; background: rgba(20, 53, 41, 0.9); color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-xs); backdrop-filter: blur(4px);">
             {{ article.category }}
           </span>
         </div>
 
-        <div style="padding: 16px; display: flex; flex-direction: column; flex-grow: 1;">
-          <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: #64748b; margin-bottom: 8px;">
-            <span>⏱️ {{ article.reading_time|fa_digits }} دقیقه مطالعه</span>
-            <span>👁️ {{ article.views_count|fa_digits }} بازدید</span>
+        <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
+          <div style="display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: #64748b; margin-bottom: 10px;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;">
+              {% razavi_icon 'calendar' size=13 %}
+              <span>{{ article.reading_time|fa_digits }} دقیقه مطالعه</span>
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;">
+              {% razavi_icon 'search' size=13 %}
+              <span>{{ article.views_count|fa_digits }} بازدید</span>
+            </span>
           </div>
 
-          <h2 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin-bottom: 8px; line-height: 1.45;">
+          <h2 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 0 0 10px 0; line-height: 1.5;">
             <a href="{{ article.get_absolute_url }}" style="color: inherit; text-decoration: none;">{{ article.title }}</a>
           </h2>
 
-          <p style="font-size: 12px; color: #475569; line-height: 1.6; margin-bottom: 16px; flex-grow: 1;">
+          <p style="font-size: 12.5px; color: #475569; line-height: 1.7; margin: 0 0 18px 0; flex-grow: 1;">
             {{ article.summary|truncatewords:24 }}
           </p>
 
-          <div style="border-top: 1px solid var(--border-light); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 11px; color: #94a3b8;">{{ article.created_at|date:"Y/m/d"|fa_digits }}</span>
-            <a href="{{ article.get_absolute_url }}" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px;">
-              مطالعه کامل مقاله ←
+          <div style="border-top: 1px solid var(--border-light); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11.5px; color: #94a3b8;">{{ article.created_at|date:"Y/m/d"|fa_digits }}</span>
+            <a href="{{ article.get_absolute_url }}" style="font-size: 12.5px; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>مطالعه مقاله</span>
+              {% razavi_icon 'arrow-left' size=14 %}
             </a>
           </div>
         </div>
       </article>
     {% empty %}
-      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #fff; border-radius: var(--radius-md); border: 1px dashed var(--border);">
-        <p style="color: #64748b;">هیچ مقاله‌ای در این دسته‌بندی یافت نشد.</p>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px; background: #fff; border-radius: var(--radius-md); border: 1.5px dashed var(--border);">
+        <p style="color: #64748b; font-size: 13px; margin: 0;">مقاله‌ای در این دسته‌بندی یافت نشد.</p>
       </div>
     {% endfor %}
   </div>
