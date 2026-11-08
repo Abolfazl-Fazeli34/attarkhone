@@ -18,12 +18,15 @@
       {% csrf_token %}
 
       <div style="margin-bottom: 12px;">
-        <label style="display: block; font-size: 11px; color: #475569; margin-bottom: 3px;">نام کاربری</label>
-        <input type="text" name="username" required autofocus style="width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
+        <label style="display: block; font-size: 11px; color: #475569; margin-bottom: 3px;">نام کاربری یا نشانی ایمیل</label>
+        <input type="text" name="username" required autofocus placeholder="نام کاربری یا email@example.com" value="{{ identifier|default:'' }}" style="width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
       </div>
 
       <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 11px; color: #475569; margin-bottom: 3px;">گذرواژه</label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+          <label style="font-size: 11px; color: #475569;">گذرواژه</label>
+          <a href="{% url 'accounts:password_reset' %}" style="font-size: 10.5px; color: var(--primary);">فراموشی رمز عبور؟</a>
+        </div>
         <input type="password" name="password" required style="width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12px;">
       </div>
 
@@ -33,16 +36,6 @@
 
       <div style="margin-top: 14px; text-align: center; font-size: 11.5px;">
         حساب کاربری ندارید؟ <a href="{% url 'accounts:register' %}" style="font-weight: 600;">ثبت‌نام سریع</a>
-      </div>
-
-      <!-- راهنمای حساب‌های کارمندی کارگاه ۱ و ۲ -->
-      <div style="margin-top: 18px; background: #f8fafc; border: 1px solid var(--border); padding: 10px 12px; border-radius: var(--radius-xs); font-size: 10.5px; line-height: 1.7; color: #475569;">
-        <b>حساب‌های تست کارگاه ۱ و ۲ کتاب:</b><br>
-        • مشتری (مطابق موکاپ): <code>ali_mohammadi</code> / رمز: <code>ali123456</code><br>
-        • مشتری (پرسونای مریم): <code>maryam</code> / رمز: <code>maryam123</code><br>
-        • مدیر ارشد: <code>admin</code> / رمز: <code>admin123456</code><br>
-        • حسابدار (بررسی فیش): <code>hesabdar</code> / رمز: <code>hesabdar123</code><br>
-        • انباردار (آماده‌سازی سفارش): <code>anbardar</code> / رمز: <code>anbardar123</code>
       </div>
     </form>
 

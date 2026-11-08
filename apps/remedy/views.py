@@ -7,6 +7,7 @@ from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedy
 from catalog.models import Product
 from orders.views import get_or_create_cart
 from orders.models import CartItem
+from core.emails import send_consultation_confirmation_email
 
 
 class RemedyWizardView(View):
@@ -129,6 +130,9 @@ class ConsultationBookingView(View):
             notes=notes,
             status='pending',
         )
+
+        # ارسال اعلان ایمیل به مدیر و متخصصان عطارخونه
+        send_consultation_confirmation_email(booking, request)
 
         messages.success(
             request,

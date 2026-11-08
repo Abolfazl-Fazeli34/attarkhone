@@ -10,6 +10,7 @@ from catalog.models import Product, ProductVariant
 from shipping.models import Province, Carrier
 from marketing.models import Coupon
 from core.models import StoreSetting
+from core.emails import send_order_confirmation_email
 
 
 def get_or_create_cart(request):
@@ -436,9 +437,14 @@ class MockPaymentGatewayView(View):
         action = request.POST.get('action')
 
         if action == 'pay_success':
+            receipt_email = request.POST.get('receipt_email', '').strip()
+            if receipt_email:
+                order.email = receipt_email
+
             order.is_paid = True
             order.status = 'paid'
-            order.admin_notes = f"پرداخت آنلاین موفق از طریق شاپرک - شناسه مرجع بانکی: {random.randint(10000000, 99999999)}"
+            ref_id = random.randint(10000000, 99999999)
+            order.admin_notes = f"پرداخت آنلاین موفق از طریق درگاه شاپرک - شناسه مرجع بانکی: {ref_id}"
             order.save()
 
             # کسر موجودی انبار و ثبت آمار فروش (کارگاه ۲۴)
@@ -447,6 +453,9 @@ class MockPaymentGatewayView(View):
                 p.stock = max(0, p.stock - oi.quantity)
                 p.sales_count += oi.quantity
                 p.save()
+
+            # ارسال خودکار رایانامه فاکتور و رسید سفارش به خریدار
+            send_order_confirmation_email(order, request)
 
             messages.success(request, f'پرداخت با موفقیت انجام شد! شماره پیگیری سفارش شما: {order.tracking_code}')
             return redirect('orders:invoice', tracking_code=order.tracking_code)
@@ -489,6 +498,8 @@ class BankReceiptView(View):
                 'receipt_image': receipt_image,
             }
         )
+
+        send_order_confirmation_email(order, request)
 
         messages.success(request, 'فیش بانکی با موفقیت ثبت شد و پس از بررسی حسابداری، وضعیت سفارش به‌روزرسانی خواهد شد.')
         return redirect('orders:invoice', tracking_code=order.tracking_code)

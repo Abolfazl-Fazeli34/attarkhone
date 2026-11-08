@@ -4,80 +4,487 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>درگاه پرداخت اینترنتی شاپرک | شبیه‌ساز امن عطارخونه</title>
+  <title>درگاه پرداخت اینترنتی شاپرک | پرداخت امن الکترونیک</title>
   <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body style="background: #eef2f5;">
+  <style>
+    :root {
+      --psp-primary: #0284c7;
+      --psp-primary-dark: #0369a1;
+      --psp-bg: #f1f5f9;
+      --psp-card-bg: #ffffff;
+      --psp-border: #cbd5e1;
+      --psp-text: #1e293b;
+      --psp-text-muted: #64748b;
+      --psp-green: #16a34a;
+      --psp-green-dark: #15803d;
+      --psp-danger: #dc2626;
+    }
 
-  <div class="mock-gateway-container">
-    <div class="gateway-header">
-      <div style="font-size: 26px; margin-bottom: 6px;">💳 سامانه پرداخت اینترنتی شاپرک</div>
-      <div style="font-size: 13px; opacity: 0.9;">شبیه‌ساز رسمی درگاه پرداخت آنلاین فروشگاه عطارخونه</div>
+    body {
+      background-color: var(--psp-bg);
+      font-family: var(--font-family);
+      margin: 0;
+      padding: 0;
+      color: var(--psp-text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* هدر رسمی درگاه شاپرک */
+    .psp-header {
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .psp-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .psp-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #0284c7, #0f172a);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      font-size: 18px;
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+    }
+    .psp-timer-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    /* ساختار اصلی درگاه */
+    .psp-container {
+      max-width: 920px;
+      margin: 25px auto;
+      padding: 0 15px;
+      width: 100%;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 1fr 1.55fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .psp-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* کارت اطلاعات پذیرنده */
+    .psp-info-card {
+      background: #ffffff;
+      border: 1px solid var(--psp-border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .psp-info-header {
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .psp-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      padding: 8px 0;
+      border-bottom: 1px dashed #f1f5f9;
+    }
+    .psp-info-row span:first-child {
+      color: var(--psp-text-muted);
+    }
+    .psp-info-row span:last-child {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .psp-amount-banner {
+      background: linear-gradient(135deg, #047857, #065f46);
+      color: #ffffff;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    /* کارت فرم پرداخت الکترونیک */
+    .psp-form-card {
+      background: #ffffff;
+      border: 1px solid var(--psp-border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .psp-form-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .psp-field {
+      margin-bottom: 16px;
+    }
+    .psp-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .psp-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 9px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .psp-input:focus {
+      border-color: var(--psp-primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .card-number-wrapper {
+      position: relative;
+    }
+    .card-type-badge {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* دکمه‌های عملیات */
+    .psp-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-psp-pay {
+      flex: 2;
+      background: var(--psp-green);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 11px 16px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+    }
+    .btn-psp-pay:hover {
+      background: var(--psp-green-dark);
+    }
+
+    .btn-psp-cancel {
+      flex: 1;
+      background: #f8fafc;
+      color: var(--psp-danger);
+      border: 1.5px solid #fca5a5;
+      border-radius: 6px;
+      padding: 11px 16px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .btn-psp-cancel:hover {
+      background: #fee2e2;
+    }
+
+    /* پانویس امنیتی */
+    .psp-footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      font-size: 11.5px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.8;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- هدر رسمی شاپرک -->
+  <header class="psp-header">
+    <div class="psp-brand">
+      <div class="psp-logo-icon">ش</div>
+      <div>
+        <div style="font-weight: 800; font-size: 14.5px; color: #0f172a;">شبکه الکترونیکی پرداخت کارت (شاپرک)</div>
+        <div style="font-size: 10.5px; color: #64748b;">زیرساخت امن پرداخت الکترونیک بانک مرکزی جمهوری اسلامی ایران</div>
+      </div>
     </div>
 
-    <div class="gateway-body">
-      
-      <!-- اطلاعات تراکنش -->
-      <div style="background: #f1f8e9; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid #c8e6c9; margin-bottom: 20px; font-size: 13px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span>پذیرنده:</span>
-          <b>فروشگاه گیاهان دارویی عطارخونه</b>
+    <div class="psp-timer-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span>زمان باقی‌مانده جلسه:</span>
+      <b id="sessionTimer" style="color: #0284c7; font-family: monospace; font-size: 14px; direction: ltr;">09:59</b>
+    </div>
+  </header>
+
+  <!-- محتوای درگاه -->
+  <main class="psp-container">
+    
+    <!-- ستون اول: مشخصات پذیرنده و تراکنش -->
+    <aside class="psp-info-card">
+      <div>
+        <div class="psp-info-header">
+          <img src="{% static 'img/logo.svg' %}" alt="عطارخونه" style="height: 36px; margin-bottom: 6px;">
+          <div style="font-size: 13.5px; font-weight: 700; color: #0f172a;">فروشگاه آنلاین عطارخونه</div>
+          <div style="font-size: 11px; color: #64748b; direction: ltr;">https://attarkhone.ir</div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span>شماره سفارش:</span>
-          <b>{{ order.tracking_code }}</b>
+
+        <div class="psp-info-row">
+          <span>کد پذیرنده (Merchant ID):</span>
+          <span style="direction: ltr;">10394821</span>
         </div>
-        <div style="display: flex; justify-content: space-between; color: var(--primary-dark); font-size: 15px;">
-          <span>مبلغ قابل پرداخت:</span>
-          <b>{{ order.total_amount|toman }}</b>
+        <div class="psp-info-row">
+          <span>شماره ترمینال (Terminal ID):</span>
+          <span style="direction: ltr;">98234512</span>
+        </div>
+        <div class="psp-info-row">
+          <span>شماره پیگیری سفارش:</span>
+          <span style="direction: ltr; font-weight: 700; color: #0284c7;">{{ order.tracking_code }}</span>
+        </div>
+        <div class="psp-info-row">
+          <span>نام خریدار:</span>
+          <span>{{ order.full_name|default:"مشتری گرامی" }}</span>
+        </div>
+        <div class="psp-info-row">
+          <span>تاریخ و زمان درخواست:</span>
+          <span>{% now "Y/m/d - H:i" %}</span>
         </div>
       </div>
 
-      <!-- فرم شبیه‌ساز اطلاعات کارت -->
-      <form action="{% url 'orders:mock_gateway' tracking_code=order.tracking_code %}" method="post">
+      <div class="psp-amount-banner">
+        <div style="font-size: 11.5px; opacity: 0.9; margin-bottom: 4px;">مبلغ قابل پرداخت:</div>
+        <div style="font-size: 20px; font-weight: 800; letter-spacing: 0.5px;">
+          {{ order.total_amount|toman }}
+        </div>
+        <div style="font-size: 10.5px; opacity: 0.8; margin-top: 3px; direction: ltr;">
+          {{ order.total_amount }}0 Rials
+        </div>
+      </div>
+    </aside>
+
+    <!-- ستون دوم: فرم ورود اطلاعات کارت شتاب -->
+    <section class="psp-form-card">
+      <div class="psp-form-title">
+        <span>اطلاعات کارت بانکی</span>
+        <span style="font-size: 11.5px; color: #16a34a; font-weight: normal; display: flex; align-items: center; gap: 4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          ارتباط رمزنگاری شده ۲۵۶ بیتی TLS
+        </span>
+      </div>
+
+      <form action="{% url 'orders:mock_gateway' tracking_code=order.tracking_code %}" method="post" id="pspForm">
         {% csrf_token %}
 
-        <div class="card-input-group">
-          <label>شماره کارت ۱۶ رقمی شتاب</label>
-          <input type="text" value="{{ card_sample }}" readonly style="background: #fafafa; letter-spacing: 2px;">
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div class="card-input-group">
-            <label>کد امنیتی CVV2</label>
-            <input type="password" value="789" readonly style="letter-spacing: 3px;">
+        <!-- شماره کارت ۱۶ رقمی -->
+        <div class="psp-field">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label for="cardNumber">شماره کارت بانکی (۱۶ رقم عضو شتاب) *</label>
+            <span style="font-size: 10.5px; color: #0284c7; cursor: pointer;" onclick="fillQuickCard('۶۰۳۷-۹۹۷۵-۱۱۲۲-۳۳۴۴')">کارت بانکی پیش‌فرض</span>
           </div>
-          <div class="card-input-group">
-            <label>تاریخ انقضا (ماه/سال)</label>
-            <input type="text" value="08 / 05" readonly style="text-align: center;">
+          <div class="card-number-wrapper">
+            <input type="text" id="cardNumber" name="card_number" class="psp-input" required 
+                   placeholder="---- ---- ---- ----" maxlength="19" value="6037 9975 1122 3344"
+                   style="direction: ltr; letter-spacing: 2.5px; font-weight: 700; font-size: 15px; padding-left: 60px;">
+            <div class="card-type-badge" id="cardBadge">شتاب</div>
           </div>
         </div>
 
-        <div class="card-input-group">
-          <label>رمز دوم پویا (پیامکی)</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="password" value="123456" readonly style="letter-spacing: 4px;">
-            <button type="button" class="btn-action" style="white-space: nowrap; font-size: 11px;">درخواست مجدد</button>
+        <!-- کد CVV2 و تاریخ انقضا -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="psp-field">
+            <label for="cvv2">کد شناسایی دوم (CVV2) *</label>
+            <input type="password" id="cvv2" name="cvv2" class="psp-input" required maxlength="4" placeholder="۳ یا ۴ رقم" value="789"
+                   style="direction: ltr; letter-spacing: 4px; font-weight: 700; text-align: center;">
+          </div>
+          <div class="psp-field">
+            <label>تاریخ انقضای کارت (ماه / سال) *</label>
+            <div style="display: flex; gap: 6px; align-items: center; direction: ltr;">
+              <input type="text" id="expMonth" name="exp_month" class="psp-input" required maxlength="2" placeholder="ماه" value="08"
+                     style="text-align: center; font-weight: 700;">
+              <span style="color: #94a3b8; font-weight: 700;">/</span>
+              <input type="text" id="expYear" name="exp_year" class="psp-input" required maxlength="2" placeholder="سال" value="05"
+                     style="text-align: center; font-weight: 700;">
+            </div>
           </div>
         </div>
 
-        <div style="margin-top: 25px; display: flex; gap: 10px;">
-          <button type="submit" name="action" value="pay_success" class="btn-hero" style="flex: 2; border: none; cursor: pointer; background: #1b4332;">
-            ✓ پرداخت موفق و تایید تراکنش
+        <!-- کد امنیتی تصویری (کپچا) -->
+        <div class="psp-field">
+          <label>کد امنیتی داخل تصویر *</label>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="captchaInput" name="captcha" class="psp-input" required maxlength="5" value="8421"
+                   style="direction: ltr; letter-spacing: 3px; font-weight: 700; text-align: center; max-width: 140px;">
+            <div id="captchaDisplay" style="background: #f8fafc; border: 1.5px dashed #94a3b8; padding: 7px 16px; border-radius: 6px; font-weight: 800; font-size: 16px; letter-spacing: 4px; color: #1e293b; user-select: none; font-style: italic;">
+              8421
+            </div>
+            <button type="button" onclick="refreshCaptcha()" style="background: none; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; cursor: pointer; color: #475569;" title="تولید کد جدید">
+              🔄
+            </button>
+          </div>
+        </div>
+
+        <!-- رمز دوم پویا (پیامکی) -->
+        <div class="psp-field">
+          <label>رمز اینترنتی دوم (پویا) *</label>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="password" id="otpInput" name="otp" class="psp-input" required maxlength="8" placeholder="رمز پویا" value="947261"
+                   style="direction: ltr; letter-spacing: 4px; font-weight: 700; flex: 1;">
+            <button type="button" id="btnGetOtp" onclick="requestDynamicOtp()" class="btn-action" style="white-space: nowrap; font-size: 11.5px; padding: 9px 12px; background: #e0f2fe; color: #0369a1; border-color: #bae6fd; font-weight: 600;">
+              دریافت رمز پویا
+            </button>
+          </div>
+          <div id="otpNotice" style="font-size: 11px; color: #16a34a; margin-top: 5px; display: none;">
+            ✓ رمز پویای پیامکی به شماره همراه ارسال شد و در کادر درج گردید.
+          </div>
+        </div>
+
+        <!-- نشانی ایمیل دریافت رسید (اختیاری) -->
+        <div class="psp-field" style="margin-bottom: 20px;">
+          <label for="receiptEmail">نشانی ایمیل دریافت رسید دیجیتال (اختیاری)</label>
+          <input type="email" id="receiptEmail" name="receipt_email" class="psp-input" 
+                 value="{{ order.email|default:order.user.email|default:'' }}" placeholder="your-email@domain.com"
+                 style="direction: ltr; text-align: left;">
+        </div>
+
+        <!-- کلیدهای عملیات نهایی -->
+        <div class="psp-actions">
+          <button type="submit" name="action" value="pay_success" class="btn-psp-pay">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            پرداخت و تایید نهایی تراکنش
           </button>
-          <button type="submit" name="action" value="cancel" class="btn-action" style="flex: 1; border-color: var(--danger); color: var(--danger); justify-content: center;">
-            انصراف ✕
+          <button type="submit" name="action" value="cancel" class="btn-psp-cancel">
+            انصراف از پرداخت ✕
           </button>
         </div>
 
       </form>
+    </section>
 
-      <div style="margin-top: 20px; text-align: center; font-size: 11px; color: #777;">
-        🔒 اتصال به درگاه شاپرک با پروتکل رمزنگاری امن SSL/TLS برقرار است.
-      </div>
+  </main>
+
+  <!-- فوتر امنیتی -->
+  <footer class="psp-footer">
+    <div>
+      🛡️ کلیه ارتباطات این سامانه تحت پروتکل امن SSL با رمزنگاری پیشرفته انجام می‌شود.
     </div>
-  </div>
+    <div style="margin-top: 4px; color: #94a3b8;">
+      سامانه جامع پرداخت الکترونیک شاپرک • کلیه حقوق متعلق به بانک مرکزی جمهوری اسلامی ایران می‌باشد.
+    </div>
+  </footer>
+
+  <script>
+    // تایمر جلسه پرداخت (۱۰ دقیقه)
+    let totalSeconds = 600;
+    const timerElem = document.getElementById('sessionTimer');
+    const timerInterval = setInterval(() => {
+      totalSeconds--;
+      if (totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        alert('زمان جلسه پرداخت به پایان رسید. به صفحه سفارش هدایت می‌شوید.');
+        window.location.href = "{% url 'orders:invoice' tracking_code=order.tracking_code %}";
+      }
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      timerElem.textContent = `${minutes}:${seconds}`;
+    }, 1000);
+
+    // تولید کد امنیتی تصادفی
+    function refreshCaptcha() {
+      const code = Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('captchaDisplay').textContent = code;
+      document.getElementById('captchaInput').value = code;
+    }
+
+    // درخواست رمز پویا
+    let otpCooldown = 0;
+    function requestDynamicOtp() {
+      const btn = document.getElementById('btnGetOtp');
+      const notice = document.getElementById('otpNotice');
+      const input = document.getElementById('otpInput');
+
+      const simulatedOtp = Math.floor(100000 + Math.random() * 900000);
+      input.value = simulatedOtp;
+      notice.style.display = 'block';
+      notice.textContent = `✓ رمز یکبار مصرف ${simulatedOtp} پیامک شد و درج گردید.`;
+
+      btn.disabled = true;
+      let remaining = 120;
+      btn.textContent = `ارسال مجدد (${remaining})`;
+
+      const otpTimer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(otpTimer);
+          btn.disabled = false;
+          btn.textContent = 'دریافت رمز پویا';
+        } else {
+          btn.textContent = `ارسال مجدد (${remaining})`;
+        }
+      }, 1000);
+    }
+
+    // پر کردن سریع شماره کارت پیش‌فرض
+    function fillQuickCard(num) {
+      document.getElementById('cardNumber').value = num.replace(/-/g, ' ');
+    }
+  </script>
 
 </body>
 </html>

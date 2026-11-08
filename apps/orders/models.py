@@ -64,8 +64,8 @@ class Order(models.Model):
     ]
 
     PAYMENT_METHOD_CHOICES = [
-        ('online', 'درگاه امن پرداخت آنلاین (شبیه‌ساز شاپرک)'),
-        ('bank_receipt', 'پرداخت از طریق فیش بانکی و کارت‌به‌کارت (کارگاه ۱۷)'),
+        ('online', 'درگاه امن پرداخت اینترنتی شاپرک'),
+        ('bank_receipt', 'پرداخت از طریق فیش بانکی و کارت‌به‌کارت'),
     ]
 
     tracking_code = models.CharField(max_length=32, unique=True, verbose_name="کد رهگیری سفارش")

@@ -2,24 +2,32 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
 from .models import User
 from orders.models import Order, BankReceipt
+from core.emails import send_welcome_email
 
 
 class UserLoginView(View):
+    """
+    ورود کاربر با نام کاربری یا نشانی ایمیل
+    همراه با ادغام هوشمند سبد خرید مهمان به حساب کاربری
+    """
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('core:home')
-        form = AuthenticationForm()
-        return render(request, 'accounts/login.html', {'form': form})
+        return render(request, 'accounts/login.html')
 
     def post(self, request):
         guest_session_key = request.session.session_key
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        identifier = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
 
+        if not identifier or not password:
+            messages.error(request, 'لطفاً نام کاربری/ایمیل و گذرواژه را وارد کنید.')
+            return render(request, 'accounts/login.html', {'identifier': identifier})
+
+        user = authenticate(request, username=identifier, password=password)
+        if user is not None:
             # انتقال و ادغام اقلام سبد خرید مهمان به حساب کاربری
             if guest_session_key:
                 from orders.models import Cart
@@ -45,11 +53,14 @@ class UserLoginView(View):
                 return redirect('accounts:staff_dashboard')
             return redirect('accounts:profile')
         else:
-            messages.error(request, 'نام کاربری یا گذرواژه نادرست است.')
-            return render(request, 'accounts/login.html', {'form': form})
+            messages.error(request, 'نام کاربری/ایمیل یا گذرواژه وارد شده نادرست است.')
+            return render(request, 'accounts/login.html', {'identifier': identifier})
 
 
 class UserRegisterView(View):
+    """
+    ثبت‌نام کاربر جدید با اعتبارسنجی ایمیل و ارسال رایانامه خوش‌آمدگویی و هدیه
+    """
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('core:home')
@@ -57,35 +68,171 @@ class UserRegisterView(View):
 
     def post(self, request):
         username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip()
         first_name = request.POST.get('first_name', '').strip()
         last_name = request.POST.get('last_name', '').strip()
         phone = request.POST.get('phone', '').strip()
         password = request.POST.get('password', '')
         password_confirm = request.POST.get('password_confirm', '')
 
-        if not username or not password or not phone:
-            messages.error(request, 'تکمیل نام کاربری، شماره تماس و گذرواژه الزامی است.')
-            return render(request, 'accounts/register.html')
+        if not username or not email or not password or not phone:
+            messages.error(request, 'تکمیل نام کاربری، ایمیل، شماره تماس و گذرواژه الزامی است.')
+            return render(request, 'accounts/register.html', {
+                'username': username,
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'phone': phone,
+            })
+
+        if '@' not in email or '.' not in email:
+            messages.error(request, 'لطفاً یک نشانی ایمیل معتبر وارد فرمایید.')
+            return render(request, 'accounts/register.html', {
+                'username': username,
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'phone': phone,
+            })
 
         if password != password_confirm:
-            messages.error(request, 'تکرار گذرواژه با گذرواژه همخوانی ندارد.')
-            return render(request, 'accounts/register.html')
+            messages.error(request, 'تکرار گذرواژه با گذرواژه اصلی همخوانی ندارد.')
+            return render(request, 'accounts/register.html', {
+                'username': username,
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'phone': phone,
+            })
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'این نام کاربری قبلاً ثبت شده است.')
-            return render(request, 'accounts/register.html')
+        if User.objects.filter(username__iexact=username).exists():
+            messages.error(request, 'این نام کاربری قبلاً در سامانه ثبت شده است.')
+            return render(request, 'accounts/register.html', {
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'phone': phone,
+            })
+
+        if User.objects.filter(email__iexact=email).exists():
+            messages.error(request, 'این نشانی ایمیل قبلاً در سامانه ثبت گردیده است.')
+            return render(request, 'accounts/register.html', {
+                'username': username,
+                'first_name': first_name,
+                'last_name': last_name,
+                'phone': phone,
+            })
 
         user = User.objects.create_user(
             username=username,
+            email=email,
             first_name=first_name,
             last_name=last_name,
             phone=phone,
             password=password,
             role='customer'
         )
-        login(request, user)
-        messages.success(request, 'حساب کاربری شما با موفقیت ایجاد شد.')
+
+        # ارسال ایمیل خوش‌آمدگویی رسمی همراه با کد تخفیف
+        send_welcome_email(user, request)
+
+        login(request, user, backend='accounts.backends.EmailOrUsernameModelBackend')
+        messages.success(request, 'حساب کاربری شما با موفقیت ایجاد شد و ایمیل خوش‌آمدگویی به همراه کد تخفیف اختصاصی برای شما ارسال گردید.')
         return redirect('core:home')
+
+
+class PasswordResetRequestView(View):
+    """
+    درخواست بازیابی گذرواژه از طریق ارسال پیوند امن به ایمیل کاربر
+    """
+    def get(self, request):
+        return render(request, 'accounts/password_reset.html')
+
+    def post(self, request):
+        email = request.POST.get('email', '').strip()
+        if not email:
+            messages.error(request, 'لطفاً نشانی ایمیل ثبت‌شده خود را وارد کنید.')
+            return render(request, 'accounts/password_reset.html')
+
+        user = User.objects.filter(email__iexact=email).first()
+        if user:
+            from django.contrib.auth.tokens import default_token_generator
+            from django.utils.http import urlsafe_base64_encode
+            from django.utils.encoding import force_bytes
+            from django.template.loader import render_to_string
+            from django.core.mail import EmailMultiAlternatives
+            from django.utils.html import strip_tags
+            from django.conf import settings
+
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            reset_url = request.build_absolute_uri(f'/accounts/password-reset-confirm/{uid}/{token}/')
+
+            context = {'user': user, 'reset_url': reset_url}
+            html_body = render_to_string('emails/password_reset_email.html', context)
+            text_body = strip_tags(html_body)
+
+            try:
+                msg = EmailMultiAlternatives(
+                    subject='بازیابی گذرواژه حساب کاربری | عطارخونه',
+                    body=text_body,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to=[user.email]
+                )
+                msg.attach_alternative(html_body, "text/html")
+                msg.send(fail_silently=False)
+            except Exception:
+                pass
+
+        messages.success(request, 'در صورتی که حسابی با این ایمیل وجود داشته باشد، پیوند بازیابی گذرواژه به صندوق ورودی شما ارسال گردید.')
+        return redirect('accounts:login')
+
+
+class PasswordResetConfirmView(View):
+    """
+    تایید پیوند بازیابی و تنظیم گذرواژه جدید
+    """
+    def get(self, request, uidb64, token):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.http import urlsafe_base64_decode
+        from django.utils.encoding import force_str
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            return render(request, 'accounts/password_reset_confirm.html', {'validlink': True, 'uidb64': uidb64, 'token': token})
+        else:
+            return render(request, 'accounts/password_reset_confirm.html', {'validlink': False})
+
+    def post(self, request, uidb64, token):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.http import urlsafe_base64_decode
+        from django.utils.encoding import force_str
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            password = request.POST.get('password')
+            password_confirm = request.POST.get('password_confirm')
+            if not password or password != password_confirm:
+                messages.error(request, 'گذرواژه‌ها یکسان نیستند یا فیلد خالی است.')
+                return render(request, 'accounts/password_reset_confirm.html', {'validlink': True, 'uidb64': uidb64, 'token': token})
+
+            user.set_password(password)
+            user.save()
+            messages.success(request, 'گذرواژه شما با موفقیت تغییر یافت. اکنون می‌توانید با گذرواژه جدید وارد شوید.')
+            return redirect('accounts:login')
+        else:
+            messages.error(request, 'پیوند بازیابی منقضی شده یا نامعتبر است.')
+            return redirect('accounts:password_reset')
 
 
 class UserLogoutView(View):
@@ -167,6 +314,8 @@ class StaffDashboardView(View):
             receipt.order.is_paid = True
             receipt.order.status = 'paid'
             receipt.order.save()
+            from core.emails import send_order_confirmation_email
+            send_order_confirmation_email(receipt.order, request)
             messages.success(request, f'فیش بانکی سفارش {receipt.order.tracking_code} تایید شد و سفارش به حالت پرداخت شده تغییر یافت.')
 
         return redirect('accounts:staff_dashboard')

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تایید ثبت درخواست مشاوره سلامت | عطارخونه</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f6f8; font-family: Tahoma, 'Segoe UI', Arial, sans-serif; direction: rtl; text-align: right;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f6f8; padding: 30px 10px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); max-width: 600px; width: 100%;">
+          
+          <tr>
+            <td style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%); padding: 30px 40px; text-align: center; color: #ffffff;">
+              <div style="font-size: 26px; font-weight: bold;">🩺 مرکز مشاوره تخصصی سلامت عطارخونه</div>
+              <div style="font-size: 13px; opacity: 0.9; margin-top: 6px;">درخواست نوبت مشاوره تلفنی رایگان طب ایرانی</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 30px 36px; color: #1e293b; font-size: 13.5px; line-height: 1.8;">
+              <h2 style="color: #1b4332; font-size: 16px; margin-top: 0;">درخواست شما با کد پیگیری #{{ booking.id }} ثبت شد</h2>
+              
+              <p style="color: #475569; margin-bottom: 16px;">
+                متقاضی محترم <b>{{ booking.name }}</b>، درخواست مشاوره رایگان شما دریافت گردید. کارشناس یا پزشک طب سنتی عطارخونه در بازه زمانی درخواستی با شما تماس خواهند گرفت.
+              </p>
+
+              <div style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px 20px; margin-bottom: 20px; font-size: 13px;">
+                <div style="margin-bottom: 6px;"><b>زمینه مشاوره:</b> {{ booking.symptom_category }}</div>
+                <div style="margin-bottom: 6px;"><b>بازه زمانی پیشنهادی تماس:</b> <span style="color: #15803d; font-weight: bold;">{{ booking.preferred_time }}</span></div>
+                <div style="margin-bottom: 6px;"><b>شماره تماس:</b> <span style="direction: ltr; display: inline-block;">{{ booking.phone }}</span></div>
+                {% if booking.notes %}
+                  <div style="margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 8px; font-size: 12px; color: #64748b;">
+                    <b>شرح شرح علائم / توضیحات:</b> {{ booking.notes }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px 16px; font-size: 12px; color: #166534;">
+                💡 توصیه: لطفاً قبل از تماس کارشناس، در صورت مصرف داروهای شیمیایی خاص، نام آن‌ها را آماده داشته باشید تا تداخلات احتمالی با گیاهان دارویی بررسی گردد.
+              </div>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 40px; text-align: center; font-size: 11.5px; color: #94a3b8; line-height: 1.7;">
+              عطارخونه | مرکز مشاوره و سلامت طب ایرانی | تلفن: 021-88997766
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
