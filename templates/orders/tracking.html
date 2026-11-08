@@ -71,7 +71,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 6px; color: #475569;">
               {% razavi_icon 'shield' size=14 class='text-primary' %}
-              <span>تسویه حساب: <strong style="color: {% if order.is_paid %}#15803d{% else %}#b45309{% endif %};">{% if order.is_paid %}پرداخت شده ✓{% else %}در انتظار پرداخت{% endif %}</strong></span>
+              <span>تسویه حساب: <strong style="color: {% if order.is_paid %}#15803d{% else %}#b45309{% endif %};">{% if order.is_paid %}پرداخت شده (تایید شاپرک){% else %}در انتظار پرداخت{% endif %}</strong></span>
             </div>
           </div>
         </div>

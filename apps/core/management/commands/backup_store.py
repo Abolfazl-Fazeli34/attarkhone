@@ -26,4 +26,4 @@ class Command(BaseCommand):
             db_backup_path = os.path.join(backup_dir, f"db_sqlite3_{timestamp}.bak")
             shutil.copy2(db_path, db_backup_path)
 
-        self.stdout.write(self.style.SUCCESS(f"✓ نسخه پشتیبان کامل با موفقیت در پوشه backups ایجاد شد:\n  {backup_file}"))
+        self.stdout.write(self.style.SUCCESS(f"نسخه پشتیبان کامل با موفقیت در پوشه backups ایجاد شد:\n  {backup_file}"))

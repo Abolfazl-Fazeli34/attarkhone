@@ -23,11 +23,11 @@
       <!-- نوار بالای محصولات: مرتب‌سازی -->
       <div class="shop-top-sorter">
         <span class="sort-label">مرتب‌سازی بر اساس:</span>
-        <select onchange="location.href=this.value" class="sort-select">
-          <option value="?sort=popular" {% if current_sort == 'popular' %}selected{% endif %}>محبوب‌ترین</option>
-          <option value="?sort=newest" {% if current_sort == 'newest' %}selected{% endif %}>جدیدترین</option>
-          <option value="?sort=price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>ارزان‌ترین</option>
-          <option value="?sort=price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>گران‌ترین</option>
+        <select onchange="updateCatalogSort(this.value)" class="sort-select">
+          <option value="popular" {% if current_sort == 'popular' %}selected{% endif %}>محبوب‌ترین</option>
+          <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>جدیدترین</option>
+          <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>ارزان‌ترین</option>
+          <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>گران‌ترین</option>
         </select>
       </div>
 
@@ -89,6 +89,9 @@
         {% endfor %}
       </div>
 
+      <!-- پیج‌بندی اصیل و بدون ایموجی -->
+      {% include 'includes/pagination.html' %}
+
     </main>
 
     <!-- ستون سمت چپ: سایدبار فیلتر محصولات -->
@@ -107,8 +110,9 @@
             <span>فیلتر محصولات</span>
           </h3>
           {% if current_temperament or current_brand or min_price or max_price or is_organic or request.GET.cat or selected_category %}
-            <a href="{% url 'catalog:product_list' %}" style="font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 600;">
-              ✕ پاکسازی
+            <a href="{% url 'catalog:product_list' %}" style="font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 3px;">
+              {% razavi_icon 'close' size=12 %}
+              <span>پاکسازی</span>
             </a>
           {% endif %}
         </div>

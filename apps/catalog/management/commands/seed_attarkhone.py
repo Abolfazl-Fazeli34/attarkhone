@@ -379,4 +379,4 @@ class Command(BaseCommand):
         )
         pkg_stress.products.set([p_damnoosh, p_gavzaban])
 
-        self.stdout.write(self.style.SUCCESS("✓ داده‌های منطبق بر موکاپ با موفقیت ذخیره شدند!"))
+        self.stdout.write(self.style.SUCCESS("داده‌های منطبق بر موکاپ با موفقیت ذخیره شدند!"))

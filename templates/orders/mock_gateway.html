@@ -374,8 +374,8 @@
             <div id="captchaDisplay" style="background: #f8fafc; border: 1.5px dashed #94a3b8; padding: 7px 16px; border-radius: 6px; font-weight: 800; font-size: 16px; letter-spacing: 4px; color: #1e293b; user-select: none; font-style: italic;">
               8421
             </div>
-            <button type="button" onclick="refreshCaptcha()" style="background: none; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; cursor: pointer; color: #475569;" title="تولید کد جدید">
-              🔄
+            <button type="button" onclick="refreshCaptcha()" style="background: none; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; cursor: pointer; color: #475569; display: flex; align-items: center;" title="تولید کد جدید">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
             </button>
           </div>
         </div>
@@ -391,7 +391,7 @@
             </button>
           </div>
           <div id="otpNotice" style="font-size: 11px; color: #16a34a; margin-top: 5px; display: none;">
-            ✓ رمز پویای پیامکی به شماره همراه ارسال شد و در کادر درج گردید.
+            رمز پویای پیامکی به شماره همراه ارسال شد و در کادر درج گردید.
           </div>
         </div>
 
@@ -410,7 +410,7 @@
             پرداخت و تایید نهایی تراکنش
           </button>
           <button type="submit" name="action" value="cancel" class="btn-psp-cancel">
-            انصراف از پرداخت ✕
+            انصراف از پرداخت و بازگشت
           </button>
         </div>
 
@@ -422,7 +422,7 @@
   <!-- فوتر امنیتی -->
   <footer class="psp-footer">
     <div>
-      🛡️ کلیه ارتباطات این سامانه تحت پروتکل امن SSL با رمزنگاری پیشرفته انجام می‌شود.
+      کلیه ارتباطات این سامانه تحت پروتکل امن SSL با رمزنگاری پیشرفته شاپرک انجام می‌شود.
     </div>
     <div style="margin-top: 4px; color: #94a3b8;">
       سامانه جامع پرداخت الکترونیک شاپرک • کلیه حقوق متعلق به بانک مرکزی جمهوری اسلامی ایران می‌باشد.
@@ -462,7 +462,7 @@
       const simulatedOtp = Math.floor(100000 + Math.random() * 900000);
       input.value = simulatedOtp;
       notice.style.display = 'block';
-      notice.textContent = `✓ رمز یکبار مصرف ${simulatedOtp} پیامک شد و درج گردید.`;
+      notice.textContent = `رمز یکبار مصرف ${simulatedOtp} پیامک شد و درج گردید.`;
 
       btn.disabled = true;
       let remaining = 120;

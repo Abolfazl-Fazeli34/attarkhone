@@ -4,7 +4,7 @@
 {% block title %}دانشنامه سلامت و مقالات تخصصی گیاهان دارویی | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="margin: 30px auto; max-width: 1100px;">
+<div class="container" style="margin: 30px auto;">
 
   <!-- بنر بالای دانشنامه -->
   <div class="shop-page-title-banner" style="padding: 24px 28px; margin-bottom: 24px; background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between;">
@@ -14,7 +14,7 @@
         <h1 class="shop-title-main" style="font-size: 20px; font-weight: 800; color: var(--primary-dark); margin: 0;">دانشنامه تخصصی گیاهان دارویی و طب سنتی</h1>
       </div>
       <p class="shop-subtitle-text" style="font-size: 13px; margin: 0; color: #64748b;">
-        دستورنامه‌های اصیل خواص درمانی گیاهان، پروتکل‌های دم‌آوری دمنوش‌ها و پایش علمی تداخلات دارویی
+        دستورنامه‌های اصیل خواص درمانی گیاهان، پروتکل‌های دم‌آوری دمنوش‌ها و پایش علمی تداخلات دارویی بر پایه منابع معتبر طب ایرانی و فارماکوپه
       </p>
     </div>
   </div>
@@ -34,10 +34,10 @@
   {% endif %}
 
   <!-- گرید مقالات -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px;">
     {% for article in articles %}
       <article style="background: #ffffff; border-radius: var(--radius-md); border: 1.5px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: all 0.25s;">
-        <div style="height: 180px; overflow: hidden; position: relative;">
+        <div style="height: 190px; overflow: hidden; position: relative;">
           <img src="{{ article.image }}" alt="{{ article.title }}" style="width: 100%; height: 100%; object-fit: cover;">
           <span style="position: absolute; bottom: 10px; right: 10px; background: rgba(20, 53, 41, 0.9); color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-xs); backdrop-filter: blur(4px);">
             {{ article.category }}
@@ -45,10 +45,10 @@
         </div>
 
         <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
-          <div style="display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: #64748b; margin-bottom: 10px;">
-            <span style="display: inline-flex; align-items: center; gap: 4px;">
-              {% razavi_icon 'calendar' size=13 %}
-              <span>{{ article.reading_time|fa_digits }} دقیقه مطالعه</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #64748b; margin-bottom: 10px;">
+            <span style="display: inline-flex; align-items: center; gap: 4px; color: var(--primary); font-weight: 600;">
+              {% razavi_icon 'certificate' size=13 %}
+              <span>{{ article.author_name }}</span>
             </span>
             <span style="display: inline-flex; align-items: center; gap: 4px;">
               {% razavi_icon 'search' size=13 %}
@@ -79,6 +79,9 @@
       </div>
     {% endfor %}
   </div>
+
+  <!-- پیج‌بندی بدون ایموجی -->
+  {% include 'includes/pagination.html' %}
 
 </div>
 {% endblock %}

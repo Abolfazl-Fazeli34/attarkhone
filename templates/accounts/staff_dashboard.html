@@ -4,7 +4,7 @@
 {% block title %}میز کار و داشبورد مدیریت | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="margin: 30px auto; max-width: 1100px;">
+<div class="container" style="margin: 30px auto;">
 
   <!-- هدر داشبورد کارمندی -->
   <div style="background: linear-gradient(135deg, #143529 0%, #1b4133 100%); color: #ffffff; padding: 22px 26px; border-radius: var(--radius-md); margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; box-shadow: var(--shadow-sm);">
@@ -19,7 +19,11 @@
         کاربر مسئول: <b style="color: #fff;">{{ user.get_full_name|default:user.username }}</b> | نمایه دسترسی: <b style="color: var(--gold);">{{ role_display }}</b>
       </div>
     </div>
-    <div style="display: flex; gap: 10px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="{% url 'core:workshops_guide' %}" class="btn-action" style="font-size: 12px; padding: 8px 14px; background: var(--gold); color: #143529; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+        {% razavi_icon 'book' size=14 %}
+        <span>دوسیه دفاع علمی و کارگاه‌ها</span>
+      </a>
       <a href="/attar-management/" class="btn-hero" style="font-size: 12px; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;" target="_blank">
         {% razavi_icon 'shield' size=14 %}
         <span>پنل امن مدیریت جنگو</span>

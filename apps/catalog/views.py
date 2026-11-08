@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.contrib import messages
 from .models import Product, Category, Brand, ProductVariant, ProductFeature, Wishlist
@@ -92,9 +93,18 @@ class ProductListView(View):
         categories = Category.objects.filter(parent=None)
         brands = Brand.objects.all()
 
+        total_count = queryset.count()
+        paginator = Paginator(queryset, 12)
+        page_number = request.GET.get('page', 1)
+        try:
+            page_obj = paginator.page(page_number)
+        except (PageNotAnInteger, EmptyPage):
+            page_obj = paginator.page(1)
+
         context = {
-            'products': queryset,
-            'products_count': queryset.count(),
+            'products': page_obj,
+            'page_obj': page_obj,
+            'products_count': total_count,
             'categories': categories,
             'selected_category': selected_category,
             'brands': brands,

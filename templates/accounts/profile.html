@@ -4,7 +4,7 @@
 {% block title %}میز کاربری من | عطارخونه{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 1000px; margin: 30px auto;">
+<div class="container" style="margin: 30px auto;">
 
   <!-- ساختار دو ستونه داشبورد کاربری -->
   <div class="dashboard-mockup-layout" style="display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start;">
@@ -164,7 +164,7 @@
             <div style="color: #94a3b8; margin-bottom: 8px;">{% razavi_icon 'package' size=36 %}</div>
             <p style="font-size: 13px; margin: 0 0 12px 0;">تاکنون سفارشی در سامانه ثبت نکرده‌اید.</p>
             <a href="{% url 'catalog:product_list' %}" class="btn-hero" style="font-size: 12.5px; padding: 8px 18px; text-decoration: none;">
-              مشاهده محصولات گیاهی و سفارش »
+              مشاهده محصولات گیاهی و سفارش
             </a>
           </div>
         {% endif %}

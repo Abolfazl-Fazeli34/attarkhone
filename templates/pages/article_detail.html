@@ -5,7 +5,7 @@
 {% block meta_description %}{{ article.summary }}{% endblock %}
 
 {% block content %}
-<div class="container" style="margin: 30px auto; max-width: 1040px;">
+<div class="container" style="margin: 30px auto;">
 
   <!-- ناوبری نان‌ریزه‌ای (Breadcrumb) -->
   <div style="font-size: 12px; color: #64748b; margin-bottom: 20px; display: flex; align-items: center; gap: 6px;">
@@ -57,12 +57,53 @@
       </div>
 
       <!-- محتوای کامل مقاله -->
-      <div style="font-size: 13.5px; line-height: 2; color: #334155; text-align: justify;">
+      <div style="font-size: 13.5px; line-height: 2; color: #334155; text-align: justify; margin-bottom: 28px;">
         {{ article.content|linebreaks }}
       </div>
 
+      <!-- شناسنامه استنادی و ناظر علمی (دوسیه دفاع علمی کارگاه ۶ و ۲۷) -->
+      <div style="background: #fdfcf7; border: 1.5px solid #e2d9c2; border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 26px;">
+        
+        <!-- مشخصات نویسنده و ناظر علمی -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed #d6cca9;">
+          <div style="display: flex; gap: 12px; align-items: flex-start;">
+            <span style="color: var(--primary); background: #e8f5e9; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              {% razavi_icon 'profile' size=20 %}
+            </span>
+            <div>
+              <div style="font-size: 11px; color: #64748b; font-weight: 600;">نگارش و تدوین تخصصی:</div>
+              <div style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark); margin: 2px 0;">{{ article.author_name }}</div>
+              <div style="font-size: 11.5px; color: #4b5563;">{{ article.author_title }}</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: flex-start;">
+            <span style="color: #b45309; background: #fef3c7; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              {% razavi_icon 'shield' size=20 %}
+            </span>
+            <div>
+              <div style="font-size: 11px; color: #64748b; font-weight: 600;">ناظر علمی و شورای داوری:</div>
+              <div style="font-size: 13px; font-weight: 700; color: #78350f; margin: 2px 0;">تاییدشده توسط شورای علمی</div>
+              <div style="font-size: 11.5px; color: #4b5563;">{{ article.scientific_reviewer }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- مراجع دانشگاهی و منابع کهن (DOI & Pharmacopoeia) -->
+        <div>
+          <div style="font-size: 12.5px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            {% razavi_icon 'book' size=16 class='text-gold' %}
+            <span>منابع اصیل طب سنتی، فارماکوپه گیاهی و شناسه‌های بالینی (DOI):</span>
+          </div>
+          <div style="font-size: 12px; line-height: 1.9; color: #475569; background: #ffffff; border: 1px solid #e5e7eb; border-radius: var(--radius-xs); padding: 12px 14px; font-family: monospace, inherit; direction: rtl; text-align: right;">
+            {{ article.academic_references|linebreaks }}
+          </div>
+        </div>
+
+      </div>
+
       <!-- باکس ارجاع و مشاوره رایگان انتهای مقاله -->
-      <div style="margin-top: 36px; background: linear-gradient(135deg, #143529 0%, #1b4133 100%); border-radius: var(--radius-sm); padding: 22px 24px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap;">
+      <div style="margin-top: 24px; background: linear-gradient(135deg, #143529 0%, #1b4133 100%); border-radius: var(--radius-sm); padding: 22px 24px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap;">
         <div>
           <h4 style="font-size: 15px; font-weight: 800; margin: 0 0 6px 0; color: #fff;">نیاز به راهنمایی پیرامون مزاج، تدابیر و مصرف گیاهان دارویی دارید؟</h4>
           <p style="font-size: 12px; opacity: 0.92; line-height: 1.6; margin: 0; color: #e2e8f0;">کارشناسان و درمانگران طب سنتی عطارخونه آماده ارائه مشاوره رایگان متناسب با پرونده سلامت شما هستند.</p>
@@ -109,7 +150,7 @@
         <h4 style="font-size: 14.5px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px 0;">دستیار هوشمند سلامت</h4>
         <p style="font-size: 11.5px; color: #64748b; line-height: 1.6; margin: 0 0 16px 0;">پیشنهاد تخصصی گیاهان دارویی مناسب عارضه شما و سنجش تداخل با داروهای مصرفی</p>
         <a href="{% url 'remedy:wizard' %}" class="btn-hero" style="display: block; width: 100%; padding: 10px 14px; font-size: 12.5px; text-decoration: none;">
-          ورود به عارضه‌یاب هوشمند »
+          ورود به عارضه‌یاب هوشمند
         </a>
       </div>
     </aside>

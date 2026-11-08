@@ -98,3 +98,21 @@ class FacetedSearchTestCase(TestCase):
         self.assertContains(res, "عصاره کاسنی خنک")
         self.assertNotContains(res, "دمنوش بابونه")
 
+    def test_product_detail_renders_coa_and_dosage(self):
+        res = self.client.get(reverse('catalog:product_detail', kwargs={'slug': self.p1.slug}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "شناسنامه ارزیابی فیتوشیمیایی")
+        self.assertContains(res, "فارماکوپه")
+        self.assertContains(res, "طبع و مزاج گیاه‌شناسی و مصلح اختصاصی")
+        self.assertContains(res, "دوز درمانی مجاز")
+
+    def test_category_get_display_image_fallback(self):
+        self.assertIn(".jpg", self.cat_tea.get_display_image)
+        self.assertIn(".jpg", self.cat_herb.get_display_image)
+
+    def test_product_list_pagination_context(self):
+        res = self.client.get(reverse('catalog:product_list'))
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('page_obj', res.context)
+        self.assertEqual(res.context['page_obj'].number, 1)
+

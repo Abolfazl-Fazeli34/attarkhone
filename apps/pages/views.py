@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.db.models import F
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import StaticPage, Article
 
 
@@ -10,14 +11,23 @@ class ArticleListView(View):
     کارگاه ۶ و ۲۷ (تولید محتوا و بهینه‌سازی سئو برای جذب ترافیک ارگانیک)
     """
     def get(self, request):
-        articles = Article.objects.filter(is_published=True).order_by('-created_at')
+        articles_qs = Article.objects.filter(is_published=True).order_by('-created_at')
         category = request.GET.get('category')
         if category:
-            articles = articles.filter(category=category)
+            articles_qs = articles_qs.filter(category=category)
         
         categories = Article.objects.filter(is_published=True).values_list('category', flat=True).distinct()
+        
+        paginator = Paginator(articles_qs, 6)
+        page_number = request.GET.get('page', 1)
+        try:
+            page_obj = paginator.page(page_number)
+        except (PageNotAnInteger, EmptyPage):
+            page_obj = paginator.page(1)
+
         return render(request, 'pages/article_list.html', {
-            'articles': articles,
+            'articles': page_obj,
+            'page_obj': page_obj,
             'categories': categories,
             'selected_category': category,
         })

@@ -16,11 +16,37 @@
 </head>
 <body>
 
-  <!-- هدر اصلی مطابق موکاپ -->
+  <!-- هدر اصلی مطابق موکاپ با چیدمان راست‌چین واقعی (RTL) -->
   <header class="site-header">
     <div class="container header-main">
-      
-      <!-- ۱. آیکون‌های سمت چپ (کاربری، علاقه‌مندی، سبد خرید) -->
+
+      <!-- ۱. لوگوی برند عطارخونه سمت راست در حالت RTL -->
+      <a href="{% url 'core:home' %}" class="brand-logo-link" title="صفحه نخست عطارخونه">
+        <div class="logo-shield-icon">
+          <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+            <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M18 7 L18 28" stroke="#1b4332" stroke-width="2" stroke-linecap="round"/>
+            <path d="M18 12 Q25 14 26 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M18 18 Q24 21 24 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M18 12 Q11 14 10 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M18 18 Q12 21 12 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-text-group">
+          <span class="logo-title">عطارخونه</span>
+          <span class="logo-subtitle">دانش کهن، سلامت مدرن</span>
+        </div>
+      </a>
+
+      <!-- ۲. فیلد جستجوی کپسولی وسط -->
+      <form class="header-search-wrap" action="{% url 'catalog:product_list' %}" method="get">
+        <input type="text" name="q" placeholder="جستجو در میان فرآورده‌های اصیل و گیاهان دارویی..." value="{{ request.GET.q }}">
+        <button type="submit" aria-label="جستجو">
+          {% razavi_icon 'search' size=16 %}
+        </button>
+      </form>
+
+      <!-- ۳. آیکون‌های سمت چپ در حالت RTL (کاربری، علاقه‌مندی، سبد خرید) -->
       <div class="header-user-icons">
         {% if user.is_authenticated %}
           <!-- منوی حساب کاربری وارد شده با دراپ‌داون -->
@@ -80,34 +106,10 @@
           <span class="cart-floating-badge" id="headerCartBadge">{{ cart_count|fa_digits }}</span>
         </a>
 
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="منو">☰</button>
-      </div>
-
-      <!-- ۲. فیلد جستجوی کپسولی وسط -->
-      <form class="header-search-wrap" action="{% url 'catalog:product_list' %}" method="get">
-        <input type="text" name="q" placeholder="جستجو در میان محصولات اصیل و گیاهان دارویی..." value="{{ request.GET.q }}">
-        <button type="submit" aria-label="جستجو">
-          {% razavi_icon 'search' size=16 %}
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="منو">
+          {% razavi_icon 'menu' size=20 %}
         </button>
-      </form>
-
-      <!-- ۳. لوگوی برند عطارخونه سمت راست -->
-      <a href="{% url 'core:home' %}" class="brand-logo-link">
-        <div class="logo-text-group">
-          <span class="logo-title">عطارخونه</span>
-          <span class="logo-subtitle">دانش کهن، سلامت مدرن</span>
-        </div>
-        <div class="logo-shield-icon">
-          <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
-            <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
-            <path d="M18 7 L18 28" stroke="#1b4332" stroke-width="2" stroke-linecap="round"/>
-            <path d="M18 12 Q25 14 26 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M18 18 Q24 21 24 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M18 12 Q11 14 10 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M18 18 Q12 21 12 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </a>
+      </div>
 
     </div>
 
@@ -144,7 +146,9 @@
       {% for msg in messages %}
         <div class="alert alert-{{ msg.tags }}">
           <span>{{ msg }}</span>
-          <span style="cursor:pointer;" onclick="this.parentElement.style.display='none'">✕</span>
+          <button type="button" style="background:none; border:none; cursor:pointer; color:inherit; display:inline-flex; align-items:center;" onclick="this.parentElement.style.display='none'" aria-label="بستن">
+            {% razavi_icon 'close' size=14 %}
+          </button>
         </div>
       {% endfor %}
     {% endif %}
@@ -155,41 +159,9 @@
     {% block content %}{% endblock %}
   </main>
 
-  <!-- فوتر اصولی، مدرن و هماهنگ با قالب عطارخونه -->
+  <!-- فوتر اصیل، کلاسیک و پالایش‌شده عطارخونه -->
   <footer class="site-footer">
     <div class="container">
-      
-      <!-- نوار نمادهای اعتماد و ویژگی‌های برجسته بالای فوتر -->
-      <div class="footer-trust-strip">
-        <div class="trust-item">
-          <span class="trust-item-icon">🌿</span>
-          <div>
-            <div class="trust-item-title">۱۰۰٪ گیاهی و ارگانیک</div>
-            <div class="trust-item-desc">محصولات آزمایشگاهی و تاییدشده</div>
-          </div>
-        </div>
-        <div class="trust-item">
-          <span class="trust-item-icon">📦</span>
-          <div>
-            <div class="trust-item-title">بسته‌بندی سبز کرافت</div>
-            <div class="trust-item-desc">دوستدار محیط زیست و تجزیه‌پذیر</div>
-          </div>
-        </div>
-        <div class="trust-item">
-          <span class="trust-item-icon">🚚</span>
-          <div>
-            <div class="trust-item-title">ارسال سریع کشوری</div>
-            <div class="trust-item-desc">با پست پیشتاز، تیپاکس و پیک</div>
-          </div>
-        </div>
-        <div class="trust-item">
-          <span class="trust-item-icon">↩️</span>
-          <div>
-            <div class="trust-item-title">ضمانت بازگشت وجه</div>
-            <div class="trust-item-desc">۷ روز در صورت عدم رضایت</div>
-          </div>
-        </div>
-      </div>
 
       <!-- ۴ ستون اصلی محتوای فوتر -->
       <div class="footer-grid">
@@ -210,11 +182,24 @@
               <span style="font-size: 10px; color: var(--primary); font-weight: 600;">دانش کهن، سلامت مدرن</span>
             </div>
           </a>
-          <p style="margin-bottom: 10px;">
-            مرجع تخصصی گیاهان دارویی دست‌چین، دمنوش‌های طبیعی و دستیار هوشمند سلامت با سنجش تداخلات دارویی.
+          <p style="margin-bottom: 12px; font-size: 12.5px; line-height: 1.8; color: #4b5563;">
+            مرجع تخصصی گیاهان دارویی دست‌چین، کاتالوگ فرآورده‌های سنتی و دستیار هوشمند سلامت با سنجش علمی تداخلات دارویی و گواهی آنالیز آزمایشگاهی (COA).
           </p>
-          <div style="font-size: 11px; color: var(--primary); font-weight: 600; background: #f0fdf4; padding: 6px 10px; border-radius: var(--radius-xs); border: 1px solid var(--primary-border); display: inline-block;">
-            🌱 تضمین اصالت و ۱۰۰٪ ارگانیک با نشان سیب سلامت
+
+          <!-- تاییدیه‌ها و مجوزهای حقوقی و رگولاتوری -->
+          <div class="footer-regulatory-badges">
+            <div class="reg-badge-item">
+              {% razavi_icon 'shield' size=15 class='text-primary' %}
+              <span>نظارت جهاد کشاورزی: ۱۱۴۰۸/ج</span>
+            </div>
+            <div class="reg-badge-item">
+              {% razavi_icon 'check-circle' size=15 class='text-primary' %}
+              <span>سیب سلامت غذا و دارو: ۱۴۰۳/۴۹۸۲۱</span>
+            </div>
+            <div class="reg-badge-item">
+              {% razavi_icon 'certificate' size=15 class='text-primary' %}
+              <span>شناسه ثبت سامانه جامع تجارت و اینماد</span>
+            </div>
           </div>
         </div>
 
@@ -224,6 +209,8 @@
             <li><a href="{% url 'catalog:product_list' %}">فروشگاه و کاتالوگ محصولات</a></li>
             <li><a href="{% url 'remedy:wizard' %}">دستیار هوشمند سلامت</a></li>
             <li><a href="{% url 'orders:tracking' %}">پیگیری آنلاین وضعیت سفارش</a></li>
+            <li><a href="{% url 'pages:article_list' %}">دانشنامه و مقالات علمی</a></li>
+            <li><a href="{% url 'core:workshops_guide' %}" style="color: var(--primary); font-weight: 700;">دوسیه دفاع پروژه و ۲۷ کارگاه کتاب</a></li>
             <li><a href="{% url 'pages:contact_us' %}">مشاوره تخصصی و پشتیبانی</a></li>
           </ul>
         </div>
@@ -244,19 +231,19 @@
         <div class="footer-col">
           <h4>اطلاعات تماس و پشتیبانی</h4>
           <div class="footer-contact-item">
-            <span>📍</span>
+            {% razavi_icon 'location' size=16 class='text-primary' %}
             <span>{{ store_setting.address }}</span>
           </div>
           <div class="footer-contact-item">
-            <span>📞</span>
+            {% razavi_icon 'call' size=16 class='text-primary' %}
             <span>تلفن ثابت: <b>{{ store_setting.phone|fa_digits }}</b></span>
           </div>
           <div class="footer-contact-item">
-            <span>📱</span>
+            {% razavi_icon 'mobile-phone-smartphone' size=16 class='text-primary' %}
             <span>پشتیبانی پیامکی: <b>{{ store_setting.mobile|fa_digits }}</b></span>
           </div>
           <div class="footer-contact-item">
-            <span>✉️</span>
+            {% razavi_icon 'email' size=16 class='text-primary' %}
             <span>رایانامه رسمی: <b>{{ store_setting.email }}</b></span>
           </div>
 

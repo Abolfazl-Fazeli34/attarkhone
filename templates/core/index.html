@@ -6,28 +6,71 @@
 {% block content %}
 <div class="container" style="margin-top: 14px;">
 
-  <!-- ۱. بنر قهرمان صفحه اصلی (عین موکاپ ارائه‌شده) -->
-  <section class="mockup-hero-banner">
-    <div class="hero-overlay">
-      <div class="hero-text-content">
-        <h1 class="hero-brand-name">عطارخونه</h1>
-        <h2 class="hero-tagline">دانش کهن، سلامت مدرن؛<br>انتخاب آگاهانه گیاهان دارویی</h2>
-        <p class="hero-desc">
-          با دستیار هوشمند سلامت از مشاوره تا خرید، همیشه در کنار شما هستیم.
-        </p>
+  <!-- ۱. اسلایدر چنداسلایده تعاملی و مجلل هیرو (کارگاه ۷) -->
+  <section class="hero-slider-wrap" id="heroSlider" aria-label="اسلایدر ویژه عطارخونه">
+    <div class="hero-slides-track">
+      {% for s in sliders %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}">
+          <div class="hero-slide-bg" style="background-image: url('{% if s.image %}{{ s.image.url }}{% elif forloop.counter == 1 %}{% static 'img/products/real_tea.jpg' %}{% elif forloop.counter == 2 %}{% static 'img/categories/cat_tea.jpg' %}{% else %}{% static 'img/categories/cat_packages.jpg' %}{% endif %}');"></div>
+          <div class="hero-slide-overlay">
+            <div class="hero-text-content">
+              <span class="hero-badge-pill">
+                {% razavi_icon 'sparkles' size=14 class='text-gold' %}
+                <span>{% if forloop.counter == 1 %}دانش کهن، سلامت مدرن{% elif forloop.counter == 2 %}جشنواره گیاهان اصیل{% else %}پکیج‌های درمانی تخصصی{% endif %}</span>
+              </span>
+              <h1 class="hero-brand-name">عطارخونه</h1>
+              <h2 class="hero-tagline">{{ s.title }}</h2>
+              <p class="hero-desc">{{ s.subtitle }}</p>
 
-        <div class="hero-actions-row">
-          <a href="{% url 'remedy:consultation' %}" class="btn-amber-remedy">
-            {% razavi_icon 'call' size=18 %}
-            <span>مشاوره سلامت رایگان</span>
-          </a>
-
-          <a href="{% url 'pages:page_detail' slug='about-us' %}" class="btn-outline-intro">
-            {% razavi_icon 'play' size=16 %}
-            <span>معرفی عطارخونه</span>
-          </a>
+              <div class="hero-actions-row">
+                {% if forloop.counter == 1 %}
+                  <a href="{% url 'remedy:wizard' %}" class="btn-amber-remedy">
+                    {% razavi_icon 'sparkles' size=18 %}
+                    <span>عارضه‌یاب هوشمند سلامت</span>
+                  </a>
+                  <a href="{% url 'remedy:consultation' %}" class="btn-outline-intro">
+                    {% razavi_icon 'call' size=16 %}
+                    <span>مشاوره تخصصی رایگان</span>
+                  </a>
+                {% elif forloop.counter == 2 %}
+                  <a href="/shop/?cat=damnoosh" class="btn-amber-remedy">
+                    {% razavi_icon 'shopping-cart-trolley' size=18 %}
+                    <span>مشاهده دمنوش‌های اصیل</span>
+                  </a>
+                  <a href="{% url 'catalog:product_list' %}" class="btn-outline-intro">
+                    {% razavi_icon 'tag' size=16 %}
+                    <span>تخفیف‌های ویژه کاتالوگ</span>
+                  </a>
+                {% else %}
+                  <a href="/shop/?cat=therapy-packages" class="btn-amber-remedy">
+                    {% razavi_icon 'package' size=18 %}
+                    <span>مشاهده پک‌های درمانی</span>
+                  </a>
+                  <a href="{% url 'remedy:consultation' %}" class="btn-outline-intro">
+                    {% razavi_icon 'profile' size=16 %}
+                    <span>مشاوره با داروساز سنتی</span>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      {% endfor %}
+    </div>
+
+    <!-- دکمه‌های ناوبری دستی اسلایدر -->
+    <button type="button" class="hero-nav-btn hero-nav-prev" id="heroPrevBtn" aria-label="اسلاید قبلی">
+      {% razavi_icon 'chevron-right' size=20 %}
+    </button>
+    <button type="button" class="hero-nav-btn hero-nav-next" id="heroNextBtn" aria-label="اسلاید بعدی">
+      {% razavi_icon 'chevron-left' size=20 %}
+    </button>
+
+    <!-- اندیکاتورهای نقطه‌ای پایین -->
+    <div class="hero-dots" id="heroDots">
+      {% for s in sliders %}
+        <button type="button" class="hero-dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="اسلاید {{ forloop.counter|fa_digits }}"></button>
+      {% endfor %}
     </div>
   </section>
 
@@ -39,7 +82,7 @@
       </div>
       <div class="feature-text">
         <h4>مشاوره تخصصی رایگان</h4>
-        <p>با پزشکان و متخصصان طب سنتی</p>
+        <p>با پزشکان و داروسازان طب سنتی</p>
       </div>
     </div>
 
@@ -48,18 +91,18 @@
         {% razavi_icon 'shield' size=22 class='text-primary' %}
       </div>
       <div class="feature-text">
-        <h4>تضمین اصالت کالا</h4>
-        <p>آزمایش و تایید کیفیت دارویی</p>
+        <h4>شناسنامه آزمایشگاهی COA</h4>
+        <p>سنجش فیتوشیمیایی و خلوص دارویی</p>
       </div>
     </div>
 
     <div class="feature-item-card">
       <div class="feature-icon-box">
-        {% razavi_icon 'truck' size=22 class='text-primary' %}
+        {% razavi_icon 'package' size=22 class='text-primary' %}
       </div>
       <div class="feature-text">
-        <h4>ارسال سریع و مطمئن</h4>
-        <p>بسته‌بندی سبز به سراسر کشور</p>
+        <h4>لجستیک چندحاملی مطمئن</h4>
+        <p>ارسال با پیشتاز، تیپاکس و پیک سلامت</p>
       </div>
     </div>
 
@@ -68,136 +111,122 @@
         {% razavi_icon 'refresh' size=22 class='text-primary' %}
       </div>
       <div class="feature-text">
-        <h4>بازگشت وجه بدون قید و شرط</h4>
-        <p>در صورت عدم رضایت خریدار</p>
+        <h4>ضمانت بازگشت وجه</h4>
+        <p>طبق قوانین تجارت الکترونیک</p>
       </div>
     </div>
   </section>
 
-  <!-- ۳. اسلایدر دسته‌بندی محصولات با تصویر موکاپ -->
-  <section class="mockup-categories-section">
-    <div class="cat-section-title-wrap">
-      <span class="carousel-arrow">{% razavi_icon 'chevron-right' size=16 %}</span>
-      <h3 class="cat-section-title">دسته‌بندی 🌿 محصولات</h3>
-      <span class="carousel-arrow">{% razavi_icon 'chevron-left' size=16 %}</span>
-    </div>
-
-    <div class="cat-cards-grid">
-      <!-- ۱. دمنوش‌ها -->
-      <a href="/shop/category/damnoosh/" class="cat-circle-card">
-        <div class="cat-img-wrap">
-          <img src="{% static 'img/categories/cat_tea.jpg' %}" alt="دمنوش‌ها">
-        </div>
-        <span class="cat-title-label">دمنوش‌ها</span>
-      </a>
-
-      <!-- ۲. گیاهان دارویی -->
-      <a href="/shop/category/herbs/" class="cat-circle-card">
-        <div class="cat-img-wrap">
-          <img src="{% static 'img/categories/cat_herbs.jpg' %}" alt="گیاهان دارویی">
-        </div>
-        <span class="cat-title-label">گیاهان دارویی</span>
-      </a>
-
-      <!-- ۳. عصاره‌ها و روغن‌ها -->
-      <a href="/shop/category/extracts-oils/" class="cat-circle-card">
-        <div class="cat-img-wrap">
-          <img src="{% static 'img/categories/cat_oils.jpg' %}" alt="عصاره‌ها و روغن‌ها">
-        </div>
-        <span class="cat-title-label">عصاره‌ها و روغن‌ها</span>
-      </a>
-
-      <!-- ۴. ادویه‌های گیاهی -->
-      <a href="/shop/category/herbal-spices/" class="cat-circle-card">
-        <div class="cat-img-wrap">
-          <img src="{% static 'img/categories/cat_spices.jpg' %}" alt="ادویه‌های گیاهی">
-        </div>
-        <span class="cat-title-label">ادویه‌های گیاهی</span>
-      </a>
-
-      <!-- ۵. محصولات سلامتی -->
-      <a href="/shop/category/wellness-products/" class="cat-circle-card">
-        <div class="cat-img-wrap">
-          <img src="{% static 'img/categories/cat_wellness.jpg' %}" alt="محصولات سلامتی">
-        </div>
-        <span class="cat-title-label">محصولات سلامتی</span>
-      </a>
-
-      <!-- ۶. پک‌های درمانی -->
-      <a href="/shop/category/therapy-packages/" class="cat-circle-card">
-        <div class="cat-img-wrap">
-          <img src="{% static 'img/categories/cat_packages.jpg' %}" alt="پک‌های درمانی">
-        </div>
-        <span class="cat-title-label">پک‌های درمانی</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ۴. محصولات شاخص فروشگاه مطابق موکاپ -->
-  <section style="margin: 28px 0;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <h3 style="font-size: 15px; font-weight: 700; color: #143529; display: flex; align-items: center; gap: 6px;">
-        {% razavi_icon 'sparkles' size=18 class='text-gold' %}
-        <span>محصولات پرطرفدار و منتخب عطارخونه</span>
-      </h3>
-      <a href="{% url 'catalog:product_list' %}" style="font-size: 12px; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 4px;">
-        <span>مشاهده همه کاتالوگ</span>
+  <!-- ۳. ویترین کلاسیک و مجلل دسته‌بندی فرآورده‌های گیاهی متصل به دیتابیس (کارگاه ۱۱) -->
+  <section class="botanical-categories-showcase">
+    <div class="section-classic-header">
+      <div class="header-text-block">
+        <h3 class="section-title-classic">
+          <span class="gold-accent-line"></span>
+          <span>دسته‌بندی فرآورده‌های گیاهی</span>
+        </h3>
+        <p class="section-subtitle-classic">مجموعه‌ای فاخر از مفردات دارویی، دمنوش‌های دست‌چین و فرمولاسیون‌های اصیل سنتی</p>
+      </div>
+      <a href="{% url 'catalog:product_list' %}" class="section-link-more">
+        <span>مشاهده همه دسته‌ها</span>
         {% razavi_icon 'arrow-left' size=14 %}
       </a>
     </div>
 
-    <div class="products-grid">
-      {% for product in featured_products %}
-        <div class="product-card">
-          <div class="product-img-box">
-            <button type="button" class="btn-wishlist-toggle" data-product-id="{{ product.id }}" title="افزودن به علاقه‌مندی‌ها">
-              {% razavi_icon 'heart' size=17 %}
-            </button>
-            <img src="{{ product.get_display_image }}" alt="{{ product.name }}" loading="lazy">
+    <div class="botanical-cat-grid">
+      {% for cat in categories %}
+        <a href="{{ cat.get_absolute_url }}" class="botanical-cat-card" title="{{ cat.name }}">
+          <div class="cat-card-media">
+            <img src="{{ cat.get_display_image }}" alt="{{ cat.name }}" loading="lazy">
+            <div class="cat-card-overlay"></div>
           </div>
-
-          <div class="product-info">
-            <h3 class="product-title">
-              <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-            </h3>
-
-            {% if product.scientific_name %}
-              <div style="font-size: 10px; color: #5a7367; font-style: italic; direction: ltr; text-align: right; margin-top: -3px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                {{ product.scientific_name }}
-              </div>
-            {% endif %}
-
-            <!-- ستاره‌های امتیاز ۵ تایی با آیکون وکتور رضوی -->
-            <div class="product-rating-stars">
-              <span style="color: var(--gold); display: flex; gap: 2px;">
-                {% razavi_icon 'star' size=13 fill='var(--gold)' %}
-                {% razavi_icon 'star' size=13 fill='var(--gold)' %}
-                {% razavi_icon 'star' size=13 fill='var(--gold)' %}
-                {% razavi_icon 'star' size=13 fill='var(--gold)' %}
-                {% razavi_icon 'star' size=13 fill='var(--gold)' %}
-              </span>
-              <span class="rating-num">۴.۹</span>
-            </div>
-
-            <div class="product-price-box">
-              <div class="price-values">
-                {% if product.discount_percent > 0 %}
-                  <span class="old-price">{{ product.base_price|toman }}</span>
-                {% endif %}
-                <span class="current-price">{{ product.final_price|toman }}</span>
-              </div>
-              
-              <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post" class="ajax-add-cart-form" data-product-id="{{ product.id }}">
-                {% csrf_token %}
-                <button type="submit" class="btn-card-add-cart">
-                  {% razavi_icon 'shopping-cart-trolley' size=15 %}
-                  <span>افزودن به سبد</span>
-                </button>
-              </form>
-            </div>
+          <div class="cat-card-body">
+            <h4 class="cat-card-title">{{ cat.name }}</h4>
+            <span class="cat-card-count">{{ cat.products.count|fa_digits }} فرآورده دارویی</span>
           </div>
-        </div>
+        </a>
       {% endfor %}
+    </div>
+  </section>
+
+  <!-- ۴. اسلایدر افقی فرآورده‌های محبوب و منتخب عطارخونه (کارگاه ۱۸ و ۲۵) -->
+  <section class="popular-products-carousel-section">
+    <div class="section-classic-header">
+      <div class="header-text-block">
+        <h3 class="section-title-classic">
+          <span class="gold-accent-line"></span>
+          <span>محصولات پرطرفدار و منتخب عطارخونه</span>
+        </h3>
+        <p class="section-subtitle-classic">دارای برگه آنالیز آزمایشگاهی (COA)، نشان سیب سلامت و بالاترین میزان رضایت مشتریان</p>
+      </div>
+
+      <div class="carousel-nav-arrows">
+        <button type="button" class="carousel-arrow-btn" id="prodCarouselPrev" aria-label="قبلی">
+          {% razavi_icon 'chevron-right' size=18 %}
+        </button>
+        <button type="button" class="carousel-arrow-btn" id="prodCarouselNext" aria-label="بعدی">
+          {% razavi_icon 'chevron-left' size=18 %}
+        </button>
+      </div>
+    </div>
+
+    <div class="popular-carousel-wrapper">
+      <div class="popular-carousel-track" id="popularCarouselTrack">
+        {% for product in featured_products %}
+          <div class="product-card carousel-product-item">
+            <div class="product-img-box">
+              <button type="button" class="btn-wishlist-toggle" data-product-id="{{ product.id }}" title="افزودن به علاقه‌مندی‌ها">
+                {% razavi_icon 'heart' size=17 %}
+              </button>
+              <img src="{{ product.get_display_image }}" alt="{{ product.name }}" loading="lazy">
+              {% if product.is_organic %}
+                <span class="badge-organic-seal">تاییدیه COA</span>
+              {% endif %}
+            </div>
+
+            <div class="product-info">
+              <h3 class="product-title">
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+              </h3>
+
+              {% if product.scientific_name %}
+                <div class="product-scientific-latin">
+                  {{ product.scientific_name }}
+                </div>
+              {% endif %}
+
+              <!-- ستاره‌های امتیاز ۵ تایی با آیکون وکتور رضوی -->
+              <div class="product-rating-stars">
+                <span style="color: var(--gold); display: flex; gap: 2px;">
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                  {% razavi_icon 'star' size=13 fill='var(--gold)' %}
+                </span>
+                <span class="rating-num">۴.۹</span>
+              </div>
+
+              <div class="product-price-box">
+                <div class="price-values">
+                  {% if product.discount_percent > 0 %}
+                    <span class="old-price">{{ product.base_price|toman }}</span>
+                  {% endif %}
+                  <span class="current-price">{{ product.final_price|toman }}</span>
+                </div>
+                
+                <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post" class="ajax-add-cart-form" data-product-id="{{ product.id }}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-card-add-cart" title="افزودن به سبد خرید">
+                    {% razavi_icon 'shopping-cart-trolley' size=15 %}
+                    <span>افزودن</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
   </section>
 

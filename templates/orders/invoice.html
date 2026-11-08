@@ -41,7 +41,10 @@
         <div>تاریخ صدور: <b>{{ order.created_at|date:"Y/m/d - H:i" }}</b></div>
         <div>وضعیت پرداخت: 
           {% if order.is_paid %}
-            <span style="color: #15803d; font-weight: bold;">پرداخت شده ✓</span>
+            <span style="color: #15803d; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">
+              <span>پرداخت شده</span>
+              {% razavi_icon 'check-circle' size=14 %}
+            </span>
           {% else %}
             <span style="color: #b91c1c; font-weight: bold;">در انتظار پرداخت</span>
           {% endif %}
@@ -152,7 +155,10 @@
     <!-- پیام کادوپیچی -->
     {% if order.is_gift_wrapped and order.gift_message %}
       <div style="margin: 24px 0; background: #fefce8; border: 1.5px dashed #fde047; padding: 14px 20px; border-radius: var(--radius-sm); font-size: 12.5px;">
-        <b style="color: #854d0e;">💌 یادداشت اختصاصی کارت هدیه:</b>
+        <b style="color: #854d0e; display: inline-flex; align-items: center; gap: 5px;">
+          {% razavi_icon 'gift' size=15 %}
+          <span>یادداشت اختصاصی کارت هدیه:</span>
+        </b>
         <p style="margin-top: 6px; color: #713f12; font-style: italic; margin-bottom: 0;">«{{ order.gift_message }}»</p>
       </div>
     {% endif %}

@@ -34,6 +34,7 @@ urlpatterns = [
     # میانبرهای کاربردی جهت دسترسی سریع
     path('cart/', RedirectView.as_view(url='/orders/cart/', permanent=False)),
     path('checkout/', RedirectView.as_view(url='/orders/checkout/', permanent=False)),
+    path('articles/', RedirectView.as_view(url='/pages/articles/', permanent=False)),
 
     # سئو و نقشه سایت (کارگاه ۲۶)
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),

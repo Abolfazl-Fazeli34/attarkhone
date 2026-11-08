@@ -35,3 +35,22 @@ class CoreWorkshopsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "آزمایش صحت ارتقا و سلامت سامانه")
         self.assertContains(response, "اتصال پایگاه داده")
+
+    def test_workshops_guide_renders_defense_dossier(self):
+        """تست دوسیه دفاع علمی و تجاری پروژه و ۲۷ کارگاه کتاب"""
+        response = self.client.get(reverse('core:workshops_guide'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "شناسنامه دفاع پروژه: انطباق کامل با ۲۷ کارگاه پودمان دوم")
+        self.assertContains(response, "دوسیه دفاع علمی و تجاری پروژه")
+        self.assertContains(response, "اصالت‌سنجی فرآورده‌های گیاهی")
+        self.assertContains(response, "اعتبار علمی مقالات آموزشی")
+        self.assertContains(response, "مدل درآمدزایی و توجیه اقتصادی")
+        self.assertContains(response, "انطباق کامل با پودمان دوم")
+
+    def test_persian_tags_calculate_old_price(self):
+        """تست فیلتر محاسبه قیمت اولیه قبل از تخفیف برای خط زدن قیمت"""
+        from core.templatetags.persian_tags import calculate_old_price
+        self.assertEqual(calculate_old_price(45000, 10), 50000)
+        self.assertEqual(calculate_old_price(195000, 10), 217000)
+        self.assertEqual(calculate_old_price(50000, 0), 50000)
+

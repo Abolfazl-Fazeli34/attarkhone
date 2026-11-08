@@ -33,4 +33,4 @@ class Command(BaseCommand):
             Brand.objects.all().delete()
             Supplier.objects.all().delete()
 
-        self.stdout.write(self.style.SUCCESS("✓ محتوای پیش‌فرض فروشگاه با موفقیت پاکسازی شد (کارگاه ۹)."))
+        self.stdout.write(self.style.SUCCESS("محتوای پیش‌فرض فروشگاه با موفقیت پاکسازی شد (کارگاه ۹)."))

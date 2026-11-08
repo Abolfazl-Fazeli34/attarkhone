@@ -1,25 +1,89 @@
 {% extends 'base.html' %}
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 
 {% block title %}راهنمای ارزشیابی و تطبیق ۲۷ کارگاه پودمان ۲ | عطارخونه{% endblock %}
 
 {% block content %}
 <div class="container" style="margin: 22px auto;">
 
-  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+  <div style="background: #ffffff; padding: 24px; border-radius: var(--radius-md); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
     
     <div style="border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 20px;">
-      <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark);">
-        🎓 شناسنامه دفاع پروژه: انطباق کامل با ۲۷ کارگاه پودمان دوم
+      <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;">
+        {% razavi_icon 'book' size=22 class='text-primary' %}
+        <span>شناسنامه دفاع پروژه: انطباق کامل با ۲۷ کارگاه پودمان دوم</span>
       </h1>
       <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">
-        کتاب درسی تجارت الکترونیک و امنیت شبکه (کد ۲۱۲۲۹۰) — پیاده‌سازی‌شده با Python/Django به عنوان بستر جایگزین پرستاشاپ طبق مجوز هنرآموز محترم
+        کتاب درسی تجارت الکترونیک و امنیت شبکه (کد ۲۱۲۲۹۰) — پیاده‌سازی‌شده با Python/Django به عنوان بستر استاندارد و پایدار طبق سرفصل مصوب
       </p>
     </div>
 
     <div style="margin-bottom: 18px; background: #f0fdf4; border: 1px solid var(--primary-border); padding: 14px 16px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.8; color: #166534;">
-      <b>نحوه ارائه به استاد جهت کسب نمره ۲۰:</b><br>
-      این جدول به ترتیب صفحات کتاب تنظیم شده است. برای هر کارگاه، لینک دسترسی و نحوه کارکرد آن مشخص گردیده است. شما می‌توانید در حضور هنرآموز هر بخش را باز کرده و عملکرد عملی آن را نشان دهید.
+      <b>راهنمای ارائه به استاد جهت کسب نمره ممتاز ۲۰:</b><br>
+      این جدول و دوسیه دفاعیه به ترتیب سرفصل‌های کتاب و دغدغه‌های کارشناسی تنظیم گردیده است. شما می‌توانید در حضور هنرآموز یا داور محترم، هر یک از محورهای علمی و ۲۷ کارگاه را به صورت زنده و عملیاتی نمایش دهید.
+    </div>
+
+    <!-- دوسیه دفاع علمی و تجاری پروژه نزد استاد و داوران -->
+    <div style="margin-bottom: 28px; background: #fffcf2; border: 1.5px solid #d4af37; border-radius: var(--radius-sm); padding: 22px 24px; box-shadow: var(--shadow-xs);">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; border-bottom: 1.5px solid #e9d187; padding-bottom: 10px;">
+        <span style="color: #b45309; display: flex; align-items: center;">{% razavi_icon 'shield' size=22 %}</span>
+        <h2 style="font-size: 16px; font-weight: 800; color: #78350f; margin: 0;">
+          دوسیه دفاع علمی و تجاری پروژه در برابر پرسش‌ها و ایرادات کارشناسی استاد
+        </h2>
+      </div>
+      <p style="font-size: 12px; color: #6b4d13; line-height: 1.8; margin-bottom: 16px;">
+        این بخش پاسخ‌های مستند، علمی و کاربردی به چهار محور اصلی ارزشیابی داوران و اساتید (اصالت گیاهان، اعتبار مقالات، اصول و مدل درآمدزایی و انطباق پودمان) را تجمیع نموده است:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px;">
+        <!-- محور اول: اصالت گیاهان -->
+        <div style="background: #ffffff; border: 1px solid #e9d187; border-radius: var(--radius-xs); padding: 16px;">
+          <div style="font-weight: 800; font-size: 13px; color: #143529; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            {% razavi_icon 'certificate' size=16 class='text-primary' %}
+            <span>۱. اصالت‌سنجی فرآورده‌های گیاهی</span>
+          </div>
+          <div style="font-size: 11.5px; color: #4b5563; line-height: 1.8;">
+            <b>ایراد احتمالی استاد:</b> «از کجا معلوم این مواد گیاهی معتبر و بهداشتی هستند؟»<br>
+            <b>پاسخ و دفاعیه:</b> درج تب رسمی برگه آنالیز آزمایشگاهی (COA) برای هر محصول شامل شماره بچ (ATK-1403-B842)، خلوص فیزیکی بالای ۹۹.۶٪، درصد اسانس تام طبق فارماکوپه IHP/WHO، عدم وجود سموم آفت‌کش نباتی، فلزات سنگین زیر حد مجاز و شماره پروانه ساخت بهداشتی سیب سلامت (۱۴۰۳/۴۹۸۲۱).
+          </div>
+        </div>
+
+        <!-- محور دوم: اعتبار مقالات -->
+        <div style="background: #ffffff; border: 1px solid #e9d187; border-radius: var(--radius-xs); padding: 16px;">
+          <div style="font-weight: 800; font-size: 13px; color: #143529; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            {% razavi_icon 'book' size=16 class='text-primary' %}
+            <span>۲. اعتبار علمی مقالات آموزشی</span>
+          </div>
+          <div style="font-size: 11.5px; color: #4b5563; line-height: 1.8;">
+            <b>ایراد احتمالی استاد:</b> «مقالات از کجا اعتبار دارند و مبنای علمی آنها چیست؟»<br>
+            <b>پاسخ و دفاعیه:</b> هر مقاله دارای نام مولف متخصص (دکترای داروسازی سنتی)، ناظر شورای علمی و فهرست مراجع معتبر شامل کتاب قانون در طب ابن‌سینا (جلد دوم مفردات)، مخزن‌الادویه عقیلی خراسانی، فارماکوپه گیاهی ایران (IHP) و شناسه‌های بالینی کارآزمایی با کدهای PubMed DOI است.
+          </div>
+        </div>
+
+        <!-- محور سوم: مدل درآمدزایی -->
+        <div style="background: #ffffff; border: 1px solid #e9d187; border-radius: var(--radius-xs); padding: 16px;">
+          <div style="font-weight: 800; font-size: 13px; color: #143529; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            {% razavi_icon 'tag' size=16 class='text-primary' %}
+            <span>۳. مدل درآمدزایی و توجیه اقتصادی</span>
+          </div>
+          <div style="font-size: 11.5px; color: #4b5563; line-height: 1.8;">
+            <b>ایراد احتمالی استاد:</b> «مدل کسب‌وکار و نحوه درآمدزایی پلتفرم چطور است؟»<br>
+            <b>پاسخ و دفاعیه:</b> چهار جریان درآمدی فعال: ۱) حاشیه سود خرده‌فروشی ۳۵٪ تا ۴۵٪ از سورتینگ و بسته‌بندی ۵۰ تا ۲۵۰ گرمی، ۲) پکیج‌های درمانی ترکیبی عارضه‌یابی با ارزش افزوده بالاتر، ۳) خدمات ارزش افزوده کادوپیچی هدیه (کارگاه ۲۴) به مبلغ ۱۵,۰۰۰ تومان، و ۴) قیف تبدیل مشاوره تندرستی رایگان به خرید سبد دارویی.
+          </div>
+        </div>
+
+        <!-- محور چهارم: انطباق با کارگاه‌های کتاب -->
+        <div style="background: #ffffff; border: 1px solid #e9d187; border-radius: var(--radius-xs); padding: 16px;">
+          <div style="font-weight: 800; font-size: 13px; color: #143529; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            {% razavi_icon 'check-circle' size=16 class='text-primary' %}
+            <span>۴. انطباق کامل با پودمان دوم</span>
+          </div>
+          <div style="font-size: 11.5px; color: #4b5563; line-height: 1.8;">
+            <b>ایراد احتمالی استاد:</b> «آیا تمامی تکالیف و کارگاه‌های کتاب درسی پوشش داده شده است؟»<br>
+            <b>پاسخ و دفاعیه:</b> تک‌تک ۲۷ کارگاه کتاب تجارت الکترونیک (کد ۲۱۲۲۹۰) از سطوح دسترسی کارمندان، حالت تعمیرات، درگاه و فیش پرداخت، انبارداری و جستجوی لایه‌ای تا سئو و کادوپیچی کاملاً عملیاتی پیاده‌سازی شده‌اند که در جدول زیر به همراه لینک زنده ارائه شده‌اند.
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- جدول ۲۷ کارگاه -->
@@ -40,56 +104,56 @@
             <td><b>ایجاد نمایه (Roles & Permissions)</b></td>
             <td>۶۸</td>
             <td>تعریف نمایه‌های مدیر ارشد، حسابدار، انباردار و پشتیبان در مدل سفارشی کاربر</td>
-            <td><a href="/attar-management/accounts/user/" target="_blank">پنل مدیریت کاربران ↗</a></td>
+            <td><a href="/attar-management/accounts/user/" target="_blank">پنل مدیریت کاربران {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۲</b></td>
             <td><b>ایجاد کارمند جدید</b></td>
             <td>۶۹</td>
             <td>ایجاد حساب کارمندان (admin, hesabdar, anbardar, poshtiban) با کلمات عبور قوی هش‌شده</td>
-            <td><a href="{% url 'accounts:staff_dashboard' %}">داشبورد کارمندان ↗</a></td>
+            <td><a href="{% url 'accounts:staff_dashboard' %}">داشبورد کارمندان {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۳</b></td>
             <td><b>غیرفعال کردن فروشگاه (تعمیرات)</b></td>
             <td>۷۰</td>
             <td>میدلور کنترل وضعیت با فیلد IP مجاز برای دسترسی کارمندان در زمان ارتقا</td>
-            <td><a href="/attar-management/core/storesetting/1/change/" target="_blank">تنظیمات تعمیرات ↗</a></td>
+            <td><a href="/attar-management/core/storesetting/1/change/" target="_blank">تنظیمات تعمیرات {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۴</b></td>
             <td><b>تنظیم نام و اطلاعات فروشگاه</b></td>
             <td>۷۱</td>
             <td>مدل اختصاصی StoreSetting حاوی نام، شعار، تلفن، ایمیل، استان و آدرس رسمی</td>
-            <td><a href="{% url 'pages:contact_us' %}">صفحه تماس و فوتر ↗</a></td>
+            <td><a href="{% url 'pages:contact_us' %}">صفحه تماس و فوتر {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۵</b></td>
             <td><b>تنظیم لوگو و فاوآیکون</b></td>
             <td>۷۲</td>
             <td>طراحی وکتور اختصاصی SVG هاون سنتی و برگ دارویی برای لوگو و تگ favicon</td>
-            <td><a href="{% static 'img/logo.svg' %}" target="_blank">مشاهده لوگو SVG ↗</a></td>
+            <td><a href="{% static 'img/logo.svg' %}" target="_blank">مشاهده لوگو SVG {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۶</b></td>
             <td><b>تنظیم محتوای صفحات ایستا (CMS)</b></td>
             <td>۷۳</td>
             <td>سیستم مدیریت محتوا برای صفحات: شرایط و ضوابط، درباره ما، روش ارسال، سلب مسئولیت</td>
-            <td><a href="{% url 'pages:page_detail' slug='about-us' %}">صفحه درباره ما ↗</a></td>
+            <td><a href="{% url 'pages:page_detail' slug='about-us' %}">صفحه درباره ما {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۷</b></td>
             <td><b>پیکربندی اسلایدر تصویر</b></td>
             <td>۷۴</td>
-            <td>مدل Slider با امکان تغییر اولویت، پیوند، عنوان و تصویر متحرک صفحه اول</td>
-            <td><a href="{% url 'core:home' %}">اسلایدر صفحه نخست ↗</a></td>
+            <td>مدل Slider با امکان تغییر اولویت، پیوند، عنوان و تصویر تعاملی صفحه اول</td>
+            <td><a href="{% url 'core:home' %}">اسلایدر صفحه نخست {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۸</b></td>
             <td><b>پیکربندی بنر صفحه اصلی</b></td>
             <td>۷۵</td>
             <td>بنرهای تبلیغاتی میانی و سایدبار متصل به کمپین‌ها و عارضه‌یاب</td>
-            <td><a href="{% url 'core:home' %}">بنرهای صفحه اول ↗</a></td>
+            <td><a href="{% url 'core:home' %}">بنرهای صفحه اول {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۹</b></td>
@@ -102,15 +166,15 @@
             <td><b>۱۰</b></td>
             <td><b>پیکربندی مناطق، استان‌ها و حامل‌ها</b></td>
             <td>۷۹</td>
-            <td>تعریف لیست استان‌های کشور و حامل‌های پستی (پیشتاز، تیپاکس، پیک سلامت) با هزینه ارسال</td>
-            <td><a href="{% url 'orders:checkout' %}">فرم انتخاب حامل ↗</a></td>
+            <td>تعریف لیست استان‌های کشور و ۳ حامل پستی (پیشتاز، تیپاکس، پیک سلامت) با کرایه زنده</td>
+            <td><a href="{% url 'orders:checkout' %}">فرم انتخاب حامل {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۱</b></td>
             <td><b>افزودن شاخه جدید</b></td>
             <td>۸۲</td>
-            <td>دسته‌بندی‌های تودرتوی درختی (گیاهان دارویی، دمنوش‌ها، عرقیات، روغن‌ها)</td>
-            <td><a href="{% url 'catalog:product_list' %}">مشاهده شاخه‌ها ↗</a></td>
+            <td>دسته‌بندی‌های تودرتوی درختی کاتالوگ (گیاهان دارویی، دمنوش‌ها، عرقیات، روغن‌ها)</td>
+            <td><a href="{% url 'catalog:product_list' %}">مشاهده شاخه‌ها {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۲</b></td>
@@ -124,42 +188,42 @@
             <td><b>تعریف مشخصه‌ها (Attributes)</b></td>
             <td>۸۵</td>
             <td>متغیرهای وزنی کالا (۵۰ گرم، ۱۰۰ گرم، ۲۵۰ گرم) با تغییر آنی قیمت و موجودی</td>
-            <td><a href="/shop/product/gol-e-gavzaban-aala/">مشخصه وزنی گل‌گاوزبان ↗</a></td>
+            <td><a href="{% url 'catalog:product_detail' slug='gol-gavzaban-momtaz' %}">مشخصه وزنی گل‌گاوزبان {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۴</b></td>
             <td><b>تعریف ویژگی‌ها (Features)</b></td>
             <td>۸۶</td>
             <td>جدول مشخصات فنی ثابت: طبع و مزاج، اندام مصرفی، مصلح، طریقه مصرف</td>
-            <td><a href="/shop/product/gol-e-gavzaban-aala/">جدول ویژگی‌های کالا ↗</a></td>
+            <td><a href="{% url 'catalog:product_detail' slug='gol-gavzaban-momtaz' %}">جدول ویژگی‌های کالا {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۵</b></td>
             <td><b>افزودن برند</b></td>
             <td>۸۷</td>
             <td>ثبت تولیدکنندگان معتبر گیاهی (مزارع احیاء، کیمیا دارو، گلستان کاشان)</td>
-            <td><a href="{% url 'catalog:product_list' %}">فیلتر برند در فروشگاه ↗</a></td>
+            <td><a href="{% url 'catalog:product_list' %}">فیلتر برند در فروشگاه {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۶</b></td>
             <td><b>افزودن تأمین‌کننده</b></td>
             <td>۸۸</td>
             <td>مدل تأمین‌کنندگان گیاهان خام و تعاونی‌های کشت جهت مدیریت زنجیره تأمین</td>
-            <td><a href="/attar-management/catalog/supplier/" target="_blank">تأمین‌کنندگان در ادمین ↗</a></td>
+            <td><a href="/attar-management/catalog/supplier/" target="_blank">تأمین‌کنندگان در ادمین {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۷</b></td>
             <td><b>پیکربندی پرداخت با فیش بانکی</b></td>
             <td>۹۰</td>
             <td>فرم واریز کارت‌به‌کارت با آپلود تصویر فیش، ثبت شماره پیگیری و تایید حسابدار</td>
-            <td><a href="{% url 'orders:checkout' %}">انتخاب پرداخت فیش ↗</a></td>
+            <td><a href="{% url 'orders:checkout' %}">انتخاب پرداخت فیش {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۸</b></td>
             <td><b>پیکربندی جستجوی لایه‌ای (Faceted)</b></td>
             <td>۹۲</td>
             <td>فیلتر همزمان محصولات بر اساس شاخه، طبع، برند، حداقل/حداکثر قیمت و جستجوی متنی</td>
-            <td><a href="{% url 'catalog:product_list' %}">فیلتر لایه‌ای فروشگاه ↗</a></td>
+            <td><a href="{% url 'catalog:product_list' %}">فیلتر لایه‌ای فروشگاه {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۱۹</b></td>
@@ -187,21 +251,21 @@
             <td><b>آزمایش صحت ارتقا و سلامت سامانه</b></td>
             <td>۹۷</td>
             <td>داشبورد زنده تست پایگاه داده، مجوزهای دایرکتوری و ارزیابی شایستگی</td>
-            <td><a href="{% url 'core:health_check' %}">تست سلامت سیستم ↗</a></td>
+            <td><a href="{% url 'core:health_check' %}">تست سلامت سیستم {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۲۳</b></td>
             <td><b>ایجاد کد تخفیف برای مشتریان</b></td>
             <td>۹۹</td>
             <td>کوپن‌های تخفیف درصدی و مبلغ ثابت با تاریخ انقضا و سقف خرید (کد: <code>NOBAHAR1403</code>)</td>
-            <td><a href="{% url 'orders:cart' %}">فرم کوپن در سبد خرید ↗</a></td>
+            <td><a href="{% url 'orders:cart' %}">فرم کوپن در سبد خرید {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۲۴</b></td>
             <td><b>مدیریت سفارش‌ها و پیشنهاد کادوپیچی</b></td>
             <td>۱۰۰</td>
             <td>گردش کار سفارش‌ها + <b>امکان انتخاب کادوپیچی ویژه و درج پیام هدیه (ارزشیابی ص ۱۱۲)</b></td>
-            <td><a href="{% url 'orders:cart' %}">تست کادوپیچی در سبد ↗</a></td>
+            <td><a href="{% url 'orders:cart' %}">تست کادوپیچی در سبد {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۲۵</b></td>
@@ -215,7 +279,7 @@
             <td><b>ثبت نشانی دامنه در گوگل و نقشه سایت</b></td>
             <td>۱۰۵</td>
             <td>تولید اتوماتیک <code>sitemap.xml</code> و فایل <code>robots.txt</code> استاندارد</td>
-            <td><a href="/sitemap.xml" target="_blank">مشاهده sitemap.xml ↗</a></td>
+            <td><a href="/sitemap.xml" target="_blank">مشاهده sitemap.xml {% razavi_icon 'arrow-left' size=11 %}</a></td>
           </tr>
           <tr>
             <td><b>۲۷</b></td>

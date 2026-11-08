@@ -103,9 +103,9 @@ img {
 
 .container {
   width: 100%;
-  max-width: 1140px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 24px;
 }
 
 /* ==========================================================================
@@ -141,7 +141,7 @@ img {
 .logo-text-group {
   display: flex;
   flex-direction: column;
-  text-align: left;
+  text-align: right;
 }
 
 .logo-title {
@@ -2490,8 +2490,13 @@ select:focus {
 }
 
 .toast-icon {
-  font-weight: 700;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-icon svg {
+  display: block;
 }
 
 .toast-success .toast-icon { color: #10b981; }
@@ -2504,13 +2509,44 @@ select:focus {
   border: none;
   color: #94a3b8;
   cursor: pointer;
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: auto;
-  padding: 2px 4px;
+  padding: 4px;
 }
 
 .toast-close:hover {
   color: #334155;
+}
+
+.loading-spinner-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.loading-spinner-inline svg {
+  animation: spinnerRotate 0.9s linear infinite;
+  display: block;
+}
+
+@keyframes spinnerRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.badge-danger-tag {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  display: inline-block;
+  margin-left: 5px;
 }
 
 .badge-bump {
@@ -2524,3 +2560,671 @@ select:focus {
 }
 
 
+
+/* ==========================================================================
+   طرح بازسازی کلاسیک عطارخونه (Hero Slider, Categories Showcase, Carousel, COA)
+   ========================================================================== */
+
+/* اسلایدر چنداسلایده مجلل هیرو */
+.hero-slider-wrap {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+  min-height: 380px;
+  background: #143529;
+}
+
+.hero-slides-track {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+}
+
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+  display: flex;
+}
+
+.hero-slide.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero-slide-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.03);
+  transition: transform 6s ease;
+}
+
+.hero-slide.active .hero-slide-bg {
+  transform: scale(1);
+}
+
+.hero-slide-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 380px;
+  background: linear-gradient(90deg, rgba(20, 53, 41, 0.95) 0%, rgba(27, 67, 50, 0.82) 45%, rgba(20, 53, 41, 0.45) 100%);
+  display: flex;
+  align-items: center;
+  padding: 40px 48px;
+}
+
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-full);
+  color: #fdfcf7;
+  font-size: 11.5px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.hero-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(6px);
+}
+
+.hero-nav-btn:hover {
+  background: var(--gold);
+  color: #143529;
+  border-color: var(--gold);
+}
+
+.hero-nav-prev { right: 18px; }
+.hero-nav-next { left: 18px; }
+
+.hero-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+.hero-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  padding: 0;
+}
+
+.hero-dot.active {
+  width: 24px;
+  border-radius: 12px;
+  background: var(--gold);
+}
+
+/* سربرگ بخش‌های کلاسیک */
+.section-classic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--border-light);
+}
+
+.section-title-classic {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gold-accent-line {
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+.section-subtitle-classic {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.section-link-more {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s;
+}
+
+.section-link-more:hover {
+  gap: 7px;
+  color: var(--primary-dark);
+}
+
+/* ویترین کلاسیک دسته‌بندی‌ها */
+.botanical-categories-showcase {
+  margin: 32px 0;
+}
+
+.botanical-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.botanical-cat-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xs);
+}
+
+.botanical-cat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(197, 160, 89, 0.45);
+  box-shadow: 0 8px 20px rgba(20, 53, 41, 0.08);
+}
+
+.cat-card-media {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.cat-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.botanical-cat-card:hover .cat-card-media img {
+  transform: scale(1.08);
+}
+
+.cat-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(20, 53, 41, 0.35) 100%);
+}
+
+.cat-card-body {
+  padding: 10px 12px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.cat-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 2px 0;
+}
+
+.cat-card-count {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* اسلایدر افقی محصولات محبوب */
+.popular-products-carousel-section {
+  margin: 32px 0;
+}
+
+.carousel-nav-arrows {
+  display: flex;
+  gap: 6px;
+}
+
+.carousel-arrow-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.carousel-arrow-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.popular-carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin: 0 -6px;
+  padding: 6px;
+}
+
+.popular-carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+}
+
+.popular-carousel-track.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.popular-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-product-item {
+  flex: 0 0 calc(25% - 12px);
+  min-width: 240px;
+}
+
+.badge-organic-seal {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(20, 53, 41, 0.88);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  backdrop-filter: blur(4px);
+}
+
+.product-scientific-latin {
+  font-size: 10.5px;
+  color: #5a7367;
+  font-style: italic;
+  direction: ltr;
+  text-align: right;
+  margin-top: -3px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* تب‌های صفحه جزئیات کالا و جدول شناسنامه آزمایشگاهی (COA) */
+.product-tabs-container {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.detail-tabs-nav {
+  display: flex;
+  border-bottom: 1.5px solid var(--border);
+  background: #fafaf9;
+}
+
+.tab-nav-btn {
+  padding: 14px 22px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-nav-btn:hover {
+  color: var(--primary);
+  background: #f5f5f4;
+}
+
+.tab-nav-btn.active {
+  color: var(--primary-dark);
+  background: #ffffff;
+  border-bottom-color: var(--primary);
+}
+
+.tab-content-panel {
+  display: none;
+  padding: 26px 28px;
+}
+
+.tab-content-panel.active {
+  display: block;
+}
+
+.coa-card-wrapper {
+  background: #ffffff;
+}
+
+.coa-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.coa-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin: 0 0 4px 0;
+}
+
+.coa-subtitle {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.coa-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+.coa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-bottom: 18px;
+}
+
+.coa-table th, .coa-table td {
+  padding: 10px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.coa-table th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #334155;
+}
+
+.status-pass {
+  background: #ecfdf5;
+  color: #047857;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.coa-footer-license {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 12px;
+}
+
+.clinical-dossier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.dossier-block {
+  background: #fafaf9;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+
+.dossier-block.danger-block {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.dossier-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dossier-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #334155;
+}
+
+.qa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.qa-item {
+  background: #fafaf9;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+
+.qa-question {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.qa-answer {
+  background: #ffffff;
+  border-right: 3px solid var(--primary);
+  border-radius: var(--radius-xs);
+  padding: 10px 14px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.qa-expert-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.qa-form-card {
+  background: #ffffff;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+}
+
+/* فوتر رگولاتوری و حقوقی */
+.footer-regulatory-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.reg-badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #334155;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+}
+
+/* کامپوننت پیج‌بندی کلاسیک */
+.pagination-wrapper {
+  margin: 32px 0 16px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-item .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-xs);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: #334155;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.page-item .page-link:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: var(--primary-dark);
+}
+
+.page-item.active .page-link {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+/* واکنش‌گرایی موبایل و تبلت */
+@media (max-width: 992px) {
+  .botanical-cat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .carousel-product-item {
+    flex: 0 0 calc(50% - 8px);
+  }
+  .clinical-dossier-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .botanical-cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .carousel-product-item {
+    flex: 0 0 80%;
+  }
+  .hero-slide-overlay {
+    padding: 30px 20px;
+  }
+  .detail-tabs-nav {
+    flex-direction: column;
+  }
+}

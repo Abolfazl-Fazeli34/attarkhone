@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 html += `
                   <div class="interaction-box ${boxClass}">
                     <div>
-                      <div style="font-weight:bold; margin-bottom:4px;">⛔ گیاه دارویی حساس: ${inter.product_name} (${inter.severity_display})</div>
+                      <div style="font-weight:bold; margin-bottom:4px;"><span class="badge-danger-tag">هشدار بالینی</span> گیاه دارویی حساس: ${inter.product_name} (${inter.severity_display})</div>
                       <div style="font-size:13px;">${inter.warning_text}</div>
                     </div>
                   </div>`;

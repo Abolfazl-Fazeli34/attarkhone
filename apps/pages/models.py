@@ -37,6 +37,20 @@ class Article(models.Model):
     image = models.CharField(max_length=255, default="/static/img/products/real_tea.jpg", verbose_name="تصویر شاخص مقاله")
     reading_time = models.PositiveIntegerField(default=5, verbose_name="زمان تقریبی مطالعه (دقیقه)")
     views_count = models.PositiveIntegerField(default=0, verbose_name="تعداد بازدید")
+    
+    # اطلاعات علمی و استنادی (دوسیه دفاع علمی کارگاه ۶ و ۲۷)
+    author_name = models.CharField(max_length=150, default="دکتر مریم سادات حسینی", verbose_name="نام نویسنده و پژوهشگر")
+    author_title = models.CharField(max_length=200, default="متخصص داروسازی سنتی و عضو هیئت علمی", verbose_name="درجه علمی نویسنده")
+    scientific_reviewer = models.CharField(max_length=200, default="شورای ارزیابی پژوهشکده گیاهان دارویی دانشگاه تهران", verbose_name="مرجع نظارت و داوری علمی")
+    academic_references = models.TextField(
+        blank=True,
+        default="۱. کتاب قانون در طب، شیخ‌الرئیس ابوعلی سینا، جلد دوم (مفردات ادویه و گیاه‌شناسی بالینی)\n"
+                "۲. فارماکوپه گیاهی ایران (Iranian Herbal Pharmacopoeia - IHP)، کمیته تدوین فارماکوپه\n"
+                "۳. WHO Monographs on Selected Medicinal Plants, World Health Organization, Geneva\n"
+                "۴. Journal of Ethnopharmacology: Phytochemical Profiling, PubMed DOI: 10.1016/j.jep.2021.114389",
+        verbose_name="فهرست مراجع دانشگاهی، منابع کهن و کدهای DOI"
+    )
+
     is_published = models.BooleanField(default=True, verbose_name="وضعیت انتشار")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ نگارش")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به‌روزرسانی")

@@ -15,7 +15,7 @@ def send_welcome_email(user, request=None):
         return False
 
     site_url = request.build_absolute_uri('/')[:-1] if request else 'http://127.0.0.1:8000'
-    subject = 'به عطارخونه خوش آمدید 🌱 | کد تخفیف ویژه اولین خرید شما'
+    subject = 'به عطارخونه خوش آمدید | کد تخفیف ویژه اولین خرید شما'
     
     context = {
         'user': user,

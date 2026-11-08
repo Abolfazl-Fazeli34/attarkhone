@@ -27,6 +27,14 @@ class ArticleTestCase(TestCase):
         response = client.get(reverse('pages:article_detail', kwargs={'slug': self.article.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "خواص درمانی گل گاوزبان")
+        self.assertContains(response, self.article.author_name)
+        self.assertContains(response, "قانون در طب")
         
         self.article.refresh_from_db()
         self.assertEqual(self.article.views_count, initial_views + 1)
+
+    def test_article_scientific_fields_defaults(self):
+        self.assertTrue(bool(self.article.author_name))
+        self.assertTrue(bool(self.article.scientific_reviewer))
+        self.assertIn("قانون", self.article.academic_references)
+        self.assertIn("DOI", self.article.academic_references)

@@ -31,4 +31,4 @@ class Command(BaseCommand):
 
         self.stdout.write(f"در حال بازیابی اطلاعات از فایل: {backup_file} ...")
         management.call_command('loaddata', backup_file)
-        self.stdout.write(self.style.SUCCESS("✓ بازیابی نسخه پشتیبان با موفقیت به پایان رسید (کارگاه ۲۰)."))
+        self.stdout.write(self.style.SUCCESS("بازیابی نسخه پشتیبان با موفقیت به پایان رسید (کارگاه ۲۰)."))

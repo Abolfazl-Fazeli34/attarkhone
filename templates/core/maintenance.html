@@ -1,4 +1,4 @@
-{% load static persian_tags %}
+{% load static persian_tags razavi_icons %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -26,16 +26,18 @@
       text-align: center;
     }
     .maintenance-icon {
-      font-size: 64px;
       margin-bottom: 20px;
       display: inline-block;
+      color: var(--primary);
     }
   </style>
 </head>
 <body>
 
   <div class="maintenance-card">
-    <div class="maintenance-icon">🛠️🌿</div>
+    <div class="maintenance-icon">
+      {% razavi_icon 'settings-cog' size=56 %}
+    </div>
     <h1 style="color: var(--primary-dark); font-size: 22px; margin-bottom: 15px;">
       فروشگاه عطارخونه موقتاً در دست تعمیر و ارتقا می‌باشد
     </h1>

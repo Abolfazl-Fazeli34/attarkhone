@@ -39,6 +39,27 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('catalog:product_list_by_category', kwargs={'category_slug': self.slug})
 
+    @property
+    def get_display_image(self):
+        if self.image:
+            return self.image.url
+        s = self.slug.lower()
+        if 'tea' in s or 'damnoosh' in s:
+            return '/static/img/categories/cat_tea.jpg'
+        elif 'herb' in s:
+            return '/static/img/categories/cat_herbs.jpg'
+        elif 'oil' in s or 'extract' in s:
+            return '/static/img/categories/cat_oils.jpg'
+        elif 'spice' in s or 'advieh' in s:
+            return '/static/img/categories/cat_spices.jpg'
+        elif 'pack' in s or 'therapy' in s:
+            return '/static/img/categories/cat_packages.jpg'
+        elif 'wellness' in s or 'health' in s:
+            return '/static/img/categories/cat_wellness.jpg'
+        elif 'distillate' in s or 'aragh' in s:
+            return '/static/img/categories/cat_tea.jpg'
+        return '/static/img/categories/cat_herbs.jpg'
+
 
 class Brand(models.Model):
     """

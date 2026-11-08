@@ -34,10 +34,17 @@ class HomeView(View):
         whens = [When(slug=s, then=Value(i)) for i, s in enumerate(priority_slugs)]
         featured_products = Product.objects.filter(is_featured=True).annotate(
             priority=Case(*whens, default=Value(99), output_field=IntegerField())
-        ).order_by('priority', '-created_at')[:6]
+        ).order_by('priority', '-created_at')[:8]
 
         latest_products = Product.objects.all().order_by('-created_at')[:8]
-        categories = Category.objects.filter(parent=None)[:6]
+        
+        # دسته‌بندی‌های ۶ گانه اصلی ویترین کلاسیک
+        primary_slugs = ['damnoosh', 'herbs', 'extracts-oils', 'herbal-spices', 'distillates', 'therapy-packages']
+        categories = list(Category.objects.filter(parent=None, slug__in=primary_slugs))
+        if len(categories) < 6:
+            extra = Category.objects.filter(parent=None).exclude(id__in=[c.id for c in categories])[:6 - len(categories)]
+            categories.extend(extra)
+
         symptom_categories = SymptomCategory.objects.all()[:4]
 
         context = {

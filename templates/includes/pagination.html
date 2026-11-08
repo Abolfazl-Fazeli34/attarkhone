@@ -1,0 +1,55 @@
+{% load persian_tags razavi_icons %}
+{% if page_obj.has_other_pages %}
+<nav class="pagination-wrapper" aria-label="ناوبری صفحات">
+  <ul class="pagination-list">
+    <!-- دکمه صفحه قبل (در راست‌چین جهت به راست اشاره دارد یا قبلی) -->
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a href="?{% for key, val in request.GET.items %}{% if key != 'page' %}{{ key }}={{ val|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}" class="page-link page-prev" title="صفحه قبلی" aria-label="قبلی">
+          {% razavi_icon 'chevron-right' size=14 %}
+          <span>قبلی</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled" aria-disabled="true">
+        <span class="page-link page-prev">
+          {% razavi_icon 'chevron-right' size=14 %}
+          <span>قبلی</span>
+        </span>
+      </li>
+    {% endif %}
+
+    <!-- شماره صفحات -->
+    {% for page_num in page_obj.paginator.page_range %}
+      {% if page_num == page_obj.number %}
+        <li class="page-item active" aria-current="page">
+          <span class="page-link">{{ page_num|fa_digits }}</span>
+        </li>
+      {% elif page_num > page_obj.number|add:'-3' and page_num < page_obj.number|add:'3' %}
+        <li class="page-item">
+          <a href="?{% for key, val in request.GET.items %}{% if key != 'page' %}{{ key }}={{ val|urlencode }}&{% endif %}{% endfor %}page={{ page_num }}" class="page-link">
+            {{ page_num|fa_digits }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    <!-- دکمه صفحه بعد -->
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a href="?{% for key, val in request.GET.items %}{% if key != 'page' %}{{ key }}={{ val|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}" class="page-link page-next" title="صفحه بعدی" aria-label="بعدی">
+          <span>بعدی</span>
+          {% razavi_icon 'chevron-left' size=14 %}
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled" aria-disabled="true">
+        <span class="page-link page-next">
+          <span>بعدی</span>
+          {% razavi_icon 'chevron-left' size=14 %}
+        </span>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
