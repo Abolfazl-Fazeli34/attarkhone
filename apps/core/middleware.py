@@ -11,8 +11,8 @@ class MaintenanceModeMiddleware:
 
     def __call__(self, request):
         path = request.path
-        # همیشه دسترسی به ادمین و سلامت سیستم مجاز است
-        if path.startswith('/attar-management/') or path.startswith('/admin/') or path.startswith('/static/'):
+        # همیشه دسترسی به ادمین، سلامت سیستم، استاتیک و رسانه مجاز است
+        if path.startswith('/attar-management/') or path.startswith('/admin/') or path.startswith('/static/') or path.startswith('/media/') or path == '/health/':
             return self.get_response(request)
 
         try:

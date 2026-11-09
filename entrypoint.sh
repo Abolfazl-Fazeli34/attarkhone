@@ -27,7 +27,7 @@ else:
 "
 
 # اجرای سرور پروداکشن Gunicorn
-PORT_NUM=${PORT:-8001}
+PORT_NUM=${PORT:-8650}
 WORKERS_NUM=${GUNICORN_WORKERS:-3}
 echo "اجرای سرور پروداکشن Gunicorn بر روی درگاه 0.0.0.0:$PORT_NUM با $WORKERS_NUM کارگر پردازشی..."
 exec gunicorn config.wsgi:application \

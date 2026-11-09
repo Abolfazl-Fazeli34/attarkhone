@@ -4,7 +4,7 @@ FROM python:3.12-slim
 # تنظیم متغیرهای محیطی پایتون
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8001
+    PORT=8650
 
 # دایرکتوری کاری پروژه در کانتینر
 WORKDIR /app
@@ -21,12 +21,12 @@ COPY . /app/
 RUN mkdir -p /app/staticfiles /app/media /app/data && \
     chmod +x /app/entrypoint.sh
 
-# درگاه اختصاصی پروژه
-EXPOSE 8001
+# درگاه اختصاصی پروژه در محدوده سرور (۸۶۵۰)
+EXPOSE 8650
 
 # پایش سلامت خودکار کانتینر با پایتون داخلی
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health/')" || exit 1
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8650/health/')" || exit 1
 
 # اسکریپت ورود به کانتینر
 ENTRYPOINT ["/app/entrypoint.sh"]

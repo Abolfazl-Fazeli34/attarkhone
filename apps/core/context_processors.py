@@ -4,17 +4,23 @@ from .models import StoreSetting
 def store_context(request):
     """
     متغیرهای سراسری مورد نیاز در تمامی صفحات فروشگاه
+    بهینه‌شده برای پاسخ‌دهی سریع بدون ایجاد رکوردهای تکراری در دیتابیس
     """
     try:
         setting = StoreSetting.get_settings()
     except Exception:
         setting = None
 
-    # شمارش اقلام سبد خرید کاربر یا مهمان
+    # شمارش اقلام سبد خرید کاربر یا مهمان بدون ایجاد سبد خالی
     cart_items_count = 0
     try:
-        from orders.views import get_or_create_cart
-        cart = get_or_create_cart(request)
+        from orders.models import Cart
+        cart = None
+        if request.user.is_authenticated:
+            cart = Cart.objects.filter(user=request.user).first()
+        elif request.session.session_key:
+            cart = Cart.objects.filter(session_key=request.session.session_key).first()
+
         if cart:
             cart_items_count = sum(item.quantity for item in cart.items.all())
     except Exception:
