@@ -316,3 +316,31 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.product.name}"
+
+
+class ProductReview(models.Model):
+    """
+    ثبت نظرات، امتیازدهی و پرسش‌های تخصصی دارویی خریداران به همراه پاسخ کارشناس
+    """
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name="محصول")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='product_reviews', verbose_name="کاربر ثبت‌کننده")
+    author_name = models.CharField(max_length=120, verbose_name="نام و نام خانوادگی نویسنده")
+    author_phone = models.CharField(max_length=20, blank=True, verbose_name="شماره تماس جهت پیامک پاسخ")
+    rating = models.PositiveSmallIntegerField(default=5, verbose_name="امتیاز کیفی (۱ تا ۵ ستاره)")
+    comment = models.TextField(verbose_name="متن پرسش یا دیدگاه خریدار")
+
+    # پاسخ تخصصی دکتر داروساز یا کارشناس طب سنتی
+    reply = models.TextField(blank=True, verbose_name="پاسخ رسمی دکتر داروساز طب سنتی")
+    replied_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='review_replies', verbose_name="کارشناس پاسخ‌دهنده")
+    replied_at = models.DateTimeField(null=True, blank=True, verbose_name="تاریخ پاسخ‌دهی")
+
+    is_approved = models.BooleanField(default=True, verbose_name="تایید و منتشر شده")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+
+    class Meta:
+        verbose_name = "دیدگاه و پرسش خریدار"
+        verbose_name_plural = "دیدگاه‌ها و پرسش‌های خریداران"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.author_name} درباره {self.product.name} ({self.rating} ستاره)"

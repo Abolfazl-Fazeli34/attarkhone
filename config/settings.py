@@ -1,20 +1,25 @@
 import os
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# بارگذاری متغیرهای محیطی از فایل .env
+load_dotenv(BASE_DIR / '.env')
+
 # افزودن پوشه apps به مسیرهای پایتون
 sys.path.insert(0, str(BASE_DIR / 'apps'))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-attarkhone-secret-key-podman2-shabake-212290'
+# کلید امنیتی جنگو
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-attarkhone-secret-key-podman2-shabake-212290')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# وضعیت حالت دیباگ (پیش‌فرض True، در داکر پروداکشن False)
+DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [h.strip() for h in os.getenv('DJANGO_ALLOWED_HOSTS', '*').split(',') if h.strip()]
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8001,http://localhost:8001,http://127.0.0.1:8000,http://localhost:8000').split(',') if o.strip()]
 
 # Application definition
 INSTALLED_APPS = [
@@ -41,6 +46,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,10 +79,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+DB_DIR = os.getenv('DJANGO_DB_DIR')
+if DB_DIR:
+    os.makedirs(DB_DIR, exist_ok=True)
+    DB_PATH = Path(DB_DIR) / 'db.sqlite3'
+else:
+    DB_PATH = BASE_DIR / 'db.sqlite3'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DB_PATH,
     }
 }
 
@@ -100,6 +113,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 # فایل‌های رسانه (تصاویر محصولات، اسلایدرها و فیش‌های بانکی)
 MEDIA_URL = '/media/'

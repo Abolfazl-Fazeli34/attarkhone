@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.contrib import messages
-from .models import Product, Category, Brand, ProductVariant, ProductFeature, Wishlist
+from .models import Product, Category, Brand, ProductVariant, ProductFeature, Wishlist, ProductReview
 
 
 class ProductListView(View):
@@ -128,18 +128,64 @@ class ProductDetailView(View):
     """
     def get(self, request, slug):
         product = get_object_or_404(
-            Product.objects.select_related('category', 'brand', 'supplier').prefetch_related('variants', 'features'),
+            Product.objects.select_related('category', 'brand', 'supplier', 'seller').prefetch_related('variants', 'features'),
             slug=slug
         )
         related_products = Product.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        reviews = product.reviews.filter(is_approved=True).select_related('user', 'replied_by')
+        avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 5.0
 
         context = {
             'product': product,
             'variants': product.variants.all(),
             'features': product.features.all(),
             'related_products': related_products,
+            'reviews': reviews,
+            'reviews_count': reviews.count(),
+            'avg_rating': round(avg_rating, 1),
         }
         return render(request, 'catalog/product_detail.html', context)
+
+
+class AddProductReviewView(View):
+    """
+    ثبت نظر، پرسش و امتیازدهی به محصول توسط خریدار یا بازدیدکننده
+    """
+    def post(self, request, product_id):
+        product = get_object_or_404(Product, id=product_id)
+        author_name = request.POST.get('author_name', '').strip()
+        author_phone = request.POST.get('author_phone', '').strip()
+        rating_val = request.POST.get('rating', '5')
+        comment = request.POST.get('comment', '').strip()
+
+        if request.user.is_authenticated and not author_name:
+            author_name = request.user.get_full_name() or request.user.username
+
+        if not author_name or not comment:
+            messages.error(request, 'لطفاً نام و متن دیدگاه یا پرسش خود را وارد فرمایید.')
+            return redirect(product.get_absolute_url())
+
+        try:
+            rating = max(1, min(5, int(rating_val)))
+        except (ValueError, TypeError):
+            rating = 5
+
+        ProductReview.objects.create(
+            product=product,
+            user=request.user if request.user.is_authenticated else None,
+            author_name=author_name,
+            author_phone=author_phone,
+            rating=rating,
+            comment=comment,
+            is_approved=True
+        )
+
+        msg = 'دیدگاه و پرسش شما با موفقیت ثبت شد و در سامانه قرار گرفت.'
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'success': True, 'message': msg})
+
+        messages.success(request, msg)
+        return redirect(f"{product.get_absolute_url()}#tab-qa")
 
 
 class WishlistToggleView(View):

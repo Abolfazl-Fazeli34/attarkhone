@@ -4,8 +4,10 @@ from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
 
 from core.sitemaps import ProductSitemap, CategorySitemap, PageSitemap
+from core.views import HealthCheckView
 
 # کارگاه ۲۶: نقشه سایت (sitemap.xml)
 sitemaps = {
@@ -32,6 +34,7 @@ urlpatterns = [
     path('remedy/', include('remedy.urls', namespace='remedy')),
 
     # میانبرهای کاربردی جهت دسترسی سریع
+    path('health/', lambda r: HttpResponse('OK', content_type='text/plain'), name='health'),
     path('cart/', RedirectView.as_view(url='/orders/cart/', permanent=False)),
     path('checkout/', RedirectView.as_view(url='/orders/checkout/', permanent=False)),
     path('articles/', RedirectView.as_view(url='/pages/articles/', permanent=False)),
@@ -40,6 +43,12 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
+from django.views.static import serve
+from django.urls import re_path
+
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+]
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

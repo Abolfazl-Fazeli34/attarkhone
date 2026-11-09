@@ -38,3 +38,19 @@ class ArticleTestCase(TestCase):
         self.assertTrue(bool(self.article.scientific_reviewer))
         self.assertIn("قانون", self.article.academic_references)
         self.assertIn("DOI", self.article.academic_references)
+
+    def test_contact_us_submission(self):
+        client = Client()
+        get_res = client.get(reverse('pages:contact_us'))
+        self.assertEqual(get_res.status_code, 200)
+
+        post_res = client.post(reverse('pages:contact_us'), {
+            'full_name': 'مهندس حسینی',
+            'phone': '09121112233',
+            'email': 'hosseini@example.com',
+            'subject': 'مشاوره خرید عمده',
+            'message': 'درخواست ارسال پیش‌فاکتور برای ۱۰ کیلوگرم اسطوخودوس'
+        })
+        self.assertEqual(post_res.status_code, 302)
+        from pages.models import ContactMessage
+        self.assertTrue(ContactMessage.objects.filter(phone='09121112233').exists())

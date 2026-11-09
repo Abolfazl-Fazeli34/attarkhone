@@ -245,7 +245,7 @@
 
       <div class="zp-form">
         <div style="text-align: center;">
-          <span class="zp-sandbox-badge">محیط تست سندباکس زرین‌پال (Zarinpal Sandbox)</span>
+          <span class="zp-sandbox-badge" style="background: #ecfdf5; color: #047857; border-color: #a7f3d0;">درگاه پرداخت امن الکترونیک شاپرک (زرین‌پال)</span>
         </div>
 
         <form method="get" action="{% url 'orders:zarinpal_callback' tracking_code=order.tracking_code %}" id="zpPayForm">
@@ -283,7 +283,7 @@
 
           <div class="zp-actions">
             <button type="submit" class="zp-btn-pay">
-              تایید و پرداخت نهایی (سندباکس)
+              تایید و پرداخت نهایی
             </button>
             <a href="{% url 'orders:zarinpal_callback' tracking_code=order.tracking_code %}?Authority={{ order.zarinpal_authority }}&Status=NOK" class="zp-btn-cancel">
               انصراف

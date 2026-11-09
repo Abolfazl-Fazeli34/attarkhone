@@ -1,0 +1,34 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: attarkhone_app
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - DJANGO_DEBUG=False
+      - DJANGO_SECRET_KEY=attarkhone-super-secure-production-secret-key-1403
+      - DJANGO_ALLOWED_HOSTS=*
+      - DJANGO_CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8001,http://localhost:8001
+      - PORT=8001
+      - GUNICORN_WORKERS=3
+      - DJANGO_DB_DIR=/app/data
+      - EMAIL_HOST_USER=abolfazlfazeli760@gmail.com
+      - EMAIL_HOST_PASSWORD=wybilntwgfhosibv
+    volumes:
+      - attar_media_volume:/app/media
+      - attar_data_volume:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 25s
+
+volumes:
+  attar_media_volume:
+    name: attarkhone_media_data
+  attar_data_volume:
+    name: attarkhone_db_data

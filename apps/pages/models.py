@@ -65,3 +65,24 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('pages:article_detail', kwargs={'slug': self.slug})
+
+
+class ContactMessage(models.Model):
+    """
+    پیام‌ها، پرسش‌ها و مشاوره‌های ارسالی کاربران از طریق صفحه تماس با ما
+    """
+    full_name = models.CharField(max_length=150, verbose_name="نام و نام خانوادگی")
+    email = models.EmailField(blank=True, verbose_name="نشانی رایانامه")
+    phone = models.CharField(max_length=25, verbose_name="شماره تماس")
+    subject = models.CharField(max_length=200, blank=True, verbose_name="موضوع پیام")
+    message = models.TextField(verbose_name="متن پیام و درخواست مشاوره")
+    is_read = models.BooleanField(default=False, verbose_name="بررسی شده توسط پشتیبانی")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ارسال")
+
+    class Meta:
+        verbose_name = "پیام تماس با ما"
+        verbose_name_plural = "پیام‌های تماس با ما"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.full_name} - {self.subject or self.phone}"

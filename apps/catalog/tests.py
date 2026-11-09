@@ -116,3 +116,17 @@ class FacetedSearchTestCase(TestCase):
         self.assertIn('page_obj', res.context)
         self.assertEqual(res.context['page_obj'].number, 1)
 
+    def test_product_review_submission(self):
+        from catalog.models import ProductReview
+        url = reverse('catalog:add_review', kwargs={'product_id': self.p1.id})
+        res = self.client.post(url, {
+            'author_name': 'سحر کرمانی',
+            'author_phone': '09120001122',
+            'rating': '5',
+            'comment': 'بسیار عطر و طعم مطبوعی داشت و آرامش‌بخش بود.'
+        })
+        self.assertEqual(res.status_code, 302)
+        review = ProductReview.objects.filter(product=self.p1, author_name='سحر کرمانی').first()
+        self.assertIsNotNone(review)
+        self.assertEqual(review.rating, 5)
+

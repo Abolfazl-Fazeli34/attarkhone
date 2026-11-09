@@ -101,15 +101,44 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ثبت دیدگاه و پرسش تخصصی کالا با اعلان مدرن توست
+  // ثبت دیدگاه و پرسش تخصصی کالا با اتصال واقعی به بک‌اند
   const qaForm = document.getElementById('expertQuestionForm');
   if (qaForm) {
     qaForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (typeof showToast === 'function') {
-        showToast('پرسش شما با موفقیت ثبت شد و پس از بررسی و تایید ناظر علمی نمایش داده خواهد شد.', 'success');
-      }
-      qaForm.reset();
+      const formData = new FormData(qaForm);
+      const submitBtn = qaForm.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+
+      fetch(qaForm.action, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          if (typeof showToast === 'function') {
+            showToast(data.message || 'دیدگاه شما با موفقیت ثبت گردید.', 'success');
+          }
+          qaForm.reset();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1200);
+        } else {
+          if (typeof showToast === 'function') {
+            showToast(data.message || 'خطا در ثبت دیدگاه', 'error');
+          }
+        }
+      })
+      .catch(err => {
+        qaForm.submit();
+      })
+      .finally(() => {
+        if (submitBtn) submitBtn.disabled = false;
+      });
     });
   }
 

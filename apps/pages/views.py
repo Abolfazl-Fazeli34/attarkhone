@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.contrib import messages
 from django.db.models import F
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import StaticPage, Article
+from .models import StaticPage, Article, ContactMessage
 
 
 class ArticleListView(View):
@@ -63,3 +64,30 @@ class PageDetailView(View):
 class ContactUsView(View):
     def get(self, request):
         return render(request, 'pages/contact_us.html')
+
+    def post(self, request):
+        full_name = request.POST.get('full_name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        email = request.POST.get('email', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        message = request.POST.get('message', '').strip()
+
+        if not full_name or not phone or not message:
+            messages.error(request, 'لطفاً نام، شماره تماس و متن پیام خود را وارد فرمایید.')
+            return render(request, 'pages/contact_us.html', {
+                'full_name': full_name,
+                'phone': phone,
+                'email': email,
+                'subject': subject,
+                'message': message,
+            })
+
+        ContactMessage.objects.create(
+            full_name=full_name,
+            phone=phone,
+            email=email,
+            subject=subject or 'پیام عمومی از فرم تماس با ما',
+            message=message
+        )
+        messages.success(request, 'پیام و درخواست مشاوره شما با موفقیت دریافت گردید. کارشناسان پشتیبانی و داروسازان سنتی عطارخونه به زودی با شما تماس خواهند گرفت.')
+        return redirect('pages:contact_us')
