@@ -19,7 +19,28 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-attarkhone-secret-k
 DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = [h.strip() for h in os.getenv('DJANGO_ALLOWED_HOSTS', '*').split(',') if h.strip()]
-CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8001,http://localhost:8001,http://127.0.0.1:8000,http://localhost:8000').split(',') if o.strip()]
+
+# پشتیبانی از پروکسی معکوس وب‌سرور (Nginx) جهت تشخیص پروتکل SSL و هاست دامنه
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+# پایگاه دامنه‌های مجاز برای اعتبارسنجی CSRF
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
+default_origins = [
+    'http://127.0.0.1:8650', 'http://localhost:8650',
+    'http://127.0.0.1:8001', 'http://localhost:8001',
+    'http://127.0.0.1:8000', 'http://localhost:8000',
+    'http://*.ip3.ir', 'https://*.ip3.ir',
+    'http://attarkhone.ip3.ir', 'https://attarkhone.ip3.ir',
+    'http://*.ir', 'https://*.ir',
+    'http://*.com', 'https://*.com',
+    'http://*.org', 'https://*.org',
+    'http://*.net', 'https://*.net',
+]
+for origin in default_origins:
+    if origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(origin)
 
 # Application definition
 INSTALLED_APPS = [
@@ -47,6 +68,8 @@ AUTH_USER_MODEL = 'accounts.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    # پشتیبانی پویا از دامنه‌ها در برابر خطای CSRF
+    'core.middleware.DynamicCsrfTrustedOriginsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

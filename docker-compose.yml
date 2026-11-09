@@ -12,7 +12,7 @@ services:
       - DJANGO_DEBUG=False
       - DJANGO_SECRET_KEY=attarkhone-super-secure-production-secret-key-1403
       - DJANGO_ALLOWED_HOSTS=*
-      - DJANGO_CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8650,http://localhost:8650,http://127.0.0.1:8001,http://localhost:8001
+      - DJANGO_CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8650,http://localhost:8650,http://attarkhone.ip3.ir,https://attarkhone.ip3.ir,http://*.ip3.ir,https://*.ip3.ir,http://*.ir,https://*.ir
       - PORT=8650
       - GUNICORN_WORKERS=3
       - DJANGO_DB_DIR=/app/data

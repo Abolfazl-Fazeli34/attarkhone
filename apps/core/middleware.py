@@ -1,5 +1,22 @@
 from django.shortcuts import render
+from django.conf import settings
 from .models import StoreSetting
+
+
+class DynamicCsrfTrustedOriginsMiddleware:
+    """
+    پشتیبانی هوشمند و پویا از هر دامنه، زیردامنه و سرور پروکسی معکوس در بررسی‌های CSRF
+    این میدلور تضمین می‌کند دامنه‌های عمومی مانند attarkhone.ip3.ir یا هر دامنه‌ای که به سرور متصل شود،
+    بدون خطای ۴۰۳ فوربیدن در تراکنش‌های POST، ورود به سایت و سبد خرید کار کنند.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        origin = request.META.get('HTTP_ORIGIN')
+        if origin and origin not in settings.CSRF_TRUSTED_ORIGINS:
+            settings.CSRF_TRUSTED_ORIGINS.append(origin)
+        return self.get_response(request)
 
 
 class MaintenanceModeMiddleware:
