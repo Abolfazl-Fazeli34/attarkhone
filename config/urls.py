@@ -22,6 +22,9 @@ admin.site.site_title = "پنل مدیریت عطارخونه"
 admin.site.index_title = "میز کار و داشبورد مدیریت فروشگاه الکترونیکی"
 
 urlpatterns = [
+    # پنل ادمین رسمی پیش‌فرض جنگو
+    path('admin/', admin.site.urls),
+
     # ص ۱۱۳ کتاب درسی: تغییر آدرس پیش‌فرض ادمین به نشانی غیرقابل حدس جهت افزایش امنیت
     path('attar-management/', admin.site.urls),
 
