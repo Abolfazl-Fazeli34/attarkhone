@@ -69,6 +69,21 @@
             <b>نشانی ارسال مرسوله:</b> {{ order.province }}، {{ order.city }} - {{ order.address }} | <b>کد پستی:</b> {{ order.postal_code|fa_digits }}
           </div>
 
+          <!-- الزامات بسته‌بندی هدیه (کارگاه ۲۴) -->
+          {% if order.is_gift_wrapped %}
+            <div style="background: #fefce8; border: 1px dashed #fde047; border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #713f12; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #b45309; margin-top: 2px;">{% razavi_icon 'gift' size=16 %}</span>
+              <div>
+                <b>سفارش حاوی کادوپیچی ویژه گیاهی:</b> این سفارش باید با لفاف کرافت تزئینی و روبان طبیعی بسته‌بندی گردد.
+                {% if order.gift_message %}
+                  <div style="margin-top: 4px; font-style: italic; color: #854d0e;">
+                    <b>یادداشت کارت تبریک:</b> «{{ order.gift_message }}»
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
           <!-- اقلام سفارش مربوط به این فروشنده -->
           <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
@@ -78,6 +93,7 @@
                   <th style="padding: 8px 12px;">تنوع وزنی</th>
                   <th style="padding: 8px 12px;">تعداد بسته</th>
                   <th style="padding: 8px 12px;">مبلغ جزء</th>
+                  <th style="padding: 8px 12px; text-align: center;">لیبل QR بسته‌بندی</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,6 +111,12 @@
                       </td>
                       <td style="padding: 10px 12px; font-weight: 700; color: var(--primary-dark);">
                         {{ item.total_price|intcomma|fa_digits }} تومان
+                      </td>
+                      <td style="padding: 10px 12px; text-align: center;">
+                        <a href="{% url 'accounts:seller_product_qr' product_id=item.product.id %}" target="_blank" class="btn-action" style="font-size: 11px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--primary); font-weight: 600; border: 1px solid var(--border);">
+                          {% razavi_icon 'printer' size=13 %}
+                          <span>چاپ برچسب بسته</span>
+                        </a>
                       </td>
                     </tr>
                   {% endif %}

@@ -30,9 +30,18 @@
     <!-- سربرگ فاکتور -->
     <div class="invoice-header" style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border); padding-bottom: 18px; margin-bottom: 20px;">
       <div>
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-          <span style="color: var(--gold);">{% razavi_icon 'sparkles' size=22 %}</span>
-          <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin: 0;">فروشگاه تخصصی عطارخونه</h2>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+          <div class="logo-shield-icon">
+            <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+              <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#143529" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M18 7 L18 28" stroke="#143529" stroke-width="2" stroke-linecap="round"/>
+              <path d="M18 12 Q25 14 26 20" stroke="#143529" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M18 18 Q24 21 24 25" stroke="#143529" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M18 12 Q11 14 10 20" stroke="#143529" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M18 19 Q12 21 12 25" stroke="#143529" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2 style="font-size: 20px; font-weight: 800; color: var(--primary-dark); margin: 0;">{{ store_setting.store_name|default:'فروشگاه تخصصی عطارخونه' }}</h2>
         </div>
         <div style="font-size: 12px; color: #64748b;">صورت‌حساب رسمی فروش کالا و خدمات دارویی گیاهی و طب سنتی</div>
       </div>

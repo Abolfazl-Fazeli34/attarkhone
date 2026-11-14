@@ -10,7 +10,11 @@
   <meta name="keywords" content="{% block meta_keywords %}گیاهان دارویی, خرید دمنوش آرامش بخش, گل گاوزبان, طب سنتی, دستیار هوشمند سلامت, عطارخونه{% endblock %}">
   <meta name="robots" content="index, follow">
   
-  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  {% if store_setting and store_setting.favicon %}
+    <link rel="icon" type="image/png" href="{{ store_setting.favicon.url }}">
+  {% else %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  {% endif %}
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
@@ -21,7 +25,7 @@
     <div class="container header-main">
 
       <!-- ۱. لوگوی برند عطارخونه سمت راست در حالت RTL -->
-      <a href="{% url 'core:home' %}" class="brand-logo-link" title="صفحه نخست عطارخونه">
+      <a href="{% url 'core:home' %}" class="brand-logo-link" title="{{ store_setting.store_name|default:'صفحه نخست عطارخونه' }}">
         <div class="logo-shield-icon">
           <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
             <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
@@ -33,8 +37,8 @@
           </svg>
         </div>
         <div class="logo-text-group">
-          <span class="logo-title">عطارخونه</span>
-          <span class="logo-subtitle">دانش کهن، سلامت مدرن</span>
+          <span class="logo-title">{{ store_setting.store_name|default:'عطارخونه' }}</span>
+          <span class="logo-subtitle">{{ store_setting.slogan|default:'دانش کهن، سلامت مدرن' }}</span>
         </div>
       </a>
 
@@ -187,8 +191,8 @@
               </svg>
             </div>
             <div>
-              <span style="font-size: 16px; font-weight: 800; color: var(--primary-dark); display: block; line-height: 1.1;">عطارخونه</span>
-              <span style="font-size: 10px; color: var(--primary); font-weight: 600;">دانش کهن، سلامت مدرن</span>
+              <span style="font-size: 16px; font-weight: 800; color: var(--primary-dark); display: block; line-height: 1.1;">{{ store_setting.store_name|default:'عطارخونه' }}</span>
+              <span style="font-size: 10px; color: var(--primary); font-weight: 600;">{{ store_setting.slogan|default:'دانش کهن، سلامت مدرن' }}</span>
             </div>
           </a>
           <p style="margin-bottom: 12px; font-size: 12.5px; line-height: 1.8; color: #4b5563;">

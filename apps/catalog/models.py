@@ -193,30 +193,30 @@ class Product(models.Model):
         if self.image:
             return self.image.url
         slug = self.slug.lower()
-        if 'damnoosh' in slug or 'aramesh' in slug or 'relax' in slug:
-            return '/static/img/products/real_jar.jpg'
-        elif 'gavzaban' in slug:
+        if 'cinnamon' in slug or 'darchin' in slug:
+            return '/static/img/products/prod_cinnamon.jpg'
+        elif 'saffron' in slug or 'zaferan' in slug:
+            return '/static/img/products/prod_saffron.jpg'
+        elif 'rose' in slug or 'damascena' in slug or 'gol-mohammadi' in slug:
+            return '/static/img/products/prod_rose.jpg'
+        elif 'chamomile' in slug or 'baboneh' in slug:
+            return '/static/img/products/prod_chamomile.jpg'
+        elif 'mint' in slug or 'nana' in slug or 'peppermint' in slug:
+            return '/static/img/products/prod_mint.jpg'
+        elif 'gavzaban' in slug or 'echium' in slug:
             return '/static/img/products/real_herb.jpg'
         elif 'green-tea' in slug or 'tea' in slug:
             return '/static/img/products/real_tea.jpg'
-        elif 'box' in slug or 'package' in slug or 'gift' in slug:
+        elif 'box' in slug or 'gift' in slug or 'honey' in slug or 'asal' in slug:
             return '/static/img/products/real_box.jpg'
-        elif 'oil' in slug or 'roghan' in slug or 'black-seed' in slug:
+        elif 'oil' in slug or 'roghan' in slug or 'black-seed' in slug or 'extract' in slug:
             return '/static/img/categories/cat_oils.jpg'
-        elif 'darchin' in slug or 'cinnamon' in slug or 'spice' in slug:
-            return '/static/img/categories/cat_spices.jpg'
-        elif 'ostokhoddos' in slug or 'lavender' in slug or 'wellness' in slug:
+        elif 'lavender' in slug or 'lavandula' in slug or 'ostokhoddos' in slug or 'wellness' in slug:
             return '/static/img/categories/cat_wellness.jpg'
-        elif 'zaferan' in slug or 'saffron' in slug:
-            return '/static/img/products/prod_saffron.jpg'
-        elif 'gol-mohammadi' in slug or 'rose' in slug or 'damascena' in slug:
-            return '/static/img/products/prod_rose.jpg'
-        elif 'baboneh' in slug or 'chamomile' in slug:
-            return '/static/img/products/prod_chamomile.jpg'
-        elif 'nana' in slug or 'mint' in slug or 'peppermint' in slug:
-            return '/static/img/products/prod_mint.jpg'
-        elif 'kasni' in slug or 'aragh' in slug:
-            return '/static/img/categories/cat_tea.jpg'
+        elif 'cardamom' in slug or 'hel' in slug or 'spice' in slug or 'advieh' in slug:
+            return '/static/img/categories/cat_spices.jpg'
+        elif 'damnoosh' in slug or 'aramesh' in slug or 'relax' in slug or 'kasni' in slug or 'aragh' in slug:
+            return '/static/img/products/real_jar.jpg'
         return '/static/img/products/real_jar.jpg'
 
     @property

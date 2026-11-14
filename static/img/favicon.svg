@@ -1,15 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
-    <linearGradient id="favLeaf" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4caf50" />
-      <stop offset="100%" stop-color="#1b5e20" />
+    <!-- گرادیان سپر زمردی تیره فاخر -->
+    <linearGradient id="favShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#143529"/>
+      <stop offset="100%" stop-color="#092017"/>
+    </linearGradient>
+    <!-- گرادیان طلا -->
+    <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d68b"/>
+      <stop offset="100%" stop-color="#c69214"/>
     </linearGradient>
   </defs>
-  <circle cx="32" cy="32" r="30" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" />
-  <!-- هاون و برگ -->
-  <path d="M 20 38 C 20 48, 26 52, 32 52 C 38 52, 44 48, 44 38 Z" fill="#6d4c41" />
-  <ellipse cx="32" cy="38" rx="14" ry="4" fill="#8d6e63" />
-  <!-- برگ دارویی -->
-  <path d="M 32 34 C 32 18, 48 16, 48 28 C 48 34, 38 36, 32 34 Z" fill="url(#favLeaf)" />
-  <path d="M 32 34 C 28 26, 16 24, 18 34 C 20 38, 28 38, 32 34 Z" fill="#81c784" />
+
+  <!-- پس‌زمینه گرد مدرن با رنگ ملایم عاجی/گیاهی برای وضوح در تم تاریک و روشن مرورگرها -->
+  <rect width="64" height="64" rx="16" fill="#f8faf9"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="none" stroke="#e2ece6" stroke-width="1.5"/>
+
+  <!-- شش‌ضلعی نماد سلامت و مفردات گیاهی -->
+  <g transform="translate(14, 12)">
+    <!-- کادر اصلی سپر -->
+    <path d="M18 2 L33 10.5 L33 27.5 L18 36 L3 27.5 L3 10.5 Z" fill="url(#favShieldGrad)" stroke="url(#favGold)" stroke-width="1.6" stroke-linejoin="round"/>
+    
+    <!-- حاشیه نازک داخلی -->
+    <path d="M18 5 L30 11.8 L30 25.2 L18 32 L6 25.2 L6 11.8 Z" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.35"/>
+
+    <!-- ساقه و برگ‌های گیاه دارویی به رنگ سفید/طلایی درخشان -->
+    <path d="M18 8 L18 30" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <!-- برگ‌های فوقانی -->
+    <path d="M18 13 Q25 15 26 20" stroke="#f5d68b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M18 13 Q11 15 10 20" stroke="#f5d68b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+    <!-- برگ‌های میانی -->
+    <path d="M18 19 Q24 22 24 26" stroke="#ffffff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M18 19 Q12 22 12 26" stroke="#ffffff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+
+    <!-- نگین طلایی بالای ساقه -->
+    <circle cx="18" cy="8" r="1.8" fill="url(#favGold)"/>
+  </g>
 </svg>

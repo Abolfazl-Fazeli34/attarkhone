@@ -583,6 +583,7 @@ class Command(BaseCommand):
             ProductFeature.objects.create(product=p, name="منطقه رویش", value=p.harvest_region)
             ProductFeature.objects.create(product=p, name="ترکیبات مؤثره", value=p.active_compounds[:60])
             ProductFeature.objects.create(product=p, name="پروانه بهداشتی", value=p.health_license)
+            ProductFeature.objects.create(product=p, name="استاندارد بسته‌بندی", value="پاکت کرافت چندلایه دارویی زیست‌پذیر با زیپ‌کیپ ضدرطوبت و محافظ اسانس")
 
         self.stdout.write(f"تعداد {len(created_products)} محصول ممتاز با مشخصه‌ها و ویژگی‌های تخصصی ثبت گردید.")
 

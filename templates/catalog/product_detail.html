@@ -134,14 +134,14 @@
 
       <!-- ۳ تصویر بندانگشتی در زیر عکس اصلی -->
       <div class="thumbnails-row">
-        <div class="thumb-box active">
+        <div class="thumb-box active" title="نمای اصلی فرآورده">
           <img src="{{ product.get_display_image }}" alt="تصویر اصلی {{ product.name }}">
         </div>
-        <div class="thumb-box">
-          <img src="{% static 'img/products/real_tea.jpg' %}" alt="تصویر فرآوری">
+        <div class="thumb-box" title="بسته‌بندی بهداشتی محافظ">
+          <img src="{% static 'img/products/real_box.jpg' %}" alt="بسته‌بندی محافظ کرافت دارویی">
         </div>
-        <div class="thumb-box">
-          <img src="{% static 'img/products/real_herb.jpg' %}" alt="تصویر گیاه‌شناسی">
+        <div class="thumb-box" title="کیفیت فرآوری و نگهداری">
+          <img src="{% static 'img/products/real_jar.jpg' %}" alt="ظروف استاندارد نگهداری و حفظ اسانس">
         </div>
       </div>
     </div>
@@ -178,6 +178,10 @@
       <button type="button" class="tab-nav-btn" data-tab="tab-dosage">
         {% razavi_icon 'time' size=16 %}
         <span>راهنمای بالینی دوز، دم‌آوری و مصلح سنتی</span>
+      </button>
+      <button type="button" class="tab-nav-btn" data-tab="tab-features">
+        {% razavi_icon 'tag' size=16 %}
+        <span>ویژگی‌ها و مشخصات فنی فرآورده (کارگاه ۱۴)</span>
       </button>
       <button type="button" class="tab-nav-btn" data-tab="tab-qa">
         {% razavi_icon 'help' size=16 %}
@@ -321,7 +325,69 @@
       </div>
     </div>
 
-    <!-- تب ۳: پرسش و پاسخ کارشناسی و نظرات خریداران -->
+    <!-- تب ۳: ویژگی‌ها و مشخصات فنی فرآورده (کارگاه ۱۴ پودمان ۲) -->
+    <div class="tab-content-panel" id="tab-features">
+      <div class="coa-card-wrapper" style="padding: 24px;">
+        <div class="coa-header-bar" style="margin-bottom: 20px;">
+          <div>
+            <h3 class="coa-title" style="display: flex; align-items: center; gap: 8px;">
+              {% razavi_icon 'tag' size=20 class='text-primary' %}
+              <span>ویژگی‌ها و مشخصات فنی استاندارد (Product Features - کارگاه ۱۴)</span>
+            </h3>
+            <span class="coa-subtitle">ویژگی‌های ثابت فیتوشیمیایی، اقلیمی و استانداردهای بسته‌بندی بر اساس سرفصل آموزشی پودمان ۲</span>
+          </div>
+          <div class="coa-status-badge">
+            {% razavi_icon 'check-circle' size=15 class='text-primary' %}
+            <span>ثبت معتبر در کاتالوگ</span>
+          </div>
+        </div>
+
+        {% if features %}
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+            {% for feature in features %}
+              <div style="background: #fbfbfa; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; transition: var(--transition);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 12px; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 6px;">
+                    {% if "بسته‌بندی" in feature.name %}
+                      {% razavi_icon 'package' size=14 class='text-gold' %}
+                    {% elif "مزاج" in feature.name or "طبع" in feature.name %}
+                      {% razavi_icon 'sparkles' size=14 class='text-gold' %}
+                    {% elif "منطقه" in feature.name %}
+                      {% razavi_icon 'map-pin' size=14 class='text-gold' %}
+                    {% elif "پروانه" in feature.name %}
+                      {% razavi_icon 'shield' size=14 class='text-gold' %}
+                    {% else %}
+                      {% razavi_icon 'tag' size=14 class='text-gold' %}
+                    {% endif %}
+                    {{ feature.name }}
+                  </span>
+                  {% if "بسته‌بندی" in feature.name %}
+                    <span style="font-size: 10px; background: #ecfdf5; color: #047857; padding: 2px 6px; border-radius: 4px; font-weight: 600;">استاندارد زیست‌پذیر</span>
+                  {% endif %}
+                </div>
+                <div style="font-size: 13px; color: #334155; line-height: 1.6; font-weight: 500;">
+                  {{ feature.value }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="text-align: center; color: #64748b; font-size: 13px; margin: 20px 0;">ویژگی فنی اختصاصی ثبت نشده است.</p>
+        {% endif %}
+
+        <!-- نکته آموزشی و استانداردهای دارویی بسته‌بندی عطارخونه -->
+        <div style="margin-top: 20px; padding: 14px 18px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); display: flex; align-items: flex-start; gap: 12px;">
+          <div style="color: #15803d; margin-top: 2px;">
+            {% razavi_icon 'package' size=20 %}
+          </div>
+          <div style="font-size: 12px; color: #166534; line-height: 1.8;">
+            <b>تضمین سلامت بسته‌بندی دارویی:</b> کلیه اقلام عطارخونه با رعایت کامل استانداردهای داروسازی گیاهی و اصول زیست‌پذیر (Kraft Multi-layer Foil Barrier) بسته‌بندی می‌شوند تا از نفوذ رطوبت، نور و تجزیه اسانس‌های مؤثره جلوگیری شود.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- تب ۴: پرسش و پاسخ کارشناسی و نظرات خریداران -->
     <div class="tab-content-panel" id="tab-qa">
       <div class="qa-section-wrapper">
         

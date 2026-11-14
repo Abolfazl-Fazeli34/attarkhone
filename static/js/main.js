@@ -593,18 +593,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // ۵. محاسبه بلادرنگ هزینه حامل در مرحله تسویه حساب (Checkout Live Carrier Cost)
+  // ۵. محاسبه بلادرنگ هزینه حامل و کادوپیچی در مرحله تسویه حساب (Checkout Live Carrier & Gift Calculations)
   const carrierRadios = document.querySelectorAll('.carrier-radio');
   const shippingDisplay = document.getElementById('checkoutShippingCostDisplay');
   const grandTotalDisplay = document.getElementById('checkoutGrandTotalDisplay');
+  const giftCheckbox = document.getElementById('checkoutGiftCheckbox');
+  const giftMessageBox = document.getElementById('checkoutGiftMessageBox');
+  const giftSummaryRow = document.getElementById('checkoutGiftWrapSummaryRow');
+  const giftCostDisplay = document.getElementById('checkoutGiftCostDisplay');
+  const giftWrapLabel = document.getElementById('checkoutGiftWrapLabel');
 
   if (carrierRadios.length > 0 && shippingDisplay && grandTotalDisplay) {
     function updateCheckoutCalculations() {
       const selected = document.querySelector('.carrier-radio:checked') || carrierRadios[0];
       const shippingCost = parseInt(selected.dataset.cost) || 0;
       const subtotal = parseInt(document.getElementById('rawSubtotal').value) || 0;
-      const giftCost = parseInt(document.getElementById('rawGiftCost').value) || 0;
       const discount = parseInt(document.getElementById('rawDiscountAmount').value) || 0;
+
+      let currentGiftCost = 0;
+      if (giftCheckbox) {
+        const unitCost = parseInt(giftCheckbox.dataset.unitCost) || 25000;
+        if (giftCheckbox.checked) {
+          currentGiftCost = unitCost;
+          if (giftMessageBox) giftMessageBox.style.display = 'block';
+          if (giftSummaryRow) giftSummaryRow.style.display = 'flex';
+          if (giftCostDisplay) giftCostDisplay.textContent = formatToman(currentGiftCost);
+          if (giftWrapLabel) {
+            giftWrapLabel.style.borderColor = 'var(--primary)';
+            giftWrapLabel.style.background = '#f7faf8';
+          }
+        } else {
+          currentGiftCost = 0;
+          if (giftMessageBox) giftMessageBox.style.display = 'none';
+          if (giftSummaryRow) giftSummaryRow.style.display = 'none';
+          if (giftWrapLabel) {
+            giftWrapLabel.style.borderColor = 'var(--border)';
+            giftWrapLabel.style.background = '#fafafa';
+          }
+        }
+        const rawGiftCostInput = document.getElementById('rawGiftCost');
+        if (rawGiftCostInput) rawGiftCostInput.value = currentGiftCost;
+      } else {
+        currentGiftCost = parseInt(document.getElementById('rawGiftCost')?.value) || 0;
+      }
 
       if (shippingCost === 0) {
         shippingDisplay.innerHTML = '<span style="color: #15803d; font-weight: 700;">رایگان</span>';
@@ -612,13 +643,17 @@ document.addEventListener('DOMContentLoaded', function () {
         shippingDisplay.textContent = formatToman(shippingCost);
       }
 
-      const grandTotal = Math.max(0, subtotal - discount + giftCost + shippingCost);
+      const grandTotal = Math.max(0, subtotal - discount + currentGiftCost + shippingCost);
       grandTotalDisplay.textContent = formatToman(grandTotal);
     }
 
     carrierRadios.forEach(radio => {
       radio.addEventListener('change', updateCheckoutCalculations);
     });
+
+    if (giftCheckbox) {
+      giftCheckbox.addEventListener('change', updateCheckoutCalculations);
+    }
 
     updateCheckoutCalculations();
   }

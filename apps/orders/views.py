@@ -303,6 +303,7 @@ class CheckoutView(View):
             'is_gift_wrapped': is_gift_wrapped,
             'gift_message': gift_message,
             'gift_cost': gift_cost,
+            'setting_gift_cost': setting.gift_wrap_cost,
             'coupon': coupon,
             'discount_amount': discount_amount,
         }
@@ -345,9 +346,9 @@ class CheckoutView(View):
         else:
             shipping_cost = carrier.cost
 
-        # کادوپیچی
-        is_gift_wrapped = request.session.get('cart_is_gift_wrapped', False)
-        gift_message = request.session.get('cart_gift_message', '')
+        # کادوپیچی (پوشش کارگاه ۲۴ و ارزشیابی ص ۱۱۲ - انتخاب در سبد خرید یا مرحله تسویه)
+        is_gift_wrapped = (request.POST.get('is_gift_wrapped') in ('on', 'true', '1')) or bool(request.session.get('cart_is_gift_wrapped', False))
+        gift_message = request.POST.get('gift_message', '').strip() or request.session.get('cart_gift_message', '')
         gift_cost = setting.gift_wrap_cost if is_gift_wrapped else 0
 
         # کوپن تخفیف

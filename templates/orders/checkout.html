@@ -111,6 +111,43 @@
           </div>
         </div>
 
+        <!-- ۲.۵. بسته‌بندی هدیه و خدمات ویژه مرسوله (کارگاه ۲۴ و شاخص ارزشیابی ص ۱۱۲) -->
+        <div style="background: #ffffff; padding: 22px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 20px; box-shadow: var(--shadow-sm);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="color: var(--gold);">{% razavi_icon 'gift' size=18 %}</span>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin: 0;">
+                خدمات بسته‌بندی نفیس و کادوپیچی هدیه
+              </h3>
+            </div>
+            <span class="badge" style="background:#fef3c7; color:#b45309; font-size: 11px;">کارگاه ۲۴</span>
+          </div>
+
+          <label style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1.5px solid {% if is_gift_wrapped %}var(--primary){% else %}var(--border){% endif %}; border-radius: var(--radius-sm); cursor: pointer; background: {% if is_gift_wrapped %}#f7faf8{% else %}#fafafa{% endif %}; transition: all 0.2s;" id="checkoutGiftWrapLabel">
+            <input type="checkbox" name="is_gift_wrapped" id="checkoutGiftCheckbox" {% if is_gift_wrapped %}checked{% endif %} data-unit-cost="{{ setting_gift_cost }}" style="margin-top: 3px; accent-color: var(--primary);">
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; font-size: 13px; color: var(--text-dark);">
+                  سفارش من در بسته‌بندی کادویی با روبان و کاغذ کرافت دارویی تزیین شود
+                </span>
+                <span style="font-weight: 700; font-size: 13px; color: #b45309;">
+                  +{{ setting_gift_cost|toman }}
+                </span>
+              </div>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 4px; line-height: 1.6;">
+                شامل لفاف کرافت ضدرطوبت درجه یک، روبان گیاهی کنفی و چاپ کارت‌پستال تبریک با یادداشت دلخواه شما.
+              </div>
+            </div>
+          </label>
+
+          <div id="checkoutGiftMessageBox" style="margin-top: 12px; {% if not is_gift_wrapped %}display: none;{% endif %}">
+            <label style="display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px;">
+              متن اختصاصی روی کارت هدیه:
+            </label>
+            <textarea name="gift_message" id="checkoutGiftMessageInput" rows="2" placeholder="متن پیام تبریک، قدردانی یا یادداشت دلخواه شما برای درج روی کارت..." style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px; box-sizing: border-box; resize: vertical;">{{ gift_message }}</textarea>
+          </div>
+        </div>
+
         <!-- ۳. شیوه پرداخت -->
         <div style="background: #ffffff; padding: 22px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
@@ -182,15 +219,13 @@
             <span id="checkoutShippingCostDisplay" style="font-weight: 600;">محاسبه...</span>
           </div>
 
-          {% if is_gift_wrapped %}
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; color: #b45309;">
-              <span style="display: inline-flex; align-items: center; gap: 4px;">
-                {% razavi_icon 'sparkles' size=13 %}
-                <span>بسته‌بندی هدیه:</span>
-              </span>
-              <span style="font-weight: 600;">{{ gift_cost|toman }}</span>
-            </div>
-          {% endif %}
+          <div id="checkoutGiftWrapSummaryRow" style="display: {% if is_gift_wrapped %}flex{% else %}none{% endif %}; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; color: #b45309;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;">
+              {% razavi_icon 'sparkles' size=13 %}
+              <span>بسته‌بندی هدیه:</span>
+            </span>
+            <span id="checkoutGiftCostDisplay" style="font-weight: 600;">{{ gift_cost|toman }}</span>
+          </div>
 
           {% if coupon %}
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; color: var(--primary);">
