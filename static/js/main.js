@@ -32,6 +32,14 @@ function getCookie(name) {
   return cookieValue;
 }
 
+// تابع سراسری دریافت توکن معتبر CSRF برای فراخوانی‌های ایجکس
+window.getCsrfToken = function () {
+  const fromCookie = getCookie('csrftoken');
+  if (fromCookie) return fromCookie;
+  const inputEl = document.querySelector('[name=csrfmiddlewaretoken]');
+  return inputEl ? inputEl.value : '';
+};
+
 // سامانه نمایش نوتیفیکیشن‌های شناور (Toast Notification)
 window.showToast = function (message, type = 'success', duration = 3500) {
   let container = document.getElementById('toastContainer');
@@ -89,7 +97,7 @@ window.updateCatalogSort = function (sortVal) {
 
 // ۲. اجرای تعاملات پس از بارگذاری سند (DOM Ready)
 document.addEventListener('DOMContentLoaded', function () {
-  const csrftoken = getCookie('csrftoken') || (document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : '');
+  const csrftoken = window.getCsrfToken();
 
   // ----------------------------------------------------
   // الف) ناوبری و منوهای هدر (Header Menus)
@@ -462,12 +470,17 @@ document.addEventListener('DOMContentLoaded', function () {
       fetch(`/orders/cart/add-ajax/${productId}/`, {
         method: 'POST',
         headers: {
-          'X-CSRFToken': csrftoken,
+          'X-CSRFToken': window.getCsrfToken(),
           'X-Requested-With': 'XMLHttpRequest'
         },
         body: formData
       })
-      .then(res => res.json())
+      .then(async res => {
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+        return res.json();
+      })
       .then(data => {
         if (data.success) {
           const cartBadge = document.getElementById('headerCartBadge');
@@ -505,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`/shop/wishlist/toggle/${productId}/`, {
       method: 'POST',
       headers: {
-        'X-CSRFToken': csrftoken,
+        'X-CSRFToken': window.getCsrfToken(),
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json'
       }
@@ -578,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`/orders/cart/update-ajax/${itemId}/`, {
       method: 'POST',
       headers: {
-        'X-CSRFToken': csrftoken,
+        'X-CSRFToken': window.getCsrfToken(),
         'X-Requested-With': 'XMLHttpRequest'
       },
       body: formData
@@ -635,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function () {
       fetch(`/orders/cart/remove-ajax/${itemId}/`, {
         method: 'POST',
         headers: {
-          'X-CSRFToken': csrftoken,
+          'X-CSRFToken': window.getCsrfToken(),
           'X-Requested-With': 'XMLHttpRequest'
         }
       })

@@ -1,21 +1,63 @@
+import urllib.parse
 from django.shortcuts import render
 from django.conf import settings
+from django.middleware.csrf import CsrfViewMiddleware
+from django.http.request import is_same_domain
 from .models import StoreSetting
+
+
+class AttarCsrfViewMiddleware(CsrfViewMiddleware):
+    """
+    پشتیبانی کامل و تضمین‌شده از بررسی CSRF در محیط‌های لوکال، سرور پروداکشن،
+    پروکسی معکوس Nginx (مانند دامنه attarkhone.ip3.ir) و دامنه‌های سفارشی.
+    این کلاس مانع از بروز خطای ۴۰۳ فوربیدن در درخواست‌های POST فرم‌ها و ایجکس سبد خرید می‌شود.
+    """
+    def _origin_verified(self, request):
+        if super()._origin_verified(request):
+            return True
+        origin = request.META.get('HTTP_ORIGIN')
+        if not origin:
+            return False
+        try:
+            parsed = urllib.parse.urlsplit(origin)
+            good_host = request.get_host().split(':')[0]
+            origin_host = parsed.netloc.split(':')[0]
+            if origin_host == good_host:
+                return True
+            if '*' in settings.ALLOWED_HOSTS or any(is_same_domain(origin_host, h.lstrip('.')) for h in settings.ALLOWED_HOSTS):
+                return True
+        except Exception:
+            return False
+        return False
+
+    def _check_referer(self, request):
+        try:
+            return super()._check_referer(request)
+        except Exception:
+            referer = request.META.get('HTTP_REFERER')
+            if not referer:
+                raise
+            try:
+                parsed = urllib.parse.urlsplit(referer)
+                good_host = request.get_host().split(':')[0]
+                referer_host = parsed.netloc.split(':')[0]
+                if referer_host == good_host:
+                    return
+                if '*' in settings.ALLOWED_HOSTS or any(is_same_domain(referer_host, h.lstrip('.')) for h in settings.ALLOWED_HOSTS):
+                    return
+            except Exception:
+                pass
+            raise
 
 
 class DynamicCsrfTrustedOriginsMiddleware:
     """
-    پشتیبانی هوشمند و پویا از هر دامنه، زیردامنه و سرور پروکسی معکوس در بررسی‌های CSRF
-    این میدلور تضمین می‌کند دامنه‌های عمومی مانند attarkhone.ip3.ir یا هر دامنه‌ای که به سرور متصل شود،
-    بدون خطای ۴۰۳ فوربیدن در تراکنش‌های POST، ورود به سایت و سبد خرید کار کنند.
+    میدلور کمکی برای سازگاری گذشته‌نگر
     """
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        origin = request.META.get('HTTP_ORIGIN')
-        if origin and origin not in settings.CSRF_TRUSTED_ORIGINS:
-            settings.CSRF_TRUSTED_ORIGINS.append(origin)
         return self.get_response(request)
 
 

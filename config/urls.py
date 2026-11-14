@@ -25,8 +25,8 @@ urlpatterns = [
     # پنل ادمین رسمی پیش‌فرض جنگو
     path('admin/', admin.site.urls),
 
-    # ص ۱۱۳ کتاب درسی: تغییر آدرس پیش‌فرض ادمین به نشانی غیرقابل حدس جهت افزایش امنیت
-    path('attar-management/', admin.site.urls),
+    # ص ۱۱۳ کتاب درسی: آدرس مدیریتی اختصاصی با هدایت به پنل ادمین
+    path('attar-management/', RedirectView.as_view(url='/admin/', permanent=False)),
 
     # اپلیکیشن‌های اصلی پروژه
     path('', include('core.urls', namespace='core')),

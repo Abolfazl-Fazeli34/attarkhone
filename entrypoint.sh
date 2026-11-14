@@ -14,6 +14,14 @@ python manage.py migrate --noinput
 echo "[2/3] در حال گردآوری فایل‌های استاتیک (CollectStatic)..."
 python manage.py collectstatic --noinput
 
+# حصول اطمینان از وجود پوشه‌ها و دارایی‌های رسانه‌ای اولیه (لوگو و آیکون برند)
+mkdir -p /app/media/settings
+if [ ! -f /app/media/settings/logo.png ] && [ -f /app/static/img/brand_logo.png ]; then
+    echo "بارگذاری لوگو و آیکون پیش‌فرض برند در رسانه..."
+    cp /app/static/img/brand_logo.png /app/media/settings/logo.png
+    cp /app/static/img/brand_icon.png /app/media/settings/favicon.png
+fi
+
 # بررسی نیاز به استقرار دیتای پروداکشن اولیه در صورت خالی بودن دیتابیس
 echo "[3/3] بررسی داده‌های اولیه پایگاه داده..."
 python manage.py shell -c "

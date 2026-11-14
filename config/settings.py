@@ -68,11 +68,10 @@ AUTH_USER_MODEL = 'accounts.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    # پشتیبانی پویا از دامنه‌ها در برابر خطای CSRF
-    'core.middleware.DynamicCsrfTrustedOriginsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # کارگاه اعتبارسنجی امن و هوشمند CSRF سازگار با پروکسی معکوس و کلیه دامنه‌ها
+    'core.middleware.AttarCsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

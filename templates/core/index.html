@@ -166,7 +166,7 @@
 
             <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
               <div>
-                <div style="font-size: 10.5px; color: #94a3b8; text-decoration: line-through;">{{ deal.price|toman }}</div>
+                <div style="font-size: 10.5px; color: #94a3b8; text-decoration: line-through;">{{ deal.base_price|toman }}</div>
                 <div style="font-size: 13.5px; font-weight: 800; color: #15803d;">{{ deal.final_price|toman }}</div>
               </div>
               <a href="{% url 'catalog:product_detail' slug=deal.slug %}" class="btn-action" style="padding: 5px 12px; font-size: 11.5px; font-weight: 700; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 4px; text-decoration: none;">

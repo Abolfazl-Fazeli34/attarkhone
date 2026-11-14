@@ -20,6 +20,35 @@
 </head>
 <body>
 
+  <!-- نوار اعلان و پشتیبانی فوقانی هدر (Top Announcement Bar) -->
+  <div class="site-top-bar" style="background: #143529; color: #f1f5f9; font-size: 11px; padding: 5px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.35);">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="display: inline-flex; align-items: center; gap: 5px; color: #fef08a; font-weight: 600;">
+          {% razavi_icon 'sparkles' size=12 %}
+          <span>ارسال رایگان برای خریدهای بالای ۴۵۰ هزار تومان در سراسر کشور</span>
+        </span>
+        <span style="color: rgba(255,255,255,0.25);">|</span>
+        <span style="display: inline-flex; align-items: center; gap: 4px; color: #cbd5e1;">
+          {% razavi_icon 'shield' size=12 %}
+          <span>تضمین ۱۰۰٪ اصالت و شناسنامه آزمایشگاهی (COA)</span>
+        </span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px; color: #cbd5e1;">
+        <span style="display: inline-flex; align-items: center; gap: 4px;">
+          {% razavi_icon 'time' size=12 %}
+          <span>پشتیبانی: شنبه تا چهارشنبه ۹ الی ۱۸</span>
+        </span>
+        <span style="color: rgba(255,255,255,0.25);">|</span>
+        <a href="tel:{{ store_setting.phone|default:'02188997766' }}" style="color: #fef08a; text-decoration: none; font-weight: 700; direction: ltr; display: inline-flex; align-items: center; gap: 4px;">
+          {% razavi_icon 'call' size=12 %}
+          <span>{{ store_setting.phone|default:'021-88997766' }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- هدر اصلی مطابق موکاپ با چیدمان راست‌چین واقعی (RTL) -->
   <header class="site-header">
     <div class="container header-main">
@@ -27,7 +56,7 @@
       <!-- ۱. لوگوی برند عطارخونه سمت راست در حالت RTL -->
       <a href="{% url 'core:home' %}" class="brand-logo-link" title="{{ store_setting.store_name|default:'صفحه نخست عطارخونه' }}">
         <div class="logo-shield-icon">
-          <img src="{% if store_setting and store_setting.logo %}{{ store_setting.logo.url }}{% else %}{% static 'img/brand_logo.png' %}{% endif %}" alt="{{ store_setting.store_name|default:'عطارخونه' }}" class="header-brand-img" style="width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));">
+          <img src="{% if store_setting and store_setting.logo %}{{ store_setting.logo.url }}{% else %}{% static 'img/brand_emblem.svg' %}{% endif %}" alt="{{ store_setting.store_name|default:'عطارخونه' }}" class="header-brand-img" style="width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));">
         </div>
         <div class="logo-text-group">
           <span class="logo-title">{{ store_setting.store_name|default:'عطارخونه' }}</span>
@@ -184,7 +213,7 @@
         <div class="footer-col">
           <a href="{% url 'core:home' %}" class="footer-brand-title">
             <div class="logo-shield-icon">
-              <img src="{% if store_setting and store_setting.logo %}{{ store_setting.logo.url }}{% else %}{% static 'img/brand_logo.png' %}{% endif %}" alt="{{ store_setting.store_name|default:'عطارخونه' }}" style="width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));">
+              <img src="{% if store_setting and store_setting.logo %}{{ store_setting.logo.url }}{% else %}{% static 'img/brand_emblem.svg' %}{% endif %}" alt="{{ store_setting.store_name|default:'عطارخونه' }}" style="width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));">
             </div>
             <div>
               <span style="font-size: 16px; font-weight: 800; color: var(--primary-dark); display: block; line-height: 1.1;">{{ store_setting.store_name|default:'عطارخونه' }}</span>

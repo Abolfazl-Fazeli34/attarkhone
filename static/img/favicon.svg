@@ -1,41 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
   <defs>
-    <!-- گرادیان سپر زمردی تیره فاخر -->
-    <linearGradient id="favShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#143529"/>
-      <stop offset="100%" stop-color="#092017"/>
+    <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#194233"/>
+      <stop offset="50%" stop-color="#143529"/>
+      <stop offset="100%" stop-color="#0c2018"/>
     </linearGradient>
-    <!-- گرادیان طلا -->
     <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f5d68b"/>
-      <stop offset="100%" stop-color="#c69214"/>
+      <stop offset="0%" stop-color="#fff2c6"/>
+      <stop offset="35%" stop-color="#d4af37"/>
+      <stop offset="70%" stop-color="#aa7e18"/>
+      <stop offset="100%" stop-color="#f5d77f"/>
+    </linearGradient>
+    <linearGradient id="favMortar" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#fae8a4"/>
+      <stop offset="30%" stop-color="#d4af37"/>
+      <stop offset="70%" stop-color="#936c12"/>
+      <stop offset="100%" stop-color="#5a4108"/>
     </linearGradient>
   </defs>
 
-  <!-- پس‌زمینه گرد مدرن با رنگ ملایم عاجی/گیاهی برای وضوح در تم تاریک و روشن مرورگرها -->
-  <rect width="64" height="64" rx="16" fill="#f8faf9"/>
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="none" stroke="#e2ece6" stroke-width="1.5"/>
+  <!-- دایره بیرونی زمردی -->
+  <circle cx="60" cy="60" r="56" fill="url(#favBg)"/>
+  <circle cx="60" cy="60" r="52" fill="none" stroke="url(#favGold)" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="47.5" fill="none" stroke="url(#favGold)" stroke-width="1" stroke-dasharray="2.5, 3"/>
 
-  <!-- شش‌ضلعی نماد سلامت و مفردات گیاهی -->
-  <g transform="translate(14, 12)">
-    <!-- کادر اصلی سپر -->
-    <path d="M18 2 L33 10.5 L33 27.5 L18 36 L3 27.5 L3 10.5 Z" fill="url(#favShieldGrad)" stroke="url(#favGold)" stroke-width="1.6" stroke-linejoin="round"/>
-    
-    <!-- حاشیه نازک داخلی -->
-    <path d="M18 5 L30 11.8 L30 25.2 L18 32 L6 25.2 L6 11.8 Z" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.35"/>
+  <!-- دانه‌های طلایی چهارسو -->
+  <circle cx="60" cy="11.5" r="2.5" fill="url(#favGold)"/>
+  <circle cx="60" cy="108.5" r="2.5" fill="url(#favGold)"/>
+  <circle cx="11.5" cy="60" r="2.5" fill="url(#favGold)"/>
+  <circle cx="108.5" cy="60" r="2.5" fill="url(#favGold)"/>
 
-    <!-- ساقه و برگ‌های گیاه دارویی به رنگ سفید/طلایی درخشان -->
-    <path d="M18 8 L18 30" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
-    
-    <!-- برگ‌های فوقانی -->
-    <path d="M18 13 Q25 15 26 20" stroke="#f5d68b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <path d="M18 13 Q11 15 10 20" stroke="#f5d68b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <!-- شاخه‌های دارویی دور هاون -->
+  <g stroke="url(#favGold)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M78 82 C88 74 90 56 86 42 C84 37 80 32 75 28" stroke-width="1.8"/>
+    <path d="M84 44 C88 43 92 46 91 50 C87 49 85 46 84 44 Z" fill="url(#favGold)"/>
+    <path d="M87 56 C92 56 94 60 92 64 C88 62 86 58 87 56 Z" fill="url(#favGold)"/>
+    <path d="M84 68 C88 69 90 73 87 77 C84 75 83 71 84 68 Z" fill="url(#favGold)"/>
 
-    <!-- برگ‌های میانی -->
-    <path d="M18 19 Q24 22 24 26" stroke="#ffffff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-    <path d="M18 19 Q12 22 12 26" stroke="#ffffff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M42 82 C32 74 30 56 34 42 C36 37 40 32 45 28" stroke-width="1.8"/>
+    <path d="M36 44 C32 43 28 46 29 50 C33 49 35 46 36 44 Z" fill="url(#favGold)"/>
+    <path d="M33 56 C28 56 26 60 28 64 C32 62 34 58 33 56 Z" fill="url(#favGold)"/>
+    <path d="M36 68 C32 69 30 73 33 77 C36 75 37 71 36 68 Z" fill="url(#favGold)"/>
+  </g>
 
-    <!-- نگین طلایی بالای ساقه -->
-    <circle cx="18" cy="8" r="1.8" fill="url(#favGold)"/>
+  <!-- دسته هاون شیب‌دار -->
+  <g transform="translate(60, 56) rotate(-28)">
+    <path d="M-4 -30 C-4 -34 4 -34 4 -30 L3 6 C3 8 -3 8 -3 6 Z" fill="url(#favMortar)" stroke="#523a07" stroke-width="0.8"/>
+    <circle cx="0" cy="-31" r="6" fill="url(#favMortar)" stroke="#523a07" stroke-width="0.8"/>
+    <circle cx="-1" cy="-32" r="2" fill="#fff7d1" opacity="0.6"/>
+  </g>
+
+  <!-- کاسه هاون عتیقه -->
+  <g id="mortar">
+    <ellipse cx="60" cy="85" rx="20" ry="3.5" fill="#08140f" opacity="0.6"/>
+    <path d="M46 84 C46 82 49 81 60 81 C71 81 74 82 74 84 L72 87 C72 88 48 88 48 87 Z" fill="url(#favMortar)" stroke="#523a07" stroke-width="0.6"/>
+    <ellipse cx="60" cy="87" rx="13" ry="2" fill="url(#favGold)"/>
+
+    <path d="M38 56 C38 68 47 81 60 81 C73 81 82 68 82 56 L85 54 C85 52 83 51 81 51 L39 51 C37 51 35 52 35 54 Z" fill="url(#favMortar)" stroke="#523a07" stroke-width="0.8"/>
+    <ellipse cx="60" cy="53" rx="22" ry="4.5" fill="url(#favGold)" stroke="#523a07" stroke-width="0.8"/>
+    <ellipse cx="60" cy="53" rx="19.5" ry="3.2" fill="#143529"/>
+
+    <path d="M52 52 C48 48 49 43 54 44 C57 45 56 50 52 52 Z" fill="#22c55e"/>
+    <path d="M64 51 C68 46 73 48 71 52 C68 54 65 53 64 51 Z" fill="#16a34a"/>
+
+    <path d="M43 60 Q60 66 77 60" fill="none" stroke="url(#favGold)" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="60" cy="65" r="2" fill="url(#favGold)"/>
   </g>
 </svg>
