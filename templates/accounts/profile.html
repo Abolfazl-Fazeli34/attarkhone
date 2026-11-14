@@ -149,10 +149,16 @@
                       </span>
                     </td>
                     <td style="padding: 10px 8px;">
-                      <a href="{% url 'orders:invoice' tracking_code=o.tracking_code %}" class="btn-action" style="font-size: 11px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--primary); font-weight: 600;">
-                        {% razavi_icon 'receipt' size=13 %}
-                        <span>مشاهده</span>
-                      </a>
+                      <div style="display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="{% url 'orders:tracking' %}?code={{ o.tracking_code }}" class="btn-action" style="font-size: 11px; padding: 4px 8px; display: inline-flex; align-items: center; gap: 3px; text-decoration: none; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; font-weight: 600;" title="رهگیری مراحل بسته‌بندی و ارسال">
+                          {% razavi_icon 'truck' size=12 %}
+                          <span>رهگیری</span>
+                        </a>
+                        <a href="{% url 'orders:invoice' tracking_code=o.tracking_code %}" class="btn-action" style="font-size: 11px; padding: 4px 8px; display: inline-flex; align-items: center; gap: 3px; text-decoration: none; color: var(--primary); font-weight: 600;">
+                          {% razavi_icon 'receipt' size=12 %}
+                          <span>فاکتور</span>
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 {% endfor %}

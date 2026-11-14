@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage, ConsultationBooking
+from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage, ConsultationBooking, PrescriptionOrder
 
 
 @admin.register(SymptomCategory)
@@ -32,3 +32,11 @@ class ConsultationBookingAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'symptom_category', 'preferred_time', 'status', 'created_at')
     list_filter = ('status', 'symptom_category')
     search_fields = ('name', 'phone', 'notes')
+
+
+@admin.register(PrescriptionOrder)
+class PrescriptionOrderAdmin(admin.ModelAdmin):
+    list_display = ('tracking_code', 'patient_name', 'phone', 'doctor_name', 'status', 'estimated_cost', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('tracking_code', 'patient_name', 'phone', 'doctor_name', 'notes')
+    readonly_fields = ('tracking_code', 'created_at')

@@ -130,3 +130,17 @@ class FacetedSearchTestCase(TestCase):
         self.assertIsNotNone(review)
         self.assertEqual(review.rating, 5)
 
+    def test_search_suggest_api(self):
+        url = reverse('catalog:search_suggest')
+        # query too short
+        res_short = self.client.get(url, {'q': 'a'})
+        self.assertEqual(res_short.status_code, 200)
+        self.assertEqual(res_short.json()['total_matches'], 0)
+
+        # matching query
+        res = self.client.get(url, {'q': 'بابونه'})
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertGreaterEqual(len(data['products']), 1)
+        self.assertIn("بابونه", data['products'][0]['name'])
+

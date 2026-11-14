@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}ارسال عکس نسخه پزشک طب سنتی | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 820px; margin: 32px auto;">
+
+  <!-- نوار مسیر راهنما (Breadcrumbs) -->
+  <nav class="site-breadcrumbs" aria-label="خرده‌نان">
+    <a href="{% url 'core:home' %}">صفحه نخست</a>
+    <span class="bc-sep">{% razavi_icon 'arrow-left' size=10 %}</span>
+    <a href="{% url 'remedy:wizard_index' %}">دستیار سلامت و مشاوره</a>
+    <span class="bc-sep">{% razavi_icon 'arrow-left' size=10 %}</span>
+    <span class="bc-current">ارسال نسخه پزشک طب سنتی</span>
+  </nav>
+
+  <div style="background: #ffffff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 32px; box-shadow: var(--shadow-sm); margin-top: 16px;">
+    
+    <!-- سربرگ فرم ارسال نسخه -->
+    <div style="text-align: center; border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: #ecfdf5; color: var(--primary); margin-bottom: 10px;">
+        {% razavi_icon 'receipt' size=28 %}
+      </div>
+      <h1 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin: 0 0 8px 0;">
+        ارسال نسخه پزشک طب سنتی جهت تهیه و ارسال اقلام
+      </h1>
+      <p style="font-size: 13px; color: #64748b; line-height: 1.8; max-width: 620px; margin: 0 auto;">
+        چنانچه از پزشک یا متخصص طب سنتی نسخه مکتوب یا لیست اقلام ترکیبی دارید، عکس نسخه را ارسال فرمایید تا توسط دکتر داروساز عطارخونه بررسی، قیمت‌گذاری و بسته‌بندی استاندارد شود.
+      </p>
+    </div>
+
+    <!-- مزایای ارسال نسخه -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 26px;">
+      <div style="background: #fbfbfa; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+        <span style="color: var(--primary);">{% razavi_icon 'shield' size=20 %}</span>
+        <span style="font-size: 12px; font-weight: 600; color: var(--primary-dark);">بررسی دقیق تداخلات دارویی</span>
+      </div>
+      <div style="background: #fbfbfa; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+        <span style="color: var(--primary);">{% razavi_icon 'package' size=20 %}</span>
+        <span style="font-size: 12px; font-weight: 600; color: var(--primary-dark);">سورتینگ و بسته‌بندی دارویی</span>
+      </div>
+      <div style="background: #fbfbfa; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+        <span style="color: var(--primary);">{% razavi_icon 'truck' size=20 %}</span>
+        <span style="font-size: 12px; font-weight: 600; color: var(--primary-dark);">ارسال سریع به سراسر کشور</span>
+      </div>
+    </div>
+
+    <!-- فرم ارسال نسخه -->
+    <form action="{% url 'remedy:prescription_upload' %}" method="post" enctype="multipart/form-data" id="prescriptionForm">
+      {% csrf_token %}
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">
+            نام و نام خانوادگی بیمار <span style="color: #ef4444;">*</span>
+          </label>
+          <input type="text" name="patient_name" value="{{ initial_name }}" placeholder="مثال: مریم احمدی" required style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">
+            شماره تلفن همراه جهت هماهنگی و تماس <span style="color: #ef4444;">*</span>
+          </label>
+          <input type="tel" name="phone" value="{{ initial_phone }}" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px; direction: ltr; text-align: left; box-sizing: border-box;">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">
+            نام پزشک یا سلامتکده طب سنتی (اختیاری)
+          </label>
+          <input type="text" name="doctor_name" placeholder="مثال: دکتر خیراندیش / سلامتکده بهشت" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">
+            سن بیمار (اختیاری جهت تطبیق دوز دارو)
+          </label>
+          <input type="text" name="patient_age" placeholder="مثال: ۳۵ سال" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px; box-sizing: border-box;">
+        </div>
+      </div>
+
+      <!-- کادر بارگذاری تصویر نسخه -->
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">
+          تصویر واضح نسخه یا برگه دست‌نویس پزشک <span style="color: #ef4444;">*</span>
+        </label>
+        <div style="border: 2px dashed #cbd5e1; border-radius: var(--radius-sm); padding: 26px 20px; text-align: center; background: #f8fafc; transition: all 0.2s;" id="dropzoneBox">
+          <div style="color: #64748b; margin-bottom: 8px;">
+            {% razavi_icon 'camera' size=36 %}
+          </div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--primary-dark); margin-bottom: 4px;">
+            کلیک کنید یا فایل تصویر نسخه را اینجا رها کنید
+          </div>
+          <div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 12px;">
+            فرمت‌های مجاز: JPG, PNG, WEBP (حداکثر ۱۰ مگابایت)
+          </div>
+          <input type="file" name="prescription_image" id="prescriptionImageInput" accept="image/*" required style="display: none;">
+          <button type="button" onclick="document.getElementById('prescriptionImageInput').click()" class="btn-action" style="padding: 7px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); background: #fff; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary);">
+            انتخاب تصویر از گوشی یا رایانه
+          </button>
+          <div id="filePreviewName" style="margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--primary); display: none;"></div>
+        </div>
+      </div>
+
+      <!-- یادداشت بیمار -->
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">
+          توضیحات تکمیلی، حساسیت‌های گیاهی یا داروهای شیمیایی همزمان (اختیاری)
+        </label>
+        <textarea name="notes" rows="3" placeholder="در صورت داشتن بیماری زمینه‌ای (مانند دیابت، فشار خون) یا مصرف داروهای خاص (وارفارین، آسپرین) اینجا قید فرمایید..." style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 12.5px; box-sizing: border-box; line-height: 1.7;"></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <button type="submit" class="btn-hero" style="border: none; cursor: pointer; padding: 12px 28px; font-size: 13.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px;">
+          {% razavi_icon 'check-circle' size=16 %}
+          <span>ثبت و ارسال نسخه جهت ارزیابی داروساز</span>
+        </button>
+
+        <a href="{% url 'remedy:prescription_track' %}" style="font-size: 12px; color: var(--primary); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+          {% razavi_icon 'search' size=14 %}
+          <span>پیگیری نسخه ارسال‌شده قبلی</span>
+        </a>
+      </div>
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('prescriptionImageInput');
+  const preview = document.getElementById('filePreviewName');
+  if (input && preview) {
+    input.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        preview.textContent = 'فایل انتخاب شد: ' + this.files[0].name;
+        preview.style.display = 'block';
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

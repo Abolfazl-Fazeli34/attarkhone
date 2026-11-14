@@ -46,6 +46,9 @@ class HomeView(View):
             categories.extend(extra)
 
         symptom_categories = SymptomCategory.objects.all()[:4]
+        
+        # کارگاه ۲۳: محصولات دارای تخفیف شگفت‌انگیز روز (Daily Special Deals)
+        special_deals = Product.objects.filter(discount_percent__gt=0).order_by('-discount_percent')[:4]
 
         context = {
             'sliders': sliders,
@@ -53,6 +56,7 @@ class HomeView(View):
             'middle_banners': middle_banners,
             'featured_products': featured_products,
             'latest_products': latest_products,
+            'special_deals': special_deals,
             'categories': categories,
             'symptom_categories': symptom_categories,
         }

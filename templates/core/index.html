@@ -117,6 +117,94 @@
     </div>
   </section>
 
+  <!-- ۲.۵ ویترین شگفت‌انگیز روز و جشنواره تخفیف گیاهان اصیل همراه با تایمر معکوس -->
+  {% if special_deals %}
+  <section class="daily-deals-section" style="margin: 28px 0; background: linear-gradient(135deg, #143529 0%, #1e4d3a 100%); border-radius: var(--radius-md); padding: 24px; color: #fff; box-shadow: var(--shadow-md);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 14px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: #143529; display: flex; align-items: center; justify-content: center;">
+          {% razavi_icon 'sparkles' size=22 %}
+        </div>
+        <div>
+          <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0;">پیشنهاد شگفت‌انگیز روز عطارخونه</h3>
+          <p style="font-size: 12px; color: #cbd5e1; margin: 2px 0 0 0;">فرآورده‌های ممتاز دست‌چین با بالاترین درصد تخفیف ویژه ۲۴ ساعته</p>
+        </div>
+      </div>
+
+      <!-- تایمر معکوس زنده ۲۴ ساعته -->
+      <div style="display: flex; align-items: center; gap: 6px;" id="dealCountdown">
+        <span style="font-size: 11.5px; color: #f1f5f9; font-weight: 600;">زمان باقی‌مانده:</span>
+        <div style="display: flex; gap: 4px; font-family: inherit; direction: ltr;">
+          <span style="background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 13px;" id="dealHours">۰۸</span> :
+          <span style="background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 13px;" id="dealMinutes">۴۲</span> :
+          <span style="background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 13px; color: var(--gold);" id="dealSeconds">۱۹</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- گرید کالاهای شگفت‌انگیز -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+      {% for deal in special_deals %}
+        <div style="background: #ffffff; border-radius: var(--radius-sm); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <div style="position: relative; height: 160px; overflow: hidden;">
+            <a href="{% url 'catalog:product_detail' slug=deal.slug %}">
+              <img src="{{ deal.get_display_image }}" alt="{{ deal.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+            </a>
+            <span style="position: absolute; top: 10px; right: 10px; background: #dc2626; color: #fff; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 20px;">
+              {{ deal.discount_percent|fa_digits }}٪ تخفیف
+            </span>
+          </div>
+
+          <div style="padding: 14px; display: flex; flex-direction: column; flex: 1;">
+            <a href="{% url 'catalog:product_detail' slug=deal.slug %}" style="text-decoration: none; color: var(--primary-dark); font-size: 13px; font-weight: 800; line-height: 1.5; margin-bottom: 6px;">
+              {{ deal.name }}
+            </a>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">
+              {{ deal.category.name|default:'فرآورده گیاهی' }}
+              {% if deal.temperament %} • طبع: {{ deal.get_temperament_display }}{% endif %}
+            </div>
+
+            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+              <div>
+                <div style="font-size: 10.5px; color: #94a3b8; text-decoration: line-through;">{{ deal.price|toman }}</div>
+                <div style="font-size: 13.5px; font-weight: 800; color: #15803d;">{{ deal.final_price|toman }}</div>
+              </div>
+              <a href="{% url 'catalog:product_detail' slug=deal.slug %}" class="btn-action" style="padding: 5px 12px; font-size: 11.5px; font-weight: 700; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 4px; text-decoration: none;">
+                مشاهده و خرید
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- ۲.۶ بنر اختصاصی ارسال نسخه پزشک طب سنتی -->
+  <section style="margin: 22px 0; background: #fdfbf7; border: 1.5px solid #fed7aa; border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: #ffedd5; color: #c2410c; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        {% razavi_icon 'receipt' size=24 %}
+      </div>
+      <div>
+        <h4 style="font-size: 15px; font-weight: 800; color: #9a3412; margin: 0 0 4px 0;">نسخه پزشک یا متخصص طب سنتی دارید؟</h4>
+        <p style="font-size: 12.5px; color: #7c2d12; margin: 0; line-height: 1.7;">
+          کافیست عکس نسخه خود را بارگذاری نمایید تا اقلام دست‌چین و باکیفیت توسط داروسازان سنتی آماده و به آدرس شما ارسال گردد.
+        </p>
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'remedy:prescription_upload' %}" class="btn-hero" style="padding: 10px 20px; font-size: 12.5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background: #ea580c; color: #fff;">
+        {% razavi_icon 'camera' size=15 %}
+        <span>بارگذاری تصویر نسخه</span>
+      </a>
+      <a href="{% url 'remedy:prescription_track' %}" style="padding: 10px 16px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid #fdba74; border-radius: var(--radius-xs); background: #fff; color: #9a3412; display: inline-flex; align-items: center; gap: 4px;">
+        {% razavi_icon 'search' size=14 %}
+        <span>پیگیری نسخه قبلی</span>
+      </a>
+    </div>
+  </section>
+
   <!-- ۳. ویترین کلاسیک و مجلل دسته‌بندی فرآورده‌های گیاهی متصل به دیتابیس (کارگاه ۱۱) -->
   <section class="botanical-categories-showcase">
     <div class="section-classic-header">

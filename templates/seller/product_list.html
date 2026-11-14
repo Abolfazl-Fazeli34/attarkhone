@@ -114,6 +114,13 @@
                       ناموجود
                     </span>
                   {% endif %}
+
+                  <form method="post" action="{% url 'accounts:seller_product_toggle_stock' p.id %}" style="margin-top: 4px;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: 1px dashed var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; color: #64748b; cursor: pointer;" title="تغییر سریع وضعیت موجودی کالا">
+                      {% if p.stock > 0 %}تغییر به ناموجود{% else %}شارژ سریع انبار{% endif %}
+                    </button>
+                  </form>
                 </td>
                 <td style="padding: 12px 16px;">
                   {% if p.is_organic %}

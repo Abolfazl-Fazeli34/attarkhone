@@ -45,6 +45,91 @@
           </div>
         </div>
 
+        <!-- استپر ۴ مرحله‌ای وضعیت ارسال سفارش (Order Progress Stepper) -->
+        {% if order.status != 'cancelled' %}
+          <div class="tracking-stepper" style="margin: 24px 0 28px; padding: 18px 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; position: relative; align-items: flex-start;">
+              
+              <!-- خط رابط استپر -->
+              <div style="position: absolute; top: 18px; right: 10%; left: 10%; height: 3px; background: #e2e8f0; z-index: 1;">
+                <div style="height: 100%; background: var(--primary); transition: width 0.4s ease;
+                  {% if order.status == 'delivered' %}width: 100%;
+                  {% elif order.status == 'shipped' %}width: 66%;
+                  {% elif order.status == 'processing' %}width: 33%;
+                  {% else %}width: 5%;{% endif %}">
+                </div>
+              </div>
+
+              <!-- گام ۱: ثبت و پرداخت -->
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 22%;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;
+                  {% if order.is_paid or order.status != 'pending_payment' %}background: var(--primary); color: #fff; box-shadow: 0 0 0 4px #dcfce7;
+                  {% else %}background: #f59e0b; color: #fff; box-shadow: 0 0 0 4px #fef3c7;{% endif %}">
+                  {% if order.is_paid or order.status != 'pending_payment' %}
+                    {% razavi_icon 'check-circle' size=18 %}
+                  {% else %}
+                    {% razavi_icon 'time' size=18 %}
+                  {% endif %}
+                </div>
+                <div style="margin-top: 8px; font-size: 11.5px; font-weight: 700; color: var(--primary-dark); text-align: center;">ثبت و پرداخت</div>
+                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">
+                  {% if order.is_paid %}تایید شده{% else %}در انتظار تسویه{% endif %}
+                </div>
+              </div>
+
+              <!-- گام ۲: انبارداری و بسته‌بندی دارویی -->
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 22%;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;
+                  {% if order.status == 'processing' or order.status == 'shipped' or order.status == 'delivered' %}background: var(--primary); color: #fff; box-shadow: 0 0 0 4px #dcfce7;
+                  {% else %}background: #e2e8f0; color: #94a3b8;{% endif %}">
+                  {% razavi_icon 'package' size=18 %}
+                </div>
+                <div style="margin-top: 8px; font-size: 11.5px; font-weight: 700; color: {% if order.status == 'processing' or order.status == 'shipped' or order.status == 'delivered' %}var(--primary-dark){% else %}#94a3b8{% endif %}; text-align: center;">بسته‌بندی و سورتینگ</div>
+                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">
+                  {% if order.status == 'processing' %}در حال اقدام انبار
+                  {% elif order.status == 'shipped' or order.status == 'delivered' %}انجام شد
+                  {% else %}در انتظار{% endif %}
+                </div>
+              </div>
+
+              <!-- گام ۳: تحویل به شرکت پست / تیپاکس -->
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 22%;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;
+                  {% if order.status == 'shipped' or order.status == 'delivered' %}background: var(--primary); color: #fff; box-shadow: 0 0 0 4px #dcfce7;
+                  {% else %}background: #e2e8f0; color: #94a3b8;{% endif %}">
+                  {% razavi_icon 'truck' size=18 %}
+                </div>
+                <div style="margin-top: 8px; font-size: 11.5px; font-weight: 700; color: {% if order.status == 'shipped' or order.status == 'delivered' %}var(--primary-dark){% else %}#94a3b8{% endif %}; text-align: center;">تحویل به شرکت پست</div>
+                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">
+                  {% if order.status == 'shipped' %}در مسیر ارسال پستی
+                  {% elif order.status == 'delivered' %}توزیع شد
+                  {% else %}در صف ارسال{% endif %}
+                </div>
+              </div>
+
+              <!-- گام ۴: تحویل موفق به مشتری -->
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 22%;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;
+                  {% if order.status == 'delivered' %}background: #15803d; color: #fff; box-shadow: 0 0 0 4px #bbf7d0;
+                  {% else %}background: #e2e8f0; color: #94a3b8;{% endif %}">
+                  {% razavi_icon 'home' size=18 %}
+                </div>
+                <div style="margin-top: 8px; font-size: 11.5px; font-weight: 700; color: {% if order.status == 'delivered' %}#15803d{% else %}#94a3b8{% endif %}; text-align: center;">تحویل به خریدار</div>
+                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">
+                  {% if order.status == 'delivered' %}تحویل موفق
+                  {% else %}در انتظار تحویل{% endif %}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        {% else %}
+          <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 20px; color: #991b1b; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+            {% razavi_icon 'alert' size=18 %}
+            <span>این سفارش لغو گردیده است. در صورت نیاز به بررسی با واحد پشتیبانی عطارخونه تماس حاصل فرمایید.</span>
+          </div>
+        {% endif %}
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13px; line-height: 1.8; margin-bottom: 20px;">
           <div>
             <div style="display: flex; align-items: center; gap: 6px; color: #475569;">

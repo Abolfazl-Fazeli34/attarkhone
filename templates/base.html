@@ -13,7 +13,7 @@
   {% if store_setting and store_setting.favicon %}
     <link rel="icon" type="image/png" href="{{ store_setting.favicon.url }}">
   {% else %}
-    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   {% endif %}
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   {% block extra_css %}{% endblock %}
@@ -27,14 +27,7 @@
       <!-- ۱. لوگوی برند عطارخونه سمت راست در حالت RTL -->
       <a href="{% url 'core:home' %}" class="brand-logo-link" title="{{ store_setting.store_name|default:'صفحه نخست عطارخونه' }}">
         <div class="logo-shield-icon">
-          <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
-            <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
-            <path d="M18 7 L18 28" stroke="#1b4332" stroke-width="2" stroke-linecap="round"/>
-            <path d="M18 12 Q25 14 26 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M18 18 Q24 21 24 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M18 12 Q11 14 10 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M18 18 Q12 21 12 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-          </svg>
+          <img src="{% if store_setting and store_setting.logo %}{{ store_setting.logo.url }}{% else %}{% static 'img/brand_logo.png' %}{% endif %}" alt="{{ store_setting.store_name|default:'عطارخونه' }}" class="header-brand-img" style="width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));">
         </div>
         <div class="logo-text-group">
           <span class="logo-title">{{ store_setting.store_name|default:'عطارخونه' }}</span>
@@ -42,12 +35,13 @@
         </div>
       </a>
 
-      <!-- ۲. فیلد جستجوی کپسولی وسط -->
-      <form class="header-search-wrap" action="{% url 'catalog:product_list' %}" method="get">
-        <input type="text" name="q" placeholder="جستجو در میان فرآورده‌های اصیل و گیاهان دارویی..." value="{{ request.GET.q }}">
+      <!-- ۲. فیلد جستجوی کپسولی وسط همراه با دراپ‌داون تکمیل خودکار هوشمند -->
+      <form class="header-search-wrap" action="{% url 'catalog:product_list' %}" method="get" id="headerSearchForm" style="position: relative;">
+        <input type="text" name="q" id="headerSearchInput" placeholder="جستجو در میان فرآورده‌های اصیل و گیاهان دارویی..." value="{{ request.GET.q }}" autocomplete="off">
         <button type="submit" aria-label="جستجو">
           {% razavi_icon 'search' size=16 %}
         </button>
+        <div id="headerSearchDropdown" class="search-suggest-dropdown" style="display: none;"></div>
       </form>
 
       <!-- ۳. آیکون‌های سمت چپ در حالت RTL (کاربری، علاقه‌مندی، سبد خرید) -->
@@ -136,8 +130,17 @@
           <li class="nav-link-item {% if '/shop/' in request.path %}active{% endif %}">
             <a href="{% url 'catalog:product_list' %}">فروشگاه</a>
           </li>
-          <li class="nav-link-item {% if '/remedy/' in request.path %}active{% endif %}">
+          <li class="nav-link-item {% if request.path == '/remedy/' or request.path == '/remedy/wizard/' %}active{% endif %}">
             <a href="{% url 'remedy:wizard' %}">دستیار سلامت</a>
+          </li>
+          <li class="nav-link-item {% if '/remedy/prescription/' in request.path %}active{% endif %}">
+            <a href="{% url 'remedy:prescription_upload' %}" style="display: inline-flex; align-items: center; gap: 5px;">
+              {% razavi_icon 'receipt' size=14 %}
+              <span>ارسال نسخه پزشک</span>
+            </a>
+          </li>
+          <li class="nav-link-item {% if '/orders/tracking/' in request.path %}active{% endif %}">
+            <a href="{% url 'orders:tracking' %}">رهگیری سفارش</a>
           </li>
           <li class="nav-link-item {% if '/pages/articles/' in request.path %}active{% endif %}">
             <a href="{% url 'pages:article_list' %}">مقالات و آموزش‌ها</a>
@@ -181,14 +184,7 @@
         <div class="footer-col">
           <a href="{% url 'core:home' %}" class="footer-brand-title">
             <div class="logo-shield-icon">
-              <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
-                <path d="M18 2 L32 9 L32 25 L18 33 L4 25 L4 9 Z" stroke="#1b4332" stroke-width="2.2" stroke-linejoin="round"/>
-                <path d="M18 7 L18 28" stroke="#1b4332" stroke-width="2" stroke-linecap="round"/>
-                <path d="M18 12 Q25 14 26 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M18 18 Q24 21 24 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M18 12 Q11 14 10 20" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M18 18 Q12 21 12 25" stroke="#1b4332" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-              </svg>
+              <img src="{% if store_setting and store_setting.logo %}{{ store_setting.logo.url }}{% else %}{% static 'img/brand_logo.png' %}{% endif %}" alt="{{ store_setting.store_name|default:'عطارخونه' }}" style="width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));">
             </div>
             <div>
               <span style="font-size: 16px; font-weight: 800; color: var(--primary-dark); display: block; line-height: 1.1;">{{ store_setting.store_name|default:'عطارخونه' }}</span>

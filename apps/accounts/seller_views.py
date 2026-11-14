@@ -340,3 +340,31 @@ class SellerApplyView(LoginRequiredMixin, View):
 
         messages.success(request, 'به خانواده تأمین‌کنندگان عطارخونه خوش آمدید! پنل فروشندگی شما با موفقیت فعال گردید.')
         return redirect('accounts:seller_dashboard')
+
+
+class SellerProductToggleStockView(SellerRequiredMixin, View):
+    """
+    تغییر سریع وضعیت موجودی انبار توسط فروشنده (موجود / ناموجود)
+    """
+    def post(self, request, product_id):
+        product = get_object_or_404(Product, id=product_id, seller=request.user)
+        if product.stock > 0:
+            product.stock = 0
+            is_in_stock = False
+            msg = f"موجودی «{product.name}» به ناموجود تغییر یافت."
+        else:
+            product.stock = 50
+            is_in_stock = True
+            msg = f"موجودی «{product.name}» به تعداد ۵۰ بسته شارژ گردید."
+        product.save(update_fields=['stock'])
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'in_stock': is_in_stock,
+                'stock': product.stock,
+                'message': msg,
+            })
+
+        messages.success(request, msg)
+        return redirect('accounts:seller_products')

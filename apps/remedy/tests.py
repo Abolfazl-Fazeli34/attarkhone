@@ -56,3 +56,33 @@ class RemedyDrugInteractionTestCase(TestCase):
         self.assertIsNotNone(booking)
         self.assertEqual(booking.name, 'علی محمدی')
         self.assertEqual(booking.status, 'pending')
+
+    def test_prescription_upload_and_track(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from remedy.models import PrescriptionOrder
+        
+        url_upload = reverse('remedy:prescription_upload')
+        res_get = self.client.get(url_upload)
+        self.assertEqual(res_get.status_code, 200)
+
+        dummy_img = SimpleUploadedFile("prescription.jpg", b"fake_image_bytes", content_type="image/jpeg")
+        res_post = self.client.post(url_upload, {
+            'patient_name': 'زهرا قاسمی',
+            'phone': '09351234567',
+            'doctor_name': 'دکتر طب سنتی اصفهان',
+            'patient_age': '۴۲ سال',
+            'notes': 'داروهای کاهنده چربی خون و تقویت کبد',
+            'prescription_image': dummy_img,
+        })
+        self.assertEqual(res_post.status_code, 200)
+        prescription = PrescriptionOrder.objects.filter(phone='09351234567').first()
+        self.assertIsNotNone(prescription)
+        self.assertEqual(prescription.patient_name, 'زهرا قاسمی')
+        self.assertEqual(prescription.status, 'pending')
+
+        # استعلام آنلاین با کد رهگیری
+        url_track = reverse('remedy:prescription_track') + f'?code={prescription.tracking_code}'
+        res_track = self.client.get(url_track)
+        self.assertEqual(res_track.status_code, 200)
+        self.assertContains(res_track, prescription.tracking_code)
+        self.assertContains(res_track, 'زهرا قاسمی')

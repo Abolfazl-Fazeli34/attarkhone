@@ -8,7 +8,7 @@ from .views import (
 from .seller_views import (
     SellerDashboardView, SellerProductListView, SellerProductCreateView,
     SellerProductUpdateView, SellerProductDeleteView, SellerProductQRView,
-    SellerOrdersView, SellerSettingsView, SellerApplyView
+    SellerOrdersView, SellerSettingsView, SellerApplyView, SellerProductToggleStockView
 )
 
 app_name = 'accounts'
@@ -35,6 +35,7 @@ urlpatterns = [
     path('seller/products/', SellerProductListView.as_view(), name='seller_products'),
     path('seller/products/add/', SellerProductCreateView.as_view(), name='seller_product_add'),
     path('seller/products/<int:product_id>/edit/', SellerProductUpdateView.as_view(), name='seller_product_edit'),
+    path('seller/products/<int:product_id>/toggle-stock/', SellerProductToggleStockView.as_view(), name='seller_product_toggle_stock'),
     path('seller/products/<int:product_id>/delete/', SellerProductDeleteView.as_view(), name='seller_product_delete'),
     path('seller/products/<int:product_id>/qr/', SellerProductQRView.as_view(), name='seller_product_qr'),
     path('seller/orders/', SellerOrdersView.as_view(), name='seller_orders'),

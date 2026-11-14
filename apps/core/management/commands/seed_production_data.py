@@ -1,7 +1,10 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import timedelta
+import os
+import shutil
 import random
+from django.conf import settings
 
 from accounts.models import User, SellerProfile, EmailOTP
 from core.models import StoreSetting
@@ -66,6 +69,21 @@ class Command(BaseCommand):
         setting.telegram = "attarkhone_channel"
         setting.instagram = "attarkhone_ir"
         setting.is_maintenance_mode = False
+        
+        # کارگاه ۵: پیوند لوگو و فاوآیکون تصویری باکیفیت به تنظیمات رسمی
+        media_settings_dir = os.path.join(settings.MEDIA_ROOT, 'settings')
+        os.makedirs(media_settings_dir, exist_ok=True)
+        static_logo = os.path.join(settings.BASE_DIR, 'static', 'img', 'brand_logo.png')
+        static_fav = os.path.join(settings.BASE_DIR, 'static', 'img', 'brand_icon.png')
+        dest_logo = os.path.join(media_settings_dir, 'logo.png')
+        dest_fav = os.path.join(media_settings_dir, 'favicon.png')
+        if os.path.exists(static_logo):
+            shutil.copyfile(static_logo, dest_logo)
+            setting.logo = 'settings/logo.png'
+        if os.path.exists(static_fav):
+            shutil.copyfile(static_fav, dest_fav)
+            setting.favicon = 'settings/favicon.png'
+
         setting.save()
 
         # ۳. ایجاد استان‌ها و شرکت‌های حامل پستی (کارگاه ۴ و ۲۳)

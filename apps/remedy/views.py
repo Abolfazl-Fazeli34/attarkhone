@@ -3,7 +3,7 @@ from django.views import View
 from django.http import JsonResponse
 from django.contrib import messages
 
-from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage, ConsultationBooking
+from .models import SymptomCategory, ChemicalDrug, DrugInteraction, HealthRemedyPackage, ConsultationBooking, PrescriptionOrder
 from catalog.models import Product
 from orders.views import get_or_create_cart
 from orders.models import CartItem
@@ -139,3 +139,73 @@ class ConsultationBookingView(View):
             f'درخواست نوبت مشاوره شما با موفقیت ثبت گردید (کد پیگیری: #{booking.id}). متخصصان طب سنتی عطارخونه در بازه زمانی «{preferred_time}» با شما تماس خواهند گرفت.'
         )
         return redirect('remedy:consultation')
+
+
+class PrescriptionUploadView(View):
+    """
+    سرویس ارسال و بارگذاری نسخه پزشک طب سنتی
+    جهت بررسی تخصصی فیتوتراپیست و آماده‌سازی اقلام دارویی
+    """
+    def get(self, request):
+        initial_name = ''
+        initial_phone = ''
+        if request.user.is_authenticated:
+            initial_name = request.user.get_full_name() or request.user.username
+            initial_phone = getattr(request.user, 'phone', '')
+
+        return render(request, 'remedy/prescription_upload.html', {
+            'initial_name': initial_name,
+            'initial_phone': initial_phone,
+        })
+
+    def post(self, request):
+        patient_name = request.POST.get('patient_name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        doctor_name = request.POST.get('doctor_name', '').strip()
+        patient_age = request.POST.get('patient_age', '').strip()
+        notes = request.POST.get('notes', '').strip()
+        prescription_image = request.FILES.get('prescription_image')
+
+        if not patient_name or not phone or not prescription_image:
+            messages.error(request, 'لطفاً نام، شماره تماس و تصویر واضح نسخه پزشک را بارگذاری فرمایید.')
+            return redirect('remedy:prescription_upload')
+
+        # تولید کد رهگیری منحصربه‌فرد نسخه
+        tracking_code = PrescriptionOrder.generate_tracking_code()
+        while PrescriptionOrder.objects.filter(tracking_code=tracking_code).exists():
+            tracking_code = PrescriptionOrder.generate_tracking_code()
+
+        prescription = PrescriptionOrder.objects.create(
+            patient_name=patient_name,
+            phone=phone,
+            doctor_name=doctor_name,
+            patient_age=patient_age,
+            prescription_image=prescription_image,
+            notes=notes,
+            tracking_code=tracking_code,
+            status='pending',
+        )
+
+        messages.success(
+            request,
+            f'نسخه شما با موفقیت دریافت گردید! کد رهگیری نسخه شما: {tracking_code} می‌باشد. کارشناسان داروسازی عطارخونه پس از بررسی اولیه با شما تماس خواهند گرفت.'
+        )
+        return render(request, 'remedy/prescription_success.html', {'prescription': prescription})
+
+
+class PrescriptionTrackView(View):
+    """
+    استعلام وضعیت نسخه ارسالی با کد رهگیری
+    """
+    def get(self, request):
+        code = request.GET.get('code', '').strip()
+        prescription = None
+        if code:
+            prescription = PrescriptionOrder.objects.filter(tracking_code__iexact=code).first()
+            if not prescription:
+                messages.warning(request, 'نسخه‌ای با این شناسه رهگیری یافت نشد.')
+
+        return render(request, 'remedy/prescription_track.html', {
+            'prescription': prescription,
+            'search_code': code,
+        })

@@ -6,6 +6,15 @@
 {% block content %}
 <div class="container" style="margin: 30px auto;">
 
+  <!-- نوار مسیر راهنما (Breadcrumbs) -->
+  <nav class="site-breadcrumbs" aria-label="خرده‌نان">
+    <a href="{% url 'core:home' %}">خانه</a>
+    <span class="bc-sep">{% razavi_icon 'arrow-left' size=10 %}</span>
+    <a href="{% url 'orders:cart' %}">سبد خرید</a>
+    <span class="bc-sep">{% razavi_icon 'arrow-left' size=10 %}</span>
+    <span class="bc-current">تسویه حساب و ثبت سفارش</span>
+  </nav>
+
   <!-- هدر صفحه -->
   <div style="border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
     <div style="display: flex; align-items: center; gap: 10px;">

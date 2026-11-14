@@ -5,6 +5,7 @@ __pycache__/
 *.sqlite3
 staticfiles/
 media/receipts/*
+media/prescriptions/*
 backups/*.json
 .DS_Store
 .env

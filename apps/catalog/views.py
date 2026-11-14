@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Case, When, Value, IntegerField
+from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.contrib import messages
@@ -240,3 +241,50 @@ class WishlistView(View):
 
         items = Wishlist.objects.filter(user=request.user).select_related('product__category')
         return render(request, 'catalog/wishlist.html', {'wishlist_items': items})
+
+
+class ProductSearchSuggestView(View):
+    """
+    کارگاه ۱۸: جستجوی لحظه‌ای هوشمند و تکمیل خودکار (Ajax Live Search)
+    پاسخ سریع JSON به جستجوهای لحظه‌ای نوار هدر
+    """
+    def get(self, request):
+        q = request.GET.get('q', '').strip()
+        if len(q) < 2:
+            return JsonResponse({'products': [], 'categories': [], 'total_matches': 0})
+
+        products = Product.objects.filter(
+            Q(name__icontains=q) |
+            Q(short_description__icontains=q) |
+            Q(meta_keywords__icontains=q)
+        ).select_related('category')[:6]
+
+        categories = Category.objects.filter(name__icontains=q)[:3]
+
+        products_data = []
+        for p in products:
+            products_data.append({
+                'id': p.id,
+                'name': p.name,
+                'slug': p.slug,
+                'url': reverse('catalog:product_detail', args=[p.slug]),
+                'price': p.final_price,
+                'price_formatted': f"{p.final_price:,} تومان",
+                'old_price_formatted': f"{p.base_price:,} تومان" if p.discount_percent > 0 else None,
+                'image': p.get_display_image,
+                'category': p.category.name if p.category else "",
+                'temperament': p.get_temperament_display() if p.temperament else "",
+            })
+
+        categories_data = []
+        for c in categories:
+            categories_data.append({
+                'name': c.name,
+                'url': reverse('catalog:product_list_by_category', args=[c.slug]),
+            })
+
+        return JsonResponse({
+            'products': products_data,
+            'categories': categories_data,
+            'total_matches': len(products_data),
+        })

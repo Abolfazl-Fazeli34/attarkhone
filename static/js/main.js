@@ -121,6 +121,100 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ----------------------------------------------------
+  // الف.۱) جستجوی زنده و هوشمند هدر (Live Search Autocomplete - کارگاه ۱۸)
+  // ----------------------------------------------------
+  const searchInput = document.getElementById('headerSearchInput');
+  const searchDropdown = document.getElementById('headerSearchDropdown');
+  let searchDebounceTimer = null;
+
+  if (searchInput && searchDropdown) {
+    searchInput.addEventListener('input', function () {
+      const q = this.value.trim();
+      clearTimeout(searchDebounceTimer);
+
+      if (q.length < 2) {
+        searchDropdown.style.display = 'none';
+        searchDropdown.innerHTML = '';
+        return;
+      }
+
+      searchDebounceTimer = setTimeout(function () {
+        fetch(`/shop/api/search-suggest/?q=${encodeURIComponent(q)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (!data.products.length && !data.categories.length) {
+              searchDropdown.innerHTML = `
+                <div style="padding: 16px; text-align: center; color: #64748b; font-size: 12px;">
+                  فرآورده‌ای منطبق با «${q}» یافت نشد.
+                </div>
+              `;
+              searchDropdown.style.display = 'block';
+              return;
+            }
+
+            let html = '';
+
+            // نمایش شاخه‌های منطبق
+            if (data.categories && data.categories.length > 0) {
+              html += `<div class="search-suggest-group-title">دسته‌بندی‌های مرتبط</div>`;
+              html += `<div style="padding: 0 10px 8px; display: flex; flex-wrap: wrap; gap: 4px;">`;
+              data.categories.forEach(cat => {
+                html += `<a href="${cat.url}" class="search-suggest-cat-chip">${cat.name}</a>`;
+              });
+              html += `</div>`;
+            }
+
+            // نمایش فرآورده‌های منطبق
+            if (data.products && data.products.length > 0) {
+              html += `<div class="search-suggest-group-title">فرآورده‌های گیاهی برتر</div>`;
+              data.products.forEach(p => {
+                html += `
+                  <a href="${p.url}" class="search-suggest-item">
+                    <img src="${p.image}" alt="${p.name}" class="search-suggest-thumb">
+                    <div class="search-suggest-info">
+                      <div class="search-suggest-name">${p.name}</div>
+                      <div class="search-suggest-meta">
+                        <span>${p.category || 'عطاری'}</span>
+                        ${p.temperament ? ` • <span>طبع: ${p.temperament}</span>` : ''}
+                      </div>
+                    </div>
+                    <div class="search-suggest-price">${p.price_formatted}</div>
+                  </a>
+                `;
+              });
+            }
+
+            html += `
+              <div class="search-suggest-footer">
+                <a href="/shop/?q=${encodeURIComponent(q)}">مشاهده همه نتایج جستجو برای «${q}»</a>
+              </div>
+            `;
+
+            searchDropdown.innerHTML = html;
+            searchDropdown.style.display = 'block';
+          })
+          .catch(err => {
+            console.error('Search suggest error:', err);
+          });
+      }, 250);
+    });
+
+    // بستن با کلیک در بیرون کادر
+    document.addEventListener('click', function (e) {
+      if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+        searchDropdown.style.display = 'none';
+      }
+    });
+
+    // بستن با کلید Escape
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        searchDropdown.style.display = 'none';
+      }
+    });
+  }
+
+  // ----------------------------------------------------
   // ب) صفحه جزئیات کالا (Product Details & Variants - کارگاه ۱۳ و ۱۴)
   // ----------------------------------------------------
   const variantButtons = document.querySelectorAll('.variant-chips-wrap .variant-chip-btn[data-id]');
@@ -656,5 +750,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateCheckoutCalculations();
+  }
+
+  // ۶. تایمر معکوس زنده پیشنهاد شگفت‌انگیز روز (Daily Deal Countdown)
+  const dealHours = document.getElementById('dealHours');
+  const dealMinutes = document.getElementById('dealMinutes');
+  const dealSeconds = document.getElementById('dealSeconds');
+  if (dealHours && dealMinutes && dealSeconds) {
+    let now = new Date();
+    let midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    let diff = Math.max(0, Math.floor((midnight - now) / 1000));
+
+    function updateDealTimer() {
+      if (diff <= 0) {
+        diff = 86400;
+      }
+      diff--;
+      const h = Math.floor(diff / 3600);
+      const m = Math.floor((diff % 3600) / 60);
+      const s = diff % 60;
+
+      dealHours.textContent = toPersianDigits(h < 10 ? '0' + h : h);
+      dealMinutes.textContent = toPersianDigits(m < 10 ? '0' + m : m);
+      dealSeconds.textContent = toPersianDigits(s < 10 ? '0' + s : s);
+    }
+    updateDealTimer();
+    setInterval(updateDealTimer, 1000);
   }
 });

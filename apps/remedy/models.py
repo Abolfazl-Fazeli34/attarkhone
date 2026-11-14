@@ -104,3 +104,44 @@ class ConsultationBooking(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.phone}) - {self.symptom_category}"
+
+
+class PrescriptionOrder(models.Model):
+    """
+    سرویس ویژه عطاری آنلاین: ارسال عکس نسخه پزشک طب سنتی
+    جهت بررسی تخصصی داروساز، قیمت‌گذاری و بسته‌بندی اقلام گیاهی
+    """
+    STATUS_CHOICES = [
+        ('pending', 'در انتظار بررسی داروساز'),
+        ('reviewed', 'بررسی شده و قیمت‌گذاری گردید'),
+        ('accepted', 'تایید بیمار و در حال آماده‌سازی اقلام'),
+        ('shipped', 'بسته‌بندی و ارسال شد'),
+        ('cancelled', 'رد شده / ناخوانا'),
+    ]
+
+    patient_name = models.CharField(max_length=150, verbose_name="نام و نام خانوادگی بیمار")
+    phone = models.CharField(max_length=20, verbose_name="شماره تماس جهت هماهنگی و ارسال")
+    doctor_name = models.CharField(max_length=150, blank=True, verbose_name="نام پزشک یا درمانگاه طب سنتی (اختیاری)")
+    patient_age = models.CharField(max_length=30, blank=True, verbose_name="سن بیمار (جهت تطبیق دوز)")
+    prescription_image = models.ImageField(upload_to='prescriptions/', verbose_name="تصویر نسخه یا لیست اقلام گیاهی")
+    notes = models.TextField(blank=True, verbose_name="توضیحات بیمار، سوابق حساسیت یا بیماری‌های زمینه‌ای")
+    
+    # بخش کارشناس و داروساز
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="وضعیت بررسی")
+    estimated_cost = models.PositiveIntegerField(default=0, verbose_name="هزینه برآورد شده اقلام نسخه (تومان)")
+    pharmacist_reply = models.TextField(blank=True, verbose_name="توضیحات و پاسخ داروساز طب سنتی")
+    tracking_code = models.CharField(max_length=32, unique=True, verbose_name="شناسه رهگیری نسخه")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ارسال نسخه")
+
+    class Meta:
+        verbose_name = "نسخه ارسالی بیمار"
+        verbose_name_plural = "نسخه‌های ارسالی بیماران (سرویس آنلاین نسخه)"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"نسخه {self.tracking_code} - {self.patient_name} ({self.get_status_display()})"
+
+    @classmethod
+    def generate_tracking_code(cls):
+        import random
+        return f"RX-{random.randint(100000, 999999)}"

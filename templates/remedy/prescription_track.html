@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static persian_tags razavi_icons %}
+
+{% block title %}پیگیری آنلاین نسخه پزشک | عطارخونه{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 740px; margin: 32px auto;">
+
+  <!-- نوار مسیر راهنما (Breadcrumbs) -->
+  <nav class="site-breadcrumbs" aria-label="خرده‌نان">
+    <a href="{% url 'core:home' %}">صفحه نخست</a>
+    <span class="bc-sep">{% razavi_icon 'arrow-left' size=10 %}</span>
+    <a href="{% url 'remedy:prescription_upload' %}">ارسال نسخه پزشک</a>
+    <span class="bc-sep">{% razavi_icon 'arrow-left' size=10 %}</span>
+    <span class="bc-current">پیگیری آنلاین نسخه</span>
+  </nav>
+
+  <div style="background: #ffffff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 32px; box-shadow: var(--shadow-sm); margin-top: 16px;">
+    
+    <div style="text-align: center; border-bottom: 2px solid var(--border); padding-bottom: 18px; margin-bottom: 24px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background: #ecfdf5; color: var(--primary); margin-bottom: 8px;">
+        {% razavi_icon 'search' size=24 %}
+      </div>
+      <h1 style="font-size: 20px; font-weight: 800; color: var(--primary-dark); margin: 0;">
+        پیگیری وضعیت ارزیابی و تهیه نسخه
+      </h1>
+      <p style="font-size: 12.5px; color: #64748b; margin-top: 6px;">
+        شناسه رهگیری نسخه (مانند RX-123456) را وارد نمایید:
+      </p>
+    </div>
+
+    <!-- فرم جستجو -->
+    <form action="{% url 'remedy:prescription_track' %}" method="get" style="display: flex; gap: 10px; margin-bottom: 26px;">
+      <input type="text" name="code" value="{{ search_code }}" placeholder="شناسه رهگیری نسخه (مثال: RX-123456)" required style="flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-xs); font-family: inherit; font-size: 13px;">
+      <button type="submit" class="btn-hero" style="border: none; cursor: pointer; padding: 10px 22px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+        <span>استعلام وضعیت</span>
+        {% razavi_icon 'arrow-left' size=14 %}
+      </button>
+    </form>
+
+    {% if prescription %}
+      <div style="background: #fbfbfa; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 22px;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 11.5px; color: #64748b;">کد پیگیری نسخه:</div>
+            <div style="font-size: 18px; font-weight: 800; color: var(--primary-dark);">{{ prescription.tracking_code }}</div>
+          </div>
+          <div>
+            <span class="badge" style="background: var(--primary); color: #fff; font-size: 12px; padding: 6px 14px; border-radius: 20px; font-weight: 700;">
+              {{ prescription.get_status_display }}
+            </span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13px; line-height: 1.8; margin-bottom: 16px;">
+          <div>
+            <div>بیمار: <strong>{{ prescription.patient_name }}</strong></div>
+            <div>شماره تماس: <strong>{{ prescription.phone }}</strong></div>
+            <div>تاریخ ارسال: <strong>{{ prescription.created_at|date:"Y/m/d - H:i" }}</strong></div>
+          </div>
+          <div>
+            <div>پزشک معالج: <strong>{{ prescription.doctor_name|default:"ثبت نشده" }}</strong></div>
+            <div>برآورد هزینه اقلام: <strong>{% if prescription.estimated_cost %}{{ prescription.estimated_cost|toman }}{% else %}در حال قیمت‌گذاری{% endif %}</strong></div>
+          </div>
+        </div>
+
+        {% if prescription.pharmacist_reply %}
+          <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-xs); padding: 14px; margin-top: 12px; font-size: 12.5px; color: #065f46; line-height: 1.8;">
+            <b style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+              {% razavi_icon 'shield' size=14 %}
+              <span>نظر و راهنمای داروساز عطارخونه:</span>
+            </b>
+            {{ prescription.pharmacist_reply }}
+          </div>
+        {% endif %}
+
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}
