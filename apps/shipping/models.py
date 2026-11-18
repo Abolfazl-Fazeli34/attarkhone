@@ -10,7 +10,7 @@ class Province(models.Model):
 
     class Meta:
         verbose_name = "استان و منطقه جغرافیایی"
-        verbose_name_plural = "مناطق و استان‌ها (کارگاه ۱۰)"
+        verbose_name_plural = "مناطق و استان‌ها"
         ordering = ['name']
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Carrier(models.Model):
 
     class Meta:
         verbose_name = "حامل پستی"
-        verbose_name_plural = "حامل‌ها و شیوه‌های ارسال (کارگاه ۱۰)"
+        verbose_name_plural = "حامل‌ها و شیوه‌های ارسال"
 
     def __str__(self):
         return f"{self.name} - هزینه: {self.cost:,} تومان"

@@ -10,12 +10,12 @@ class Slider(models.Model):
     subtitle = models.CharField(max_length=250, blank=True, verbose_name="زیرعنوان / پیام ترغیب‌کننده")
     image = models.ImageField(upload_to='sliders/', null=True, blank=True, verbose_name="تصویر اسلاید")
     link = models.CharField(max_length=200, default='/shop/', verbose_name="نشانی پیوند (Link)")
-    order = models.PositiveIntegerField(default=1, verbose_name="ترتیب نمایش اسلاید (کارگاه ۷)")
+    order = models.PositiveIntegerField(default=1, verbose_name="ترتیب نمایش اسلاید")
     is_active = models.BooleanField(default=True, verbose_name="فعال")
 
     class Meta:
         verbose_name = "اسلایدر تصویر"
-        verbose_name_plural = "اسلایدرهای صفحه نخست (کارگاه ۷)"
+        verbose_name_plural = "اسلایدرهای صفحه نخست"
         ordering = ['order', 'id']
 
     def __str__(self):
@@ -39,7 +39,7 @@ class Banner(models.Model):
 
     class Meta:
         verbose_name = "بنر تبلیغاتی"
-        verbose_name_plural = "بنرهای صفحه نخست (کارگاه ۸)"
+        verbose_name_plural = "بنرهای تبلیغاتی"
 
     def __str__(self):
         return f"{self.get_position_display()} - {self.title}"
@@ -69,7 +69,7 @@ class Coupon(models.Model):
 
     class Meta:
         verbose_name = "کد تخفیف"
-        verbose_name_plural = "کدهای تخفیف (کارگاه ۲۳)"
+        verbose_name_plural = "کدهای تخفیف"
 
     def __str__(self):
         return f"کد: {self.code} ({self.get_discount_type_display()}: {self.value})"

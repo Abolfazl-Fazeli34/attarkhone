@@ -520,6 +520,12 @@ class BankReceiptView(View):
             messages.error(request, 'نام بانک و شماره پیگیری فیش الزامی است.')
             return redirect('orders:bank_receipt', tracking_code=order.tracking_code)
 
+        if receipt_image:
+            allowed_exts = ('.jpg', '.jpeg', '.png', '.webp', '.pdf')
+            if not receipt_image.name.lower().endswith(allowed_exts):
+                messages.error(request, 'فرمت فایل فیش ارسالی نامعتبر است. لطفاً فایل تصویری با پسوند JPG، PNG، WEBP یا PDF انتخاب کنید.')
+                return redirect('orders:bank_receipt', tracking_code=order.tracking_code)
+
         BankReceipt.objects.update_or_create(
             order=order,
             defaults={

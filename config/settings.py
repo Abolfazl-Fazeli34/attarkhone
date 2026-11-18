@@ -161,6 +161,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# امنیت نشست‌ها و کوکی‌ها
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 86400 * 14
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
 # تنظیمات ارسال ایمیل واقعی (Gmail SMTP)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

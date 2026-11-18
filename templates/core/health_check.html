@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static persian_tags razavi_icons %}
 
-{% block title %}آزمایش صحت ارتقا و سلامت سامانه (کارگاه ۲۲) | عطارخونه{% endblock %}
+{% block title %}پایش و وضعیت سلامت سامانه | عطارخونه{% endblock %}
 
 {% block content %}
 <div class="container" style="margin: 22px auto;">
@@ -12,9 +12,9 @@
       <div>
         <h1 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;">
           {% razavi_icon 'activity' size=20 class='text-primary' %}
-          <span>آزمایش صحت ارتقا و سلامت سامانه (کارگاه ۲۱ و ۲۲)</span>
+          <span>پایش و وضعیت سلامت سامانه (System Health Status)</span>
         </h1>
-        <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">بررسی زنده وضعیت پایگاه داده، مجوزهای دایرکتوری، تنظیمات امنیتی و شِمای سیستم</p>
+        <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">آزمایش صحت ارتقا و سلامت سامانه — بررسی زنده وضعیت پایگاه داده، مجوزهای دایرکتوری، تنظیمات امنیتی و شِمای سیستم</p>
       </div>
       <div>
         <a href="{% url 'core:health_check' %}" class="btn-action" style="background: #1b4332; color: #fff; border: none; font-size: 12px; padding: 7px 14px; display: inline-flex; align-items: center; gap: 6px;">
@@ -28,9 +28,9 @@
     <table class="cart-table">
       <thead>
         <tr>
-          <th>آزمون سنجش شایستگی</th>
+          <th>سرویس زیرساختی</th>
           <th>وضعیت عملیاتی</th>
-          <th>شرح فنی و جزئیات بررسی</th>
+          <th>شرح فنی و جزئیات پایش</th>
           <th>نتیجه آزمون</th>
         </tr>
       </thead>
@@ -56,13 +56,13 @@
       </tbody>
     </table>
 
-    <div style="margin-top: 30px; background: #f9fbe7; border: 1px solid #dce775; padding: 20px; border-radius: var(--radius-md);">
-      <h3 style="font-size: 15px; color: #33691e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-        {% razavi_icon 'receipt' size=16 %}
-        <span>تطبیق با صفحه ۹۷ کتاب درسی (کارگاه ۲۲):</span>
+    <div style="margin-top: 30px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: var(--radius-md);">
+      <h3 style="font-size: 15px; color: #166534; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        {% razavi_icon 'shield' size=16 %}
+        <span>گزارش جامع پایداری و امنیت سرویس:</span>
       </h3>
-      <p style="font-size: 13px; color: #558b2f; line-height: 1.8;">
-        در کارگاه ۲۲ کتاب، پس از انجام ارتقا (Upgrade)، صحت بخش‌های پایگاه داده، ماژول‌ها و عدم بروز خطا در لاگ‌ها تست می‌شود. در سامانه عطارخونه، این صفحه اختصاصی تمام ارکان حیاتی پروژه شامل کوئری تست پایگاه داده SQLite، وضعیت کش، متغیرهای محیطی و مسیرهای رسانه‌ای را ارزیابی کرده و تاییدیه سلامت سیستمی صادر می‌کند.
+      <p style="font-size: 13px; color: #15803d; line-height: 1.8; margin: 0;">
+        این ماژول به صورت خودکار سلامت اتصال به پایگاه داده، دسترسی به دایرکتوری‌های ذخیره‌سازی رسانه، نگاشت شِمای داده‌ها و وضعیت تنظیمات محیطی را به صورت بلادرنگ مانیتور کرده و تاییدیه پایداری سرویس صادر می‌نماید.
       </p>
     </div>
 

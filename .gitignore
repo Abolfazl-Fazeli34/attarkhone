@@ -7,6 +7,13 @@ staticfiles/
 media/receipts/*
 media/prescriptions/*
 backups/*.json
+backups/*.bak
+backups/*.sqlite3
 .DS_Store
 .env
 *.log
+
+# External nested projects / deployments on server
+BarberFiner/
+PishkhanYar/
+SPORTEX/

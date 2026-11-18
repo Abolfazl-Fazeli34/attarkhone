@@ -133,7 +133,7 @@ class Command(BaseCommand):
         admin_user = User.objects.create_superuser(
             username='admin',
             email='admin@attarkhone.ir',
-            password='AdminAttar1403!',
+            password='admin123456',
             first_name='مدیر ارشد',
             last_name='عطارخونه',
             phone='09121112233',
@@ -144,7 +144,7 @@ class Command(BaseCommand):
         hesabdar = User.objects.create_user(
             username='hesabdar',
             email='accounting@attarkhone.ir',
-            password='Staff123456!',
+            password='hesabdar123',
             first_name='محسن',
             last_name='تقوی (حسابدار ارشد)',
             phone='09122223344',
@@ -156,11 +156,23 @@ class Command(BaseCommand):
         anbardar = User.objects.create_user(
             username='anbardar',
             email='warehouse@attarkhone.ir',
-            password='Staff123456!',
+            password='anbardar123',
             first_name='سعید',
             last_name='مرتضوی (مسئول انبار و لجستیک)',
             phone='09123334455',
             role='warehouse',
+            is_staff=True,
+            email_verified=True
+        )
+
+        poshtiban = User.objects.create_user(
+            username='poshtiban',
+            email='support@attarkhone.ir',
+            password='poshtiban123',
+            first_name='فاطمه',
+            last_name='حسینی (کارشناس پشتیبانی و مشاوره)',
+            phone='09127778899',
+            role='support',
             is_staff=True,
             email_verified=True
         )
@@ -240,18 +252,19 @@ class Command(BaseCommand):
         # خریداران مشتری حقیقی
         customers = []
         cust_specs = [
+            ('maryam', 'maryam@gmail.com', 'دکتر مریم', 'احمدی', '09173330003', 'فارس', 'شیراز، خیابان ملاصدرا، کوچه ۴، ساختمان پزشکان'),
             ('sara_tehrani', 'sara.tehrani@gmail.com', 'سارا', 'تهرانی', '09121110001', 'تهران', 'خیابان سعادت‌آباد، خیابان صرافها، پلاک ۴۲'),
             ('ali_rezaei', 'ali.rezaei@gmail.com', 'علی', 'رضایی', '09132220002', 'اصفهان', 'چهارباغ عباسی، کوچه سینما ساحل، مجتمع نگین'),
-            ('maryam_ahmadi', 'maryam.ahmadi@gmail.com', 'دکتر مریم', 'احمدی', '09173330003', 'فارس', 'شیراز، خیابان ملاصدرا، کوچه ۴، ساختمان پزشکان'),
             ('mohammad_karimi', 'm.karimi@gmail.com', 'محمد', 'کریمی', '09154440004', 'خراسان رضوی', 'مشهد، بلوار سجاد، خیابان بهارستان، پلاک ۱۸'),
             ('fatemeh_soleimani', 'f.soleimani@gmail.com', 'فاطمه', 'سلیمانی', '09145550005', 'آذربایجان شرقی', 'تبریز، کوی ولیعصر، خیابان پروین اعتصامی'),
             ('reza_moradi', 'reza.moradi@gmail.com', 'رضا', 'مرادی', '09116660006', 'گیلان', 'رشت، گلسار، بلوار سمیه، کوچه ۱۲۲'),
         ]
         for u_name, email, f_name, l_name, phone, prov, addr in cust_specs:
+            pwd = 'maryam123' if u_name == 'maryam' else 'Customer123456!'
             u = User.objects.create_user(
                 username=u_name,
                 email=email,
-                password='Customer123456!',
+                password=pwd,
                 first_name=f_name,
                 last_name=l_name,
                 phone=phone,
@@ -267,10 +280,36 @@ class Command(BaseCommand):
         cat_oils = Category.objects.create(name='روغن‌های درمانی و عصاره‌های گیاهی', slug='herbal-oils', description='روغن‌های فرابکر پرس سرد و اکستراکت‌های تغلیظ‌شده درمانی')
         cat_spices = Category.objects.create(name='ادویه‌جات اعلا و چاشنی‌های دست‌چین', slug='spices', description='ادویه‌های هندی و سنتی ایرانی آسیاب‌نشده با عطر و طعم فوق‌العاده')
 
-        # برندها و تامین‌کنندگان
+        # برندها و تامین‌کنندگان (کارگاه ۱۵ و ۱۶)
         b_attar, _ = Brand.objects.get_or_create(name='عطارخونه گلچین', slug='attarkhone-select', website='https://attarkhone.ir')
         b_sabalan, _ = Brand.objects.get_or_create(name='سبلان ارگانیک', slug='sabalan-organic')
         b_kashan, _ = Brand.objects.get_or_create(name='گلستان کاشان', slug='golestan-kashan')
+
+        # کارگاه ۱۶: تأمین‌کنندگان و مزارع طرف قرارداد
+        sup_eshkevar, _ = Supplier.objects.get_or_create(
+            name='تعاونی کشت و صنعت گیاهان دارویی اشکورات گیلان',
+            defaults={
+                'contact_person': 'مهندس اسدالله رفیعی',
+                'phone': '013-42881234',
+                'address': 'استان گیلان، رودسر، منطقه ییلاقی اشکورات، مجتمع مزارع دارویی'
+            }
+        )
+        sup_kashan, _ = Supplier.objects.get_or_create(
+            name='کشت و صنعت گلاب و عرقیات سنتی قمصر کاشان',
+            defaults={
+                'contact_person': 'حاج محمدتقی چیت‌ساز',
+                'phone': '031-55662211',
+                'address': 'استان اصفهان، کاشان، قمصر، جاده کوهپایه برزک، کارگاه تقطیر سنتی'
+            }
+        )
+        sup_sabalan, _ = Supplier.objects.get_or_create(
+            name='تعاونی زنبورداران کوهستان سبلان اردبیل',
+            defaults={
+                'contact_person': 'یوسف خلیلی سبلان',
+                'phone': '045-33448899',
+                'address': 'استان اردبیل، دامنه‌های سبلان، ایستگاه پرورش زنبور عسل و گیاهان شهدزا'
+            }
+        )
 
         # ۶. ایجاد ۱۲ محصول اصیل با کلیه مشخصات علمی و کارگاهی
         products_data = [
@@ -708,6 +747,32 @@ class Command(BaseCommand):
             subtitle="انتخاب فرآورده بر اساس مزاج، بررسی تداخلات با داروهای شیمیایی و فرمولاسیون تخصصی",
             link="/remedy/",
             order=3,
+            is_active=True
+        )
+
+        # کارگاه ۸: بنرهای تبلیغاتی صفحه اصلی
+        Banner.objects.create(
+            title="جشنواره گیاهان اصیل دارویی و دمنوش‌های فصل",
+            position="home_middle",
+            link="/shop/",
+            is_active=True
+        )
+        Banner.objects.create(
+            title="دستیار هوشمند سلامت و تداخلات دارویی",
+            position="home_middle",
+            link="/remedy/wizard/",
+            is_active=True
+        )
+        Banner.objects.create(
+            title="مشاوره تخصصی و ارسال نسخه پزشک",
+            position="sidebar",
+            link="/remedy/prescription-upload/",
+            is_active=True
+        )
+        Banner.objects.create(
+            title="روغن‌های درمانی فرابکر پرس سرد خالص",
+            position="home_top",
+            link="/shop/",
             is_active=True
         )
 

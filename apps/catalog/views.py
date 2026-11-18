@@ -74,7 +74,7 @@ class ProductListView(View):
         elif sort == 'newest':
             queryset = queryset.order_by('-created_at')
         else:
-            # پیش‌فرض و محبوب‌ترین: اولویت با اقلام اصلی موکاپ
+            # پیش‌فرض: اولویت با محبوب‌ترین محصولات و پرفروش‌ترین‌ها
             from django.db.models import Case, When, Value, IntegerField
             priority_slugs = [
                 'green-tea-organic',

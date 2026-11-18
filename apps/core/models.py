@@ -11,7 +11,7 @@ class StoreSetting(models.Model):
     store_name = models.CharField(
         max_length=200,
         default='عطارخونه - فروشگاه تخصصی گیاهان دارویی و سلامت',
-        verbose_name='نام فروشگاه (کارگاه ۴)'
+        verbose_name='نام فروشگاه'
     )
     slogan = models.CharField(
         max_length=255,
@@ -33,14 +33,14 @@ class StoreSetting(models.Model):
         verbose_name='خلاصه درباره ما (فوتر)'
     )
     
-    # کارگاه ۵: لوگو و فاوآیکون
+    # لوگو و فاوآیکون
     logo = models.ImageField(upload_to='settings/', blank=True, null=True, verbose_name='لوگوی فروشگاه')
     favicon = models.ImageField(upload_to='settings/', blank=True, null=True, verbose_name='فاوآیکون (Favicon)')
 
-    # کارگاه ۳: غیرفعال‌سازی / حالت تعمیرات
+    # غیرفعال‌سازی / حالت تعمیرات
     is_maintenance_mode = models.BooleanField(
         default=False,
-        verbose_name='حالت تعمیرات فعال است؟ (کارگاه ۳)',
+        verbose_name='حالت تعمیرات فعال است؟',
         help_text='در صورت فعال بودن، کاربران عادی پیام تعمیرات را می‌بینند و تنها IPهای مجاز به سایت دسترسی خواهند داشت.'
     )
     maintenance_message = models.TextField(
@@ -49,21 +49,21 @@ class StoreSetting(models.Model):
     )
     maintenance_allowed_ips = models.TextField(
         default='127.0.0.1, ::1',
-        verbose_name='آی‌پی‌های مجاز کارمندان (کارگاه ۳)',
+        verbose_name='آی‌پی‌های مجاز کارمندان',
         help_text='نشانی‌های IP مجاز را با کاما جدا کنید. کارمندان از این IPها به فروشگاه دسترسی کامل خواهند داشت.'
     )
 
     # هزینه‌های عمومی و تنظیمات سفارش
     gift_wrap_cost = models.PositiveIntegerField(
         default=25000,
-        verbose_name='هزینه کادوپیچی سفارش (تومان) - کارگاه ۲۴'
+        verbose_name='هزینه کادوپیچی سفارش (تومان)'
     )
     free_shipping_threshold = models.PositiveIntegerField(
         default=500000,
         verbose_name='حداقل خرید برای ارسال رایگان (تومان)'
     )
 
-    # شبکه‌های اجتماعی (کارگاه ۲۵ و بازارگردانی)
+    # شبکه‌های اجتماعی
     instagram = models.CharField(max_length=100, default='attarkhooneh_official', blank=True, verbose_name='اینستاگرام')
     telegram = models.CharField(max_length=100, default='attarkhooneh', blank=True, verbose_name='تلگرام')
     eitaa = models.CharField(max_length=100, default='attarkhooneh', blank=True, verbose_name='ایتا')
@@ -71,7 +71,7 @@ class StoreSetting(models.Model):
 
     class Meta:
         verbose_name = 'تنظیمات و اطلاعات فروشگاه'
-        verbose_name_plural = 'تنظیمات و اطلاعات فروشگاه (کارگاه ۳، ۴ و ۵)'
+        verbose_name_plural = 'تنظیمات و اطلاعات فروشگاه'
 
     def __str__(self):
         return self.store_name

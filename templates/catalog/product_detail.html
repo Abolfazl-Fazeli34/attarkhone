@@ -3,6 +3,35 @@
 
 {% block title %}{{ product.name }} | عطارخونه{% endblock %}
 {% block meta_description %}{{ product.short_description }}{% endblock %}
+{% block meta_keywords %}{{ product.name }}, خرید {{ product.name }}, خواص {{ product.name }}, قیمت {{ product.name }}, طب سنتی, گیاهان دارویی ارگانیک{% endblock %}
+
+{% block extra_css %}
+<!-- داده‌های ساختاریافته Schema.org JSON-LD جهت سئو و موتورهای جستجو -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ product.name|escapejs }}",
+  "image": "{% if product.image %}{{ product.image.url }}{% endif %}",
+  "description": "{{ product.short_description|escapejs }}",
+  "sku": "ATK-{{ product.id }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ product.brand.name|default:'عطارخونه'|escapejs }}"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "IRT",
+    "price": "{{ product.base_price }}",
+    "availability": "{% if product.is_in_stock %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "seller": {
+      "@type": "Organization",
+      "name": "عطارخونه"
+    }
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container" style="margin: 20px auto;">
@@ -97,7 +126,7 @@
         {{ product.description|truncatewords:50 }}
       </p>
 
-      <!-- فرم خرید و مشخصه‌های وزنی و فرآوری (کارگاه ۱۳) -->
+      <!-- فرم خرید و انتخاب وزن فرآورده -->
       <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="post" class="ajax-add-cart-form" data-product-id="{{ product.id }}" id="addToCartForm">
         {% csrf_token %}
         <input type="hidden" name="variant_id" id="selectedVariantId" value="{% if variants %}{{ variants.first.id }}{% endif %}">
@@ -201,7 +230,7 @@
       </button>
       <button type="button" class="tab-nav-btn" data-tab="tab-features">
         {% razavi_icon 'tag' size=16 %}
-        <span>ویژگی‌ها و مشخصات فنی فرآورده (کارگاه ۱۴)</span>
+        <span>ویژگی‌ها و مشخصات فنی فرآورده</span>
       </button>
       <button type="button" class="tab-nav-btn" data-tab="tab-qa">
         {% razavi_icon 'help' size=16 %}
@@ -345,16 +374,16 @@
       </div>
     </div>
 
-    <!-- تب ۳: ویژگی‌ها و مشخصات فنی فرآورده (کارگاه ۱۴ پودمان ۲) -->
+    <!-- تب ۳: ویژگی‌ها و مشخصات فنی فرآورده -->
     <div class="tab-content-panel" id="tab-features">
       <div class="coa-card-wrapper" style="padding: 24px;">
         <div class="coa-header-bar" style="margin-bottom: 20px;">
           <div>
             <h3 class="coa-title" style="display: flex; align-items: center; gap: 8px;">
               {% razavi_icon 'tag' size=20 class='text-primary' %}
-              <span>ویژگی‌ها و مشخصات فنی استاندارد (Product Features - کارگاه ۱۴)</span>
+              <span>ویژگی‌ها و مشخصات فنی فرآورده</span>
             </h3>
-            <span class="coa-subtitle">ویژگی‌های ثابت فیتوشیمیایی، اقلیمی و استانداردهای بسته‌بندی بر اساس سرفصل آموزشی پودمان ۲</span>
+            <span class="coa-subtitle">ویژگی‌های ثابت فیتوشیمیایی، اقلیمی و استانداردهای بسته‌بندی بر اساس فارماکوپه مرجع طب سنتی</span>
           </div>
           <div class="coa-status-badge">
             {% razavi_icon 'check-circle' size=15 class='text-primary' %}

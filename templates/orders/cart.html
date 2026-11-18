@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container" style="max-width: 640px; margin: 24px auto;">
 
-  <!-- ۱. تیتر سبد خرید (عین موکاپ) -->
+  <!-- ۱. تیتر سبد خرید -->
   <div class="cart-mockup-header-title">
     <h2>سبد خرید</h2>
   </div>
@@ -14,17 +14,17 @@
   {% if cart.items.exists %}
     <div class="cart-mockup-container">
 
-      <!-- لیست اقلام سبد خرید (عین ردیف‌های کارت موکاپ با آیکون‌های وکتور رضوی) -->
+      <!-- لیست اقلام سبد خرید با آیکون‌های وکتور رضوی -->
       <div class="cart-items-card-list" id="cartItemsList">
         {% for item in cart.items.all %}
           <div class="cart-item-row-card" id="cart-item-{{ item.id }}">
             
-            <!-- تصویر محصول سمت راست (عین موکاپ) -->
+            <!-- تصویر محصول -->
             <div class="cart-item-thumb-box">
               <img src="{{ item.product.get_display_image }}" alt="{{ item.product.name }}">
             </div>
 
-            <!-- اطلاعات محصول و دکمه‌های تعداد در وسط (عین موکاپ) -->
+            <!-- اطلاعات محصول و دکمه‌های تعداد در وسط -->
             <div class="cart-item-center-info">
               <h4 class="cart-item-title">{{ item.product.name }}</h4>
               {% if item.variant %}
@@ -86,13 +86,13 @@
         </form>
       </div>
 
-      <!-- سطر جمع کل (عین موکاپ: جمع کل: ۱۷۸,۰۰۰ تومان) -->
+      <!-- سطر جمع کل -->
       <div class="cart-total-summary-row">
         <span class="total-label-text">جمع کل:</span>
         <span class="total-amount-digits" id="cartTotalPayable">{{ total_payable|toman }}</span>
       </div>
 
-      <!-- دکمه پهن تکمیل خرید (عین موکاپ) -->
+      <!-- دکمه پهن تکمیل خرید -->
       <div style="margin-top: 14px;">
         <a href="{% url 'orders:checkout' %}" class="btn-wide-dark-green-checkout">
           {% razavi_icon 'credit-card' size=20 %}

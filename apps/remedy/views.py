@@ -170,6 +170,11 @@ class PrescriptionUploadView(View):
             messages.error(request, 'لطفاً نام، شماره تماس و تصویر واضح نسخه پزشک را بارگذاری فرمایید.')
             return redirect('remedy:prescription_upload')
 
+        allowed_exts = ('.jpg', '.jpeg', '.png', '.webp', '.pdf')
+        if not prescription_image.name.lower().endswith(allowed_exts):
+            messages.error(request, 'فرمت تصویر نسخه نامعتبر است. فقط فرمت‌های تصویری JPG، PNG، WEBP یا PDF مجاز هستند.')
+            return redirect('remedy:prescription_upload')
+
         # تولید کد رهگیری منحصربه‌فرد نسخه
         tracking_code = PrescriptionOrder.generate_tracking_code()
         while PrescriptionOrder.objects.filter(tracking_code=tracking_code).exists():

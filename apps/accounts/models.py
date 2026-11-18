@@ -21,7 +21,7 @@ class User(AbstractUser):
         choices=ROLE_CHOICES,
         default='customer',
         verbose_name='نقش کاربر / نمایه کارمند',
-        help_text='کارگاه ۱ و ۲: تعیین سطوح دسترسی و نمایه‌های کارمندان و فروشندگان'
+        help_text='تعیین سطوح دسترسی و نمایه‌های کارمندان و فروشندگان'
     )
     phone = models.CharField(max_length=15, blank=True, verbose_name='شماره تماس')
     address = models.TextField(blank=True, verbose_name='نشانی پستی')
@@ -31,7 +31,7 @@ class User(AbstractUser):
 
     class Meta:
         verbose_name = 'کاربر'
-        verbose_name_plural = 'کاربران، کارمندان و فروشندگان (کارگاه ۱ و ۲)'
+        verbose_name_plural = 'کاربران و پرسنل فروشگاه'
 
     @property
     def is_store_staff(self):

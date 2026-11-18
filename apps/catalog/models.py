@@ -17,20 +17,20 @@ class Category(models.Model):
         null=True,
         blank=True,
         related_name='children',
-        verbose_name="شاخه والد (کارگاه ۱۱)"
+        verbose_name="شاخه والد"
     )
     description = models.TextField(blank=True, verbose_name="توضیحات شاخه")
     image = models.ImageField(upload_to='categories/', null=True, blank=True, verbose_name="تصویر شاخه")
     icon = models.CharField(max_length=50, default='leaf', blank=True, verbose_name="نام آیکون")
     
-    # کارگاه ۲۶ و ۲۷: سئو
+    # سئو
     meta_title = models.CharField(max_length=150, blank=True, verbose_name="عنوان متا (SEO)")
-    meta_keywords = models.CharField(max_length=255, blank=True, verbose_name="کلمات کلیدی KWFinder")
+    meta_keywords = models.CharField(max_length=255, blank=True, verbose_name="کلمات کلیدی سئو")
     meta_description = models.TextField(blank=True, verbose_name="توضیحات متا (SEO)")
 
     class Meta:
         verbose_name = "شاخه و دسته‌بندی"
-        verbose_name_plural = "شاخه‌ها و دسته‌بندی‌ها (کارگاه ۱۱)"
+        verbose_name_plural = "شاخه‌ها و دسته‌بندی‌ها"
         ordering = ['name']
 
     def __str__(self):
@@ -75,7 +75,7 @@ class Brand(models.Model):
 
     class Meta:
         verbose_name = "برند و تولیدکننده"
-        verbose_name_plural = "برندها و تولیدکنندگان (کارگاه ۱۵)"
+        verbose_name_plural = "برندها و تولیدکنندگان"
 
     def __str__(self):
         return self.name
@@ -92,7 +92,7 @@ class Supplier(models.Model):
 
     class Meta:
         verbose_name = "تأمین‌کننده"
-        verbose_name_plural = "تأمین‌کنندگان (کارگاه ۱۶)"
+        verbose_name_plural = "تأمین‌کنندگان"
 
     def __str__(self):
         return self.name
@@ -117,7 +117,7 @@ class Product(models.Model):
         Category,
         on_delete=models.CASCADE,
         related_name='products',
-        verbose_name="شاخه محصول (کارگاه ۱۱)"
+        verbose_name="شاخه محصول"
     )
     brand = models.ForeignKey(
         Brand,
@@ -125,7 +125,7 @@ class Product(models.Model):
         null=True,
         blank=True,
         related_name='products',
-        verbose_name="برند (کارگاه ۱۵)"
+        verbose_name="برند"
     )
     supplier = models.ForeignKey(
         Supplier,
@@ -133,7 +133,7 @@ class Product(models.Model):
         null=True,
         blank=True,
         related_name='products',
-        verbose_name="تأمین‌کننده (کارگاه ۱۶)"
+        verbose_name="تأمین‌کننده"
     )
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -147,7 +147,7 @@ class Product(models.Model):
         max_length=20,
         choices=TEMPERAMENT_CHOICES,
         default='moderate',
-        verbose_name="طبع و مزاج گیاه (کارگاه ۱۴)"
+        verbose_name="طبع و مزاج گیاه"
     )
     base_price = models.PositiveIntegerField(verbose_name="قیمت پایه (تومان)")
     discount_percent = models.PositiveIntegerField(default=0, verbose_name="تخفیف ویژه کالا (درصد)")
@@ -271,8 +271,8 @@ class ProductVariant(models.Model):
     sku = models.CharField(max_length=50, blank=True, verbose_name="شناسه کالا (SKU)")
 
     class Meta:
-        verbose_name = "مشخصه محصول (Attribute)"
-        verbose_name_plural = "مشخصه‌های محصولات (کارگاه ۱۳)"
+        verbose_name = "مشخصه محصول"
+        verbose_name_plural = "مشخصه‌های وزنی و بسته‌بندی"
 
     def __str__(self):
         return f"{self.product.name} - {self.weight_label} ({self.grind_type})"
@@ -294,8 +294,8 @@ class ProductFeature(models.Model):
     )
 
     class Meta:
-        verbose_name = "ویژگی محصول (Feature)"
-        verbose_name_plural = "ویژگی‌های محصولات (کارگاه ۱۴)"
+        verbose_name = "ویژگی فنی محصول"
+        verbose_name_plural = "ویژگی‌ها و مشخصات فنی محصولات"
 
     def __str__(self):
         return f"{self.product.name} | {self.name}: {self.value}"

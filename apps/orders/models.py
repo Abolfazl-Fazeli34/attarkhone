@@ -82,20 +82,20 @@ class Order(models.Model):
     full_name = models.CharField(max_length=150, verbose_name="نام و نام خانوادگی تحویل‌گیرنده")
     phone = models.CharField(max_length=20, verbose_name="تلفن همراه")
     email = models.EmailField(blank=True, verbose_name="ایمیل")
-    province = models.ForeignKey(Province, on_delete=models.PROTECT, verbose_name="استان (کارگاه ۱۰)")
+    province = models.ForeignKey(Province, on_delete=models.PROTECT, verbose_name="استان")
     city = models.CharField(max_length=100, verbose_name="شهر")
     address = models.TextField(verbose_name="نشانی دقیق پستی")
     postal_code = models.CharField(max_length=20, verbose_name="کد پستی ۱۰ رقمی")
     order_notes = models.TextField(blank=True, verbose_name="یادداشت و توضیحات خریدار")
 
-    # حامل و ارسال (کارگاه ۱۰)
-    carrier = models.ForeignKey(Carrier, on_delete=models.PROTECT, verbose_name="حامل انتخابی (کارگاه ۱۰)")
+    # حامل و ارسال
+    carrier = models.ForeignKey(Carrier, on_delete=models.PROTECT, verbose_name="حامل انتخابی مرسوله")
     shipping_cost = models.PositiveIntegerField(default=0, verbose_name="هزینه ارسال (تومان)")
 
-    # کادوپیچی ویژه (کارگاه ۲۴ و شاخص ارزشیابی ص ۱۱۲)
+    # کادوپیچی ویژه
     is_gift_wrapped = models.BooleanField(
         default=False,
-        verbose_name="پیشنهاد کادوپیچی ویژه هدیه (ارزشیابی پودمان ۲)",
+        verbose_name="پیشنهاد کادوپیچی ویژه هدیه",
         help_text="بسته‌بندی تزئینی شکیل با روبان و کاغذ کرافت گیاهی دوستدار محیط زیست"
     )
     gift_message = models.TextField(
@@ -117,7 +117,7 @@ class Order(models.Model):
     zarinpal_authority = models.CharField(max_length=64, blank=True, verbose_name="کد ارجاع زرین‌پال (Authority)")
     zarinpal_ref_id = models.CharField(max_length=64, blank=True, verbose_name="شناسه پیگیری پرداخت زرین‌پال (RefID)")
     is_paid = models.BooleanField(default=False, verbose_name="وضعیت تسویه مالی")
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='pending_payment', verbose_name="وضعیت سفارش (کارگاه ۲۴)")
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='pending_payment', verbose_name="وضعیت سفارش")
     
     admin_notes = models.TextField(blank=True, verbose_name="یادداشت مدیریتی / کد رهگیری پستی")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
@@ -125,7 +125,7 @@ class Order(models.Model):
 
     class Meta:
         verbose_name = "سفارش"
-        verbose_name_plural = "سفارش‌ها و صورت‌حساب‌ها (کارگاه ۲۴)"
+        verbose_name_plural = "سفارش‌ها و صورت‌حساب‌ها"
         ordering = ['-created_at']
 
     def __str__(self):
@@ -166,20 +166,20 @@ class BankReceipt(models.Model):
     deposited_amount = models.PositiveIntegerField(verbose_name="مبلغ واریز شده (تومان)")
     receipt_image = models.ImageField(upload_to='receipts/', blank=True, null=True, verbose_name="تصویر رسید فیش واریزی")
     
-    is_verified = models.BooleanField(default=False, verbose_name="تایید واریز توسط حسابداری (کارگاه ۱ و ۱۷)")
+    is_verified = models.BooleanField(default=False, verbose_name="تایید واریز توسط امور مالی")
     verified_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name="کارمند تاییدکننده (نقش حسابدار)"
+        verbose_name="کارمند تاییدکننده (واحد مالی)"
     )
     admin_comment = models.CharField(max_length=255, blank=True, verbose_name="توضیح کارشناس حسابداری")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت فیش")
 
     class Meta:
         verbose_name = "فیش بانکی واریزی"
-        verbose_name_plural = "فیش‌های بانکی واریزی (کارگاه ۱۷)"
+        verbose_name_plural = "فیش‌های بانکی واریزی"
 
     def __str__(self):
         return f"فیش سفارش {self.order.tracking_code} - رهگیری: {self.tracking_number}"

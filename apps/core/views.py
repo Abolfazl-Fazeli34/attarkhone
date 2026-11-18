@@ -104,7 +104,7 @@ class HealthCheckView(View):
             store_setting = StoreSetting.get_settings()
             maintenance_status = "فعال (فروشگاه در حال ارتقا)" if store_setting.is_maintenance_mode else "غیرفعال (فروشگاه باز است)"
             diagnostics.append({
-                'title': 'وضعیت دسترسی عمومی فروشگاه (کارگاه ۳)',
+                'title': 'وضعیت دسترسی عمومی فروشگاه',
                 'status': 'OK',
                 'details': f'{maintenance_status} | آی‌پی‌های مجاز: {store_setting.maintenance_allowed_ips}',
                 'badge': 'عادی'

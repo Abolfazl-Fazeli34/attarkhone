@@ -69,7 +69,7 @@
             <b>نشانی ارسال مرسوله:</b> {{ order.province }}، {{ order.city }} - {{ order.address }} | <b>کد پستی:</b> {{ order.postal_code|fa_digits }}
           </div>
 
-          <!-- الزامات بسته‌بندی هدیه (کارگاه ۲۴) -->
+          <!-- الزامات بسته‌بندی هدیه -->
           {% if order.is_gift_wrapped %}
             <div style="background: #fefce8; border: 1px dashed #fde047; border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #713f12; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 8px;">
               <span style="color: #b45309; margin-top: 2px;">{% razavi_icon 'gift' size=16 %}</span>
